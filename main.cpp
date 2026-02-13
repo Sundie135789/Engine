@@ -4,7 +4,7 @@
 #include "headers/camera.hpp"
 #include "headers/transform.hpp"
 #include <GL/glew.h>
-#include <GL/gl.h>
+//GLEW failed issue
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <cstdlib>
@@ -26,15 +26,16 @@ int main() {
   GLFWwindow* win = glfwCreateWindow(width, height, title, nullptr, nullptr);
   if(!win){
     glfwTerminate();
+    std::cout << "Could not create window";
     return 1;
   }
   glfwMakeContextCurrent(win);
   glewExperimental = GL_TRUE;
-  glViewport(0, 0, width, height);
   if(glewInit() != GLEW_OK){
     std::cout << "GLEW failed\n";
     return 1;
   }
+  glViewport(0, 0, width, height);
   std::vector<float> vertices = {
     -0.5f, -0.5f, 0.0f,
     0.5f, -0.5f, 0.0f,
