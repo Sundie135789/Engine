@@ -16,6 +16,8 @@ constexpr auto title = "Main";
 int main() {
   Camera* maincamera = nullptr;
   float speed = 0.1f; 
+  glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   if(!glfwInit()){
     std::cout << "Failed to initialize glfw;";
     return 1;
@@ -31,6 +33,13 @@ int main() {
   }
   glfwMakeContextCurrent(win);
   glewExperimental = GL_TRUE;
+  GLenum err = glewInit();
+  if(err != GLEW_OK){
+    std::cout << "GLEW FAILED : " << glewGetErrorString(err) << "\n";
+    return 1;
+  }
+  std::cout << "OpenGL version: " << glGetString(GL_VERSION) << "\n";
+
   if(glewInit() != GLEW_OK){
     std::cout << "GLEW failed\n";
     return 1;
@@ -59,20 +68,6 @@ int main() {
   Shader shader(vertexShader, fragmentShader);
   Mesh mesh(vertices,indices, 4);
   shader.use();
-  glm::vec3 position(0.0f, 0.0f, 0.0f);
-  glm::vec3 rotation (0.0f, 0.0f, glm::radians(45.0f));
-  glm::vec3 scale(1.0f, 0.5f, 0.5f);
-  Transform transform(&position, &rotation, &scale); // transform declaration
-  glm:: mat4 model = glm::mat4(1.0f);
-  model = glm::translate(model,position); 
-  
-  model = glm::rotate(glm::mat4(1.0f), rotation.z , glm::vec3(0,0,1));
-  model = glm::rotate(model, rotation.y, glm::vec3(0,1,0));
-  model = glm::rotate(model, rotation.x, glm::vec3(1,0,0));
-  model = glm::scale(model, scale);
-  GLuint modelLocation = glGetUniformLocation(shader.shaderProgram, "model");
-  glUniformMatrix4fv(modelLocation, 1, GL_FALSE,glm::value_ptr(model)); 
- 
   maincamera = new Camera();
   GLuint viewLocation = glGetUniformLocation(shader.shaderProgram, "view"); 
   GLuint projLocation = glGetUniformLocation(shader.shaderProgram, "projection");
