@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 Shader::Shader(std::string vertPath, std::string fragPath){
+  this->hasColor = false;
   std::string vertexSource = LoadShader(vertPath);
   std::string fragmentSource = LoadShader(fragPath);
   const char* vertexCstr = vertexSource.c_str();
@@ -45,7 +46,19 @@ Shader::Shader(std::string vertPath, std::string fragPath){
   glDeleteShader(fragmentShader);
 
 }
+void Shader::SetColor(float red, float green, float blue){
+  this->red = red;
+  this->green = green;
+  this->blue = blue;
+  hasColor = true;
+}
 void Shader::use(){
+
   glLinkProgram(shaderProgram);
   glUseProgram(shaderProgram);
+  if(hasColor == true){
+    glUniform3f(glGetUniformLocation(this->shaderProgram, "uColor"), red, green, blue);
+  }else{
+    glUniform3f(glGetUniformLocation(this->shaderProgram, "uColor"), 0.502f, 0.0f, 0.502f);
+  }
 }

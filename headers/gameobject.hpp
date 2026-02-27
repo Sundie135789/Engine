@@ -5,10 +5,7 @@ class GameObject{
   public:
   Shader *shader;
   Mesh* mesh;
-  void draw(){
-    shader->use();
-    mesh->draw();
-  }
+  void draw();
   GameObject(Shader* shader, Mesh* mesh);
   ~GameObject();
 };

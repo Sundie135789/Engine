@@ -8,6 +8,8 @@
 #include "global.hpp"
 #define WINDOW_WIDTH 2560
 #define WINDOW_HEIGHT 1920
+//TODO shader class, SetColor, done.
+// try to render a gameobject. go on. you idiot.
 std::vector<GameObject*> gameobjects;
 void goTerminate(){
   for(auto g : gameobjects){
@@ -39,8 +41,15 @@ int main(void){
   };
   Mesh* mesh = new Mesh(vertices, 3);
   Shader* shader = new Shader("shaders/plain.vert", "shaders/plain.frag");
+  shader->SetColor();
   GameObject gameobject(shader, mesh);
   while(!glfwWindowShouldClose(window)){
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    for(GameObject* g : gameobjects){
+      g->mesh->draw();
+    }
     glfwSwapBuffers(window);
     glfwPollEvents();
   }

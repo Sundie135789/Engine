@@ -8,3 +8,7 @@ GameObject::~GameObject(){
   delete mesh;
   delete shader;
 }
+void GameObject::draw(){
+  shader->use();
+  mesh->draw();
+}
