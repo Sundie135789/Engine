@@ -4,7 +4,7 @@ class Mesh{
   public:
     GLenum shape;
     GLuint vbo, vao;
-    Mesh(float* vertices, int verticeCount);
+    Mesh(float* vertices, int verticeCount, bool hasTexCoords);
     ~Mesh();
     void draw();
     int verticeCount;

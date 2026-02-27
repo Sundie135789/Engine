@@ -1,10 +1,12 @@
 #include "shader.hpp"
+#include <cassert>
 #include "readshader.hpp"
 #include "global.hpp"
 #include <vector>
 #include <iostream>
 Shader::Shader(std::string vertPath, std::string fragPath){
   this->hasColor = false;
+  this->hasTexture = false;
   std::string vertexSource = LoadShader(vertPath);
   std::string fragmentSource = LoadShader(fragPath);
   const char* vertexCstr = vertexSource.c_str();
@@ -43,8 +45,8 @@ Shader::Shader(std::string vertPath, std::string fragPath){
   glAttachShader(shaderProgram, vertexShader);
   glAttachShader(shaderProgram, fragmentShader);
   glDeleteShader(vertexShader);
-  glDeleteShader(fragmentShader);
-
+  glDeleteShader(fragmentShader); 
+  glLinkProgram(shaderProgram);
 }
 void Shader::SetColor(float red, float green, float blue){
   this->red = red;
@@ -52,13 +54,30 @@ void Shader::SetColor(float red, float green, float blue){
   this->blue = blue;
   hasColor = true;
 }
+void Shader::SetTexture(Texture* texture){
+  this->texture = texture;
+  hasTexture = true;
+}
 void Shader::use(){
 
-  glLinkProgram(shaderProgram);
+  assert(shaderProgram != 0 );
   glUseProgram(shaderProgram);
+  if(hasColor && hasTexture){
+    std::cout << "Cannot have Both Color and Texture at Once in a mesh. Exiting..." << std::endl;
+    goTerminate();
+    std::exit(1);
+  }
   if(hasColor == true){
     glUniform3f(glGetUniformLocation(this->shaderProgram, "uColor"), red, green, blue);
-  }else{
+  }else if(hasTexture == true){
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture->textureID);
+    glUniform1i(glGetUniformLocation(this->shaderProgram, "uTexture"),0);
+  }
+  else{
     glUniform3f(glGetUniformLocation(this->shaderProgram, "uColor"), 0.502f, 0.0f, 0.502f);
   }
+}
+Shader::~Shader(){
+  glDeleteProgram(shaderProgram);
 }

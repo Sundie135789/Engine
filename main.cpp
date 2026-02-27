@@ -6,6 +6,9 @@
 #include "shader.hpp"
 #include "gameobject.hpp"
 #include "global.hpp"
+#include "texture.hpp"
+//#define STB_IMAGE_IMPLEMENTATION
+//#include "stb_image.h"
 #define WINDOW_WIDTH 2560
 #define WINDOW_HEIGHT 1920
 //TODO shader class, SetColor, done.
@@ -35,20 +38,25 @@ int main(void){
   }
   glViewport(0,0,WINDOW_WIDTH, WINDOW_HEIGHT);
   float vertices[] = {
-    -0.5f, -0.5f, 0.0f,
-    0.5f, -0.5f, 0.0f,
-    0.0f, 0.5f, 0.0f
+    -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+    0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+    0.0f, 0.5f, 0.0f ,0.5f, 1.0f
   };
-  Mesh* mesh = new Mesh(vertices, 3);
-  Shader* shader = new Shader("shaders/plain.vert", "shaders/plain.frag");
-  shader->SetColor();
-  GameObject gameobject(shader, mesh);
+  Texture* texture = new Texture("assets/monkey.png");
+  Mesh* mesh = new Mesh(vertices, 3, true);
+  Shader* shader = new Shader("shaders/texture.vert", "shaders/texture.frag");
+  //shader->SetColor(0.5f, 0.5f, 0.5f);
+  shader->SetTexture(texture);
+  //shader->SetTexture(text);
+  GameObject* gameobject = new GameObject(shader, mesh);
+  gameobjects.push_back(gameobject);
   while(!glfwWindowShouldClose(window)){
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
     glClear(GL_DEPTH_BUFFER_BIT);
     for(GameObject* g : gameobjects){
-      g->mesh->draw();
+      g->draw();
     }
     glfwSwapBuffers(window);
     glfwPollEvents();
