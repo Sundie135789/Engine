@@ -1,7 +1,9 @@
 #include "sidepane.hpp"
 #include "shader.hpp"
+#include "readshader.hpp"
+
 GLuint sidePaneVAO = 0;
-Shader* sidePaneShader = nullptr;
+GLuint sidePaneShaderProgram = 0;
 void loadSidePane(){
   float vertices[] = {
     0.6f, -1.0f, 0.0f,
@@ -13,7 +15,7 @@ void loadSidePane(){
     0, 1, 2,
     0, 2, 3
   };
-  GLuint vbo,  ebo;
+  GLuint vbo, ebo;
   glGenBuffers(1, &vbo);
   glGenVertexArrays(1, &sidePaneVAO);
   glGenBuffers(1, &ebo);
@@ -27,6 +29,25 @@ void loadSidePane(){
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
   glEnableVertexAttribArray(0);
   glBindVertexArray(0);
-  sidePaneShader = new Shader("shaders/plain.vert", "shaders/plain.frag");
-  sidePaneShader->SetColor(0.133333f, 0.133333f, 0.133333f);
+
+  std::string vertexShaderLoaded = LoadShader("shaders/sidepane.vert");
+  std::string fragmentShaderLoaded = LoadShader("shaders/sidepane.frag");
+  const char* vertexSource = vertexShaderLoaded.c_str();
+  const char* fragmentSource = fragmentShaderLoaded.c_str();
+
+
+  GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+  glShaderSource(vertexShader, 1, &vertexSource, NULL);
+  glCompileShader(vertexShader);
+  GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+  glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
+  glCompileShader(fragmentShader);
+
+  sidePaneShaderProgram = glCreateProgram();
+  glAttachShader(sidePaneShaderProgram, vertexShader);
+  glAttachShader(sidePaneShaderProgram, fragmentShader);
+  glLinkProgram(sidePaneShaderProgram);
+
+  glDeleteShader(vertexShader);
+  glDeleteShader(fragmentShader);
 }

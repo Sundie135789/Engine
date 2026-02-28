@@ -3,6 +3,14 @@
  The projection and view matrices require a separate Camera class, even if there is only one Camera (uptill now).
  This is because the code inside a Camera class, written raw inside the main function in main.cpp would be catastrophic for cleanliness;
  * */
+
+
+/*
+ The Font atlas is a PNG file containing all the characters of a font, tightly-packed together.
+  We load a font atlas from CPU side to the GPU as GL_TEXTURE_2D.
+  Whenever we need a character for rendering, we can look at the fnt data, look at the atlas, and get the character.
+  This is how bitmap font texture atlas system works.
+ * */
 #include <iostream>
 #include <GL/glew.h>
 #include <GL/gl.h>
@@ -15,13 +23,23 @@
 #include "sidepane.hpp"
 #include "transform.hpp"
 #include "camera.hpp"
-//#define STB_IMAGE_IMPLEMENTATION
-//#include "stb_image.h"
 #define WINDOW_WIDTH 2560
 #define WINDOW_HEIGHT 1920
-
+/*
+ * Create a global LoadFont function to parse .fnt file and load atlas texture.
+ * */
 std::vector<GameObject*> gameobjects;
-
+std::string commandBuffer = "";
+void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods){
+  if(action != GLFW_PRESS) return;
+  if(key >= GLFW_KEY_A && key <= GLFW_KEY_Z){
+    char c = 'a' + (key - GLFW_KEY_A);
+    commandBuffer += c;
+  }else if(key == GLFW_KEY_ENTER){
+    //TODO
+  }
+  std::cout << commandBuffer << '\n';
+}
 void goTerminate(){
   for(auto g : gameobjects){
     delete g;
@@ -47,9 +65,10 @@ int main(void){
     goTerminate();
     return 1;
   }
+  glfwSetKeyCallback(window, key_callback);
   glViewport(0,0,WINDOW_WIDTH, WINDOW_HEIGHT);
   // --- OpenGL Code ---
-  //loadSidePane();
+  loadSidePane();
   float vertices[] = {
     -0.375f, -0.375f, 0.0f, 0.0f, 0.0f,
     0.375f, -0.375f, 0.0f, 1.0f, 0.0f,
@@ -73,15 +92,17 @@ int main(void){
     glEnable(GL_DEPTH_TEST);
     glClear(GL_DEPTH_BUFFER_BIT);
     assert(mainCamera != nullptr);
+    
     for(GameObject* g : gameobjects){
       g->draw(*mainCamera);
     }
-    sidePaneShader->use();
-    sidePaneShader->SetMatrix("view", mainCamera->GetViewMatrix());
-    sidePaneShader->SetMatrix("projection", mainCamera->GetProjectionMatrix());
-    glBindVertexArray(sidePaneVAO);
+    glUseProgram(sidePaneShaderProgram);
+    glBindVertexArray(sidePaneVAO); 
+    glUniform3f(glGetUniformLocation(sidePaneShaderProgram, "uColor"), 0.133f, 0.133f, 0.133f);
+    glDisable(GL_DEPTH_TEST);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
+    glEnable(GL_DEPTH_TEST);
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
