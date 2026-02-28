@@ -14,20 +14,24 @@
 #include "texture.hpp"
 #include "sidepane.hpp"
 #include "transform.hpp"
+#include "camera.hpp"
 //#define STB_IMAGE_IMPLEMENTATION
 //#include "stb_image.h"
 #define WINDOW_WIDTH 2560
 #define WINDOW_HEIGHT 1920
+
 std::vector<GameObject*> gameobjects;
+
 void goTerminate(){
   for(auto g : gameobjects){
     delete g;
   }
   gameobjects.clear();
   glfwTerminate();
+
 }
 int main(void){
-  // create the camera class
+  Camera* mainCamera = new Camera((float)WINDOW_WIDTH/WINDOW_HEIGHT);
 
   if(!glfwInit()){
     std::cout << "GLFW Init error" << std::endl;
@@ -44,7 +48,8 @@ int main(void){
     return 1;
   }
   glViewport(0,0,WINDOW_WIDTH, WINDOW_HEIGHT);
-  loadSidePane();
+  // --- OpenGL Code ---
+  //loadSidePane();
   float vertices[] = {
     -0.375f, -0.375f, 0.0f, 0.0f, 0.0f,
     0.375f, -0.375f, 0.0f, 1.0f, 0.0f,
@@ -67,10 +72,13 @@ int main(void){
     glClear(GL_COLOR_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
     glClear(GL_DEPTH_BUFFER_BIT);
+    assert(mainCamera != nullptr);
     for(GameObject* g : gameobjects){
-      g->draw();
+      g->draw(*mainCamera);
     }
     sidePaneShader->use();
+    sidePaneShader->SetMatrix("view", mainCamera->GetViewMatrix());
+    sidePaneShader->SetMatrix("projection", mainCamera->GetProjectionMatrix());
     glBindVertexArray(sidePaneVAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);

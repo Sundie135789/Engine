@@ -2,6 +2,7 @@
 #include "shader.hpp"
 #include "mesh.hpp"
 #include "transform.hpp"
+#include "camera.hpp"
 #include <string>
 class GameObject{
   public:
@@ -9,9 +10,9 @@ class GameObject{
   Mesh* mesh;
   Transform* transform;
   std::string name;
-  void draw();
+  void draw(Camera& camera);
   GameObject(std::string name, Shader* shader, Mesh* mesh, Transform* transform);
-  GameObject(std::string name );
+  GameObject(std::string name);
   void SetShader(Shader *shader);
   void SetMesh(Mesh *mesh);
   void SetName(std::string newName);

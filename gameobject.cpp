@@ -30,7 +30,7 @@ GameObject::~GameObject(){
   delete mesh;
   delete shader;
 }
-void GameObject::draw(){
+void GameObject::draw(Camera& camera){
   if(this->shader == nullptr){
     std::cout << "GameObject.name: " << this->name << "\nGameObject.draw() called without setting shader." << std::endl;
     goTerminate();
@@ -42,6 +42,8 @@ void GameObject::draw(){
     std::exit(1);
   }
   shader->use();
+  shader->SetMatrix("view", camera.GetViewMatrix());
+  shader->SetMatrix("projection", camera.GetProjectionMatrix());
   glm::mat4 model = transform->GetModelMatrix();
   shader->SetMatrix("model", model);
   mesh->draw();
