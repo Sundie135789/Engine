@@ -78,6 +78,10 @@ void Shader::use(){
     glUniform3f(glGetUniformLocation(this->shaderProgram, "uColor"), 0.502f, 0.0f, 0.502f);
   }
 }
+void Shader::SetMatrix(std::string uniformName, glm::mat4 matrix){
+  const char* name = uniformName.c_str();
+  glUniformMatrix4fv(glGetUniformLocation(shaderProgram, name), 1, GL_FALSE, &matrix[0][0]);
+}
 Shader::~Shader(){
   glDeleteProgram(shaderProgram);
 }
