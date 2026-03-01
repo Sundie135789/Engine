@@ -23,6 +23,10 @@
 #include "sidepane.hpp"
 #include "transform.hpp"
 #include "camera.hpp"
+#include "text.hpp"
+#include <fstream>
+#include "stb_image.h"
+#define STB_IMAGE_IMPLEMENTATION
 #define WINDOW_WIDTH 2560
 #define WINDOW_HEIGHT 1920
 /*
@@ -30,6 +34,38 @@
  * */
 std::vector<GameObject*> gameobjects;
 std::string commandBuffer = "";
+bool LoadFont(const std::string& fntFile, const std::string& atlasFile){
+  std::ifstream file(fntFile);
+  if(!file.is_open()) return false;
+  std::string line;
+  while(std::getline(file, line)){
+    if(line.find("char id=") == 0){
+      int id,x,y,width,height,xOffset,yOffset,xAdvance;
+      sscanf(line.c_str(), "char id=%d x=%d y=%d width=%d height=%d xoffset=%d yoffset=%d xadvance=%d",
+          &id, &x, &y, &width, &height, &xOffset, &yOffset, &xAdvance);
+      Character ch((char)id,x,y,width,height,xOffset,yOffset,xAdvance);
+      fontCharacters[(char)id] = ch;
+    }
+    else if (line.find("common ") == 0){
+      sscanf(line.c_str(), "common lineHeight=%d", &fontLineHeight);
+    }
+  }
+  file.close();
+
+  int width, height, channels;
+  unsigned char* data = stbi_load(atlasFile.c_str(), &width, &height, &channels, 0);
+  if(!data) return false;
+  glGenTextures(1,&fontTextureID);
+  glBindTexture(GL_TEXTURE_2D, fontTextureID);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  stbi_image_free(data);
+  return true;
+}
+void RenderText(std::string text, float x, float y, float scale, glm::vec3 color){
+  
+}
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods){
   if(action != GLFW_PRESS) return;
   if(key >= GLFW_KEY_A && key <= GLFW_KEY_Z){
@@ -49,7 +85,6 @@ void goTerminate(){
 
 }
 int main(void){
-  Camera* mainCamera = new Camera((float)WINDOW_WIDTH/WINDOW_HEIGHT);
 
   if(!glfwInit()){
     std::cout << "GLFW Init error" << std::endl;
@@ -68,7 +103,14 @@ int main(void){
   glfwSetKeyCallback(window, key_callback);
   glViewport(0,0,WINDOW_WIDTH, WINDOW_HEIGHT);
   // --- OpenGL Code ---
+  Camera* mainCamera = new Camera((float)WINDOW_WIDTH/WINDOW_HEIGHT);
   loadSidePane();
+  LoadFont("assets/font.fnt", "assets/font.png");
+  Shader* textShader = new Shader("shaders/text.vert", "shaders/text.frag");
+  glm::mat4 textOrtho = glm::ortho(0.0f, (float) WINDOW_WIDTH, (float)WINDOW_HEIGHT, 0.0f,-1.0f, 1.0f);
+  textShader->use();
+  textShader->SetMatrix("projection", textOrtho);
+  initTextRender();
   float vertices[] = {
     -0.375f, -0.375f, 0.0f, 0.0f, 0.0f,
     0.375f, -0.375f, 0.0f, 1.0f, 0.0f,
@@ -91,6 +133,8 @@ int main(void){
     glClear(GL_COLOR_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
     glClear(GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     assert(mainCamera != nullptr);
     
     for(GameObject* g : gameobjects){
@@ -102,6 +146,9 @@ int main(void){
     glDisable(GL_DEPTH_TEST);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
+    glDisable(GL_DEPTH_TEST);
+    float color[] = {1.0f, 1.0f, 1.0f};
+    renderText(*textShader, "Hello SundieCoder!", 50.0f, WINDOW_HEIGHT - 50.0f, 1.0f, color);
     glEnable(GL_DEPTH_TEST);
     glfwSwapBuffers(window);
     glfwPollEvents();

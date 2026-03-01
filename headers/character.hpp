@@ -1,4 +1,4 @@
-
+#pragma once
 class Character{
   public:
     char id;
@@ -10,7 +10,7 @@ class Character{
     float yOffset;
     float xAdvance;
     Character() = default;
-    Character(char _id, int x,int y, int w,int ,h,int xOff,int yOff, int xAdv)
+    Character(char _id, int x,int y, int w,int h,int xOff,int yOff, int xAdv)
       : id(_id), width((float) w), height((float)h), xOffset((float)xOff), yOffset((float)yOff), xAdvance((float)xAdv)
     {
       u0 = x/ 256.0f;
@@ -23,4 +23,4 @@ class Character{
       v0 = tmpV1;
       v1 = tmpV0;
     }
-}
+};

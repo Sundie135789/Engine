@@ -1,7 +1,8 @@
 #pragma once
 #include <vector>
-#include "gameobject.hpp"
-#include "Character.hpp"
+#include <unordered_map>
+#include "character.hpp"
+class GameObject;
 
 extern std::vector<GameObject*> gameobjects;
 extern std::unordered_map<char, Character> fontCharacters;
