@@ -28,6 +28,7 @@
 #include "stb_image.h"
 #define WINDOW_WIDTH 2560
 #define WINDOW_HEIGHT 1920
+// run, and move the text to the textfield, typing rendering etc.
 std::vector<GameObject*> gameobjects;
 std::string commandBuffer = "";
 bool LoadFont(const std::string& fntFile, const std::string& atlasFile){
@@ -146,7 +147,7 @@ int main(void){
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
     glDisable(GL_DEPTH_TEST);
-    float color[] = {1.0f, 1.0f, 1.0f};
+    float color[] = {0.163f, 0.163f, 0.163f};
     renderText(*textShader, "Hello SundieCoder!", 50.0f, WINDOW_HEIGHT - 50.0f, 1.0f, color);
     glEnable(GL_DEPTH_TEST);
     glfwSwapBuffers(window);
