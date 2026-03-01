@@ -26,12 +26,8 @@
 #include "text.hpp"
 #include <fstream>
 #include "stb_image.h"
-#define STB_IMAGE_IMPLEMENTATION
 #define WINDOW_WIDTH 2560
 #define WINDOW_HEIGHT 1920
-/*
- * Create a global LoadFont function to parse .fnt file and load atlas texture.
- * */
 std::vector<GameObject*> gameobjects;
 std::string commandBuffer = "";
 bool LoadFont(const std::string& fntFile, const std::string& atlasFile){
@@ -40,14 +36,15 @@ bool LoadFont(const std::string& fntFile, const std::string& atlasFile){
   std::string line;
   while(std::getline(file, line)){
     if(line.find("char id=") == 0){
-      int id,x,y,width,height,xOffset,yOffset,xAdvance;
-      sscanf(line.c_str(), "char id=%d x=%d y=%d width=%d height=%d xoffset=%d yoffset=%d xadvance=%d",
+      int id,x,y,width,height;
+      float xOffset, yOffset, xAdvance;
+      sscanf(line.c_str(), "char id=%d x=%d y=%d width=%d height=%d xoffset=%f yoffset=%f xadvance=%f",
           &id, &x, &y, &width, &height, &xOffset, &yOffset, &xAdvance);
       Character ch((char)id,x,y,width,height,xOffset,yOffset,xAdvance);
       fontCharacters[(char)id] = ch;
     }
     else if (line.find("common ") == 0){
-      sscanf(line.c_str(), "common lineHeight=%d", &fontLineHeight);
+      sscanf(line.c_str(), "common lineHeight=%f", &fontLineHeight);
     }
   }
   file.close();
@@ -57,7 +54,9 @@ bool LoadFont(const std::string& fntFile, const std::string& atlasFile){
   if(!data) return false;
   glGenTextures(1,&fontTextureID);
   glBindTexture(GL_TEXTURE_2D, fontTextureID);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+  GLint format = (channels == 1) ? GL_RED : (channels == 3) ? GL_RGBA : GL_RGB;
+  glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   stbi_image_free(data);
@@ -105,7 +104,7 @@ int main(void){
   // --- OpenGL Code ---
   Camera* mainCamera = new Camera((float)WINDOW_WIDTH/WINDOW_HEIGHT);
   loadSidePane();
-  LoadFont("assets/font.fnt", "assets/font.png");
+  LoadFont("assets/description.fnt", "assets/font.png");
   Shader* textShader = new Shader("shaders/text.vert", "shaders/text.frag");
   glm::mat4 textOrtho = glm::ortho(0.0f, (float) WINDOW_WIDTH, (float)WINDOW_HEIGHT, 0.0f,-1.0f, 1.0f);
   textShader->use();

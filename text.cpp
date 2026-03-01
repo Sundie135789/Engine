@@ -31,7 +31,7 @@ void renderText(Shader &shader, const std::string &text, float x, float y, float
 
     Character ch = fontCharacters[c];
     float xpos = x + ch.xOffset * scale;
-    float ypos = y - (ch.height - ch.yOffset) * scale;
+    float ypos = y + ch.yOffset * scale;
     float w = ch.width * scale;
     float h = ch.height * scale;
     float vertices[6][4] = {

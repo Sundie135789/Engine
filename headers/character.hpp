@@ -18,9 +18,5 @@ class Character{
       u1 = (x + w) / 256.0f;
       v1 = (y + h) / 512.0f;
 
-      float tmpV0 = 1.0f - v0;
-      float tmpV1 = 1.0f - v1;
-      v0 = tmpV1;
-      v1 = tmpV0;
     }
 };

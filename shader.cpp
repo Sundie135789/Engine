@@ -44,9 +44,9 @@ Shader::Shader(std::string vertPath, std::string fragPath){
   std::cout << std::to_string(this->shaderProgram) << std::endl;
   glAttachShader(shaderProgram, vertexShader);
   glAttachShader(shaderProgram, fragmentShader);
+  glLinkProgram(shaderProgram);
   glDeleteShader(vertexShader);
   glDeleteShader(fragmentShader); 
-  glLinkProgram(shaderProgram);
 }
 void Shader::SetColor(float red, float green, float blue){
   this->red = red;
