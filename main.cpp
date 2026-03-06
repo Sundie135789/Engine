@@ -11,24 +11,25 @@
   Whenever we need a character for rendering, we can look at the fnt data, look at the atlas, and get the character.
   This is how bitmap font texture atlas system works.
  * */
+//TODO: Top priority: https://wiki.osdev.org/Bare_Bones -> do bootstrap assembly in ~/project/boot/
+//TODO: Implement delta timing with V Sync
 #include <iostream>
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <GLFW/glfw3.h>
-#include "mesh.hpp"
-#include "shader.hpp"
-#include "gameobject.hpp"
-#include "global.hpp"
-#include "texture.hpp"
-#include "sidepane.hpp"
-#include "transform.hpp"
-#include "camera.hpp"
-#include "text.hpp"
+#include "headers/mesh.hpp"
+#include "headers/shader.hpp"
+#include "headers/gameobject.hpp"
+#include "headers/global.hpp"
+#include "headers/texture.hpp"
+#include "headers/sidepane.hpp"
+#include "headers/transform.hpp"
+#include "headers/camera.hpp"
+#include "headers/text.hpp"
 #include <fstream>
 #include "stb_image.h"
 #define WINDOW_WIDTH 2560
 #define WINDOW_HEIGHT 1920
-// run, and move the text to the textfield, typing rendering etc.
 std::vector<GameObject*> gameobjects;
 std::string commandBuffer = "";
 bool LoadFont(const std::string& fntFile, const std::string& atlasFile){
@@ -36,42 +37,52 @@ bool LoadFont(const std::string& fntFile, const std::string& atlasFile){
   if(!file.is_open()) return false;
   std::string line;
   while(std::getline(file, line)){
-    if(line.find("char id=") == 0){
-      int id,x,y,width,height;
+    if(!line.empty() && line.back() == '\r')line.pop_back();
+    if(line.find("common ") == 0){
+      sscanf(line.c_str(), "common lineHeight=%f base=%*f ascent=%*f descent=%*f scaleW=%d scaleH=%d",
+          &fontLineHeight, &fontAtlasWidth, &fontAtlasHeight);
+  
+    }
+    else if(line.find("char id=") == 0){
+      int id, x, y, width, height;
       float xOffset, yOffset, xAdvance;
       sscanf(line.c_str(), "char id=%d x=%d y=%d width=%d height=%d xoffset=%f yoffset=%f xadvance=%f",
           &id, &x, &y, &width, &height, &xOffset, &yOffset, &xAdvance);
-      Character ch((char)id,x,y,width,height,xOffset,yOffset,xAdvance);
+      Character ch((char) id, x, y, width, height, xOffset, yOffset, xAdvance);
       fontCharacters[(char)id] = ch;
-    }
-    else if (line.find("common ") == 0){
-      sscanf(line.c_str(), "common lineHeight=%f", &fontLineHeight);
     }
   }
   file.close();
-
+  for(auto& [key,ch] : fontCharacters){
+    ch.u0 /=fontAtlasWidth;
+    ch.u1 /= fontAtlasWidth;
+    ch.v0 /= fontAtlasHeight;
+    ch.v1 /= fontAtlasHeight;
+  }
   int width, height, channels;
-  unsigned char* data = stbi_load(atlasFile.c_str(), &width, &height, &channels, 0);
+  unsigned short* data = stbi_load_16(atlasFile.c_str(), &width, &height, &channels, 0);
   if(!data) return false;
-  glGenTextures(1,&fontTextureID);
+  glGenTextures(1, &fontTextureID);
   glBindTexture(GL_TEXTURE_2D, fontTextureID);
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-  GLint format = (channels == 1) ? GL_RED : (channels == 3) ? GL_RGBA : GL_RGB;
-  glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+
+  glTexImage2D (GL_TEXTURE_2D, 0, GL_R16, width, height, 0,GL_RED, GL_UNSIGNED_SHORT, data);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   stbi_image_free(data);
   return true;
-}
-void RenderText(std::string text, float x, float y, float scale, glm::vec3 color){
-  
+
 }
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods){
+  std::cout << "MOD: " << (char) mods << " AND " << mods;
   if(action != GLFW_PRESS) return;
   if(key >= GLFW_KEY_A && key <= GLFW_KEY_Z){
     char c = 'a' + (key - GLFW_KEY_A);
     commandBuffer += c;
-  }else if(key == GLFW_KEY_ENTER){
+  }else if(key == GLFW_KEY_SPACE){
+    commandBuffer += " ";
+  }
+  else if(key == GLFW_KEY_ENTER){
     //TODO
   }
   std::cout << commandBuffer << '\n';
@@ -85,7 +96,6 @@ void goTerminate(){
 
 }
 int main(void){
-
   if(!glfwInit()){
     std::cout << "GLFW Init error" << std::endl;
     goTerminate();
@@ -103,8 +113,12 @@ int main(void){
   glfwSetKeyCallback(window, key_callback);
   glViewport(0,0,WINDOW_WIDTH, WINDOW_HEIGHT);
   // --- OpenGL Code ---
+  float command_default_color[] = {0.403f, 0.403f, 0.403f};
+  float command_color[] = {0.675, 0.086, 0.173};
+  
   Camera* mainCamera = new Camera((float)WINDOW_WIDTH/WINDOW_HEIGHT);
   loadSidePane();
+  loadCommandField();
   LoadFont("assets/description.fnt", "assets/font.png");
   Shader* textShader = new Shader("shaders/text.vert", "shaders/text.frag");
   glm::mat4 textOrtho = glm::ortho(0.0f, (float) WINDOW_WIDTH, (float)WINDOW_HEIGHT, 0.0f,-1.0f, 1.0f);
@@ -128,6 +142,7 @@ int main(void){
   gameobject->SetMesh(mesh);
   gameobject->SetTransform(transform);
   gameobjects.push_back(gameobject);
+  
   while(!glfwWindowShouldClose(window)){
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -147,8 +162,12 @@ int main(void){
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
     glDisable(GL_DEPTH_TEST);
-    float color[] = {0.163f, 0.163f, 0.163f};
-    renderText(*textShader, "Hello SundieCoder!", 50.0f, WINDOW_HEIGHT - 50.0f, 1.0f, color);
+    if (commandBuffer == "") renderText(*textShader, "Enter Command Here...", 2112.5f, WINDOW_HEIGHT - 75.0f, 1.0f, command_default_color);
+    else renderText(*textShader, commandBuffer, 2112.5f, WINDOW_HEIGHT-75.0f, 1.0f, command_color);
+    glLineWidth(3.0f);
+    glBindVertexArray(commandFieldVAO);
+    glUseProgram(commandFieldShader->shaderProgram);
+    glDrawArrays(GL_LINE_LOOP, 0, 4);
     glEnable(GL_DEPTH_TEST);
     glfwSwapBuffers(window);
     glfwPollEvents();

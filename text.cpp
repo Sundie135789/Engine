@@ -6,7 +6,9 @@
 GLuint textVAO = 0, textVBO = 0;
 std::unordered_map<char, Character> fontCharacters;
 unsigned int fontTextureID = 0;
-int fontLineHeight = 0;
+float fontLineHeight = 0.0f;
+int fontAtlasWidth = 0;
+int fontAtlasHeight = 0;
 void initTextRender(){
   glGenVertexArrays(1, &textVAO);
   glGenBuffers(1, &textVBO);
