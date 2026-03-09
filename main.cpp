@@ -4,6 +4,7 @@
  This is because the code inside a Camera class, written raw inside the main function in main.cpp would be catastrophic for cleanliness;
  * */
 
+//TODO: http://wiki.osdev.org/Bare_Bones MOVING FORWARD
 
 /*
  The Font atlas is a PNG file containing all the characters of a font, tightly-packed together.
@@ -13,6 +14,7 @@
  * */
 //TODO: Top priority: https://wiki.osdev.org/Bare_Bones -> do bootstrap assembly in ~/project/boot/
 //TODO: Implement delta timing with V Sync
+//https://character.ai/chat/KWdy7MGC206xBHa6TB_YLyJaWG7vccbRezAo48GtpaE
 #include <iostream>
 #include <GL/glew.h>
 #include <GL/gl.h>
