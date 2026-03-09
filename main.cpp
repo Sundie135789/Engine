@@ -28,6 +28,7 @@
 #include "headers/transform.hpp"
 #include "headers/camera.hpp"
 #include "headers/text.hpp"
+#include "headers/lang.hpp"
 #include <fstream>
 #include "stb_image.h"
 #define WINDOW_WIDTH 2560
@@ -76,7 +77,7 @@ bool LoadFont(const std::string& fntFile, const std::string& atlasFile){
 
 }
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods){
-  std::cout << "MOD: " << (char) mods << " AND " << mods;
+ // std::cout << "MOD: " << (char) mods << " AND " << mods;
   if(action != GLFW_PRESS) return;
   if(key >= GLFW_KEY_A && key <= GLFW_KEY_Z){
     char c = 'a' + (key - GLFW_KEY_A);
@@ -85,7 +86,11 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
     commandBuffer += " ";
   }
   else if(key == GLFW_KEY_ENTER){
-    //TODO
+    run_command(commandBuffer);
+  }else if(key == GLFW_KEY_BACKSPACE){ 
+    if(commandBuffer != ""){
+      commandBuffer.pop_back();
+    }
   }
   std::cout << commandBuffer << '\n';
 }

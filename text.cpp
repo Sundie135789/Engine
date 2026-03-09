@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 #include <unordered_map>
 
+#include <iostream>
 GLuint textVAO = 0, textVBO = 0;
 std::unordered_map<char, Character> fontCharacters;
 unsigned int fontTextureID = 0;
@@ -33,6 +34,7 @@ void renderText(Shader &shader, const std::string &text, float x, float y, float
 
     Character ch = fontCharacters[c];
     float xpos = x + ch.xOffset * scale;
+    if(xpos > 2490.25f) break;; 
     float ypos = y + ch.yOffset * scale;
     float w = ch.width * scale;
     float h = ch.height * scale;
