@@ -4,7 +4,6 @@
  This is because the code inside a Camera class, written raw inside the main function in main.cpp would be catastrophic for cleanliness;
  * */
 
-//TODO: http://wiki.osdev.org/Bare_Bones MOVING FORWARD
 
 /*
  The Font atlas is a PNG file containing all the characters of a font, tightly-packed together.
@@ -12,9 +11,18 @@
   Whenever we need a character for rendering, we can look at the fnt data, look at the atlas, and get the character.
   This is how bitmap font texture atlas system works.
  * */
-//TODO: Top priority: https://wiki.osdev.org/Bare_Bones -> do bootstrap assembly in ~/project/boot/
-//TODO: Implement delta timing with V Sync
-//https://character.ai/chat/KWdy7MGC206xBHa6TB_YLyJaWG7vccbRezAo48GtpaE
+// remove sidepane and implement bottom pane, toggled GUI, upon change/non changeable key like `
+/*
+ *+------------------------------------------------+
+|                                                |
+|              OpenGL Viewport                   |
+|                                                |
++------------------------------------------------+
+| > spawn cube 0 0 0                             |  ← full width
+| > set cube.scale 2                             |     scrollable history
+| > _                                            |     above input line
++------------------------------------------------+
+ * */
 #include <iostream>
 #include <GL/glew.h>
 #include <GL/gl.h>
@@ -77,7 +85,6 @@ bool LoadFont(const std::string& fntFile, const std::string& atlasFile){
 
 }
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods){
- // std::cout << "MOD: " << (char) mods << " AND " << mods;
   if(action != GLFW_PRESS) return;
   if(key >= GLFW_KEY_A && key <= GLFW_KEY_Z){
     char c = 'a' + (key - GLFW_KEY_A);
@@ -87,12 +94,12 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
   }
   else if(key == GLFW_KEY_ENTER){
     run_command(commandBuffer);
+    commandBuffer = "";
   }else if(key == GLFW_KEY_BACKSPACE){ 
     if(commandBuffer != ""){
       commandBuffer.pop_back();
     }
   }
-  std::cout << commandBuffer << '\n';
 }
 void goTerminate(){
   for(auto g : gameobjects){
