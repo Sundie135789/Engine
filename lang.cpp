@@ -23,12 +23,16 @@ std::vector<std::string> lex_line(std::string buffer){
     }
     position++;
   }
+  std::cout << "TOKENS : start\n";
   for(std::string s : tokens){
     std::cout << s << '\n';
   }
+  std::cout << "TOKENS : end\n";
   return tokens;
 }
+void run_line(std::vector<std::string> tokens){
 
+}
 void run_command(std::string command){
-
+  run_line(lex_line(command));
 }
