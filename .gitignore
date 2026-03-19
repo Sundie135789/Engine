@@ -1,0 +1,7 @@
+*.o
+*.bin
+*.txt
+*.ini
+*.glb
+*.gltf
+*.json

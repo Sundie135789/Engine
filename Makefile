@@ -1,15 +1,40 @@
-CXX = ccache clang++
-CXXFLAGS = -std=c++20 -Wall -O2 -Iheaders
-LIBS = -lGL -lGLEW -lglfw
+# Compiler and flags
+CXX = g++
+CXXFLAGS = -std=c++17 -Wall -Wextra -O2 -I./headers -I./assets 
+LDFLAGS = -lglfw -lGLEW -lGL -lm -lassimp
 
-SRC = main.cpp shader.cpp mesh.cpp gameobject.cpp camera.cpp transform.cpp sidepane.cpp readshader.cpp texture.cpp text.cpp character.cpp lang.cpp
-OBJ = $(SRC:.cpp=.o)
+# Source files
+SOURCES = gameobject.cpp main.cpp camera.cpp lang.cpp mesh.cpp readshader.cpp shader.cpp texture.cpp transform.cpp import.cpp
+IMGUI_SOURCES = assets/imgui.cpp assets/imgui_draw.cpp assets/imgui_widgets.cpp assets/imgui_tables.cpp assets/imgui_stdlib.cpp assets/imgui_demo.cpp assets/imgui_impl_glfw.cpp assets/imgui_impl_opengl3.cpp 
 
-engine: $(OBJ)
-	$(CXX) $(OBJ) $(LIBS) -o engine
+# Object files
+OBJECTS = $(SOURCES:.cpp=.o)
+IMGUI_OBJECTS = $(IMGUI_SOURCES:.cpp=.o)
+ALL_OBJECTS = $(OBJECTS) $(IMGUI_OBJECTS)
 
+# Output executable
+TARGET = engine
+
+# Default target
+all: $(TARGET)
+
+# Link executable
+$(TARGET): $(ALL_OBJECTS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+
+# Compile .cpp to .o
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+# Clean
 clean:
-	rm -f *.o engine
+	rm -f $(ALL_OBJECTS) $(TARGET)
+
+# Rebuild
+rebuild: clean all
+
+# Run
+run: $(TARGET)
+	./$(TARGET)
+
+.PHONY: all clean rebuild run

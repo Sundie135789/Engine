@@ -26,10 +26,6 @@ void Mesh::draw(){
   
   glBindVertexArray(vao);
   glBindBuffer(GL_ARRAY_BUFFER,vbo);
-  if(verticeCount == 3){
-    shape = GL_TRIANGLES;
-  }else{
-    shape = GL_TRIANGLE_FAN;
-  }
+	shape = GL_TRIANGLES;
   glDrawArrays(shape, 0, verticeCount);
 }
