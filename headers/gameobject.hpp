@@ -20,8 +20,10 @@ class GameObject{
   void SetMesh(Mesh *mesh);
   void SetName(std::string newName);
   void SetTransform(Transform* transform);
-	char XBuffer[128];
-	char YBuffer[128];
-	char ZBuffer[128];
+	float posX = 0.0f;
+	float posY = 0.0f;
+	float posZ = 0.0f;
+	float scaleX =1.0f, scaleY=1.0f, scaleZ=1.0f;
+	float rotateX = 0.0f, rotateY = 0.0f, rotateZ = 0.0f;
   ~GameObject();
 };

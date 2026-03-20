@@ -19,18 +19,23 @@
 #include <iostream>
 #define WINDOW_WIDTH 2560
 #define WINDOW_HEIGHT 1920
-//leave glb and gltf for now, and do top bar (File, Edit) and then do on-click gameobjects[0] ka menu. simple ImGui.
+// implement moving forward (change camera position) on W.
 //
 std::vector<GameObject *> gameobjects;
+bool lastMouseButtonState = false;
 double mouseX, mouseY;
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods){
-	if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS){
-		glfwGetCursorPos(window, &mouseX, &mouseY);
-		if(mouseX >= 1000) return;
-		GameObject* g = gameobjects.at(0);
-		g->menuOpen = !(g->menuOpen);
+float Zspeed = 0.01f;
+float Xspeed = 0.01f;
+/*void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
+	
+	if(action == GLFW_KEY_PRESS){
+		if(key == GLFW_KEY_W){
+			mainCamera->position[2] -= Zspeed;
+		}else if(key == GLFW_KEY_S){
+			mainCamera->position[2] += Zspeed;
+		}
 	}
-}
+}*/
 void goTerminate() {
   for (auto g : gameobjects) {
     delete g;
@@ -62,7 +67,7 @@ int main(void) {
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init();
   Camera *mainCamera = new Camera((float)WINDOW_WIDTH / WINDOW_HEIGHT);
-  /*float vertices[] = {-0.375f, -0.375f, 0.0f, 0.0f, 0.0f,
+  float vertices[] = {-0.375f, -0.375f, 0.0f, 0.0f, 0.0f,
                       0.375f,  -0.375f, 0.0f, 1.0f, 0.0f,
                       0.0f,    0.375f,  0.0f, 0.5f, 1.0f};
   Texture *texture = new Texture("assets/monkey.png");
@@ -74,17 +79,34 @@ int main(void) {
   gameobject->SetShader(shader);
   gameobject->SetMesh(mesh);
   gameobject->SetTransform(transform);
-  gameobjects.push_back(gameobject);*/
-	loadModel("chess.glb");
-	glfwSetMouseButtonCallback(window, mouse_button_callback);
+  gameobjects.push_back(gameobject);
+	glfwSetCursorPosCallback(window, cursor_position_callback);
   while (!glfwWindowShouldClose(window)) {
     glfwPollEvents();
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 		ImGuiIO& io = ImGui::GetIO();
-		std::cout << "WantCaptureMouse: " << io.WantCaptureMouse << std::endl;
-	
+		bool currentMouseButtonState=  glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
+		if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
+			mainCamera->position[2] -= Zspeed;
+		}if(glfwGetKey(window,GLFW_KEY_S) == GLFW_PRESS){
+			mainCamera->position[2] += Zspeed;
+		} if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS){
+			mainCamera->position[0] -= Xspeed;
+		}if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS){
+			mainCamera->position[0] += Xspeed;
+		}
+		mainCamera->position[0] = glm::clamp(mainCamera->position[0], -5.0f, 5.0f);
+		mainCamera->position[2] = glm::clamp(mainCamera->position[2], 0.5f, 3.0f);
+		if(currentMouseButtonState && !lastMouseButtonState && !io.WantCaptureMouse){
+			glfwGetCursorPos(window, &mouseX, &mouseY);
+			if(mouseX < 1000){
+				GameObject* g = gameobjects.at(0);
+				g->menuOpen = !g->menuOpen;
+			}
+		}
+		lastMouseButtonState = currentMouseButtonState;
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);

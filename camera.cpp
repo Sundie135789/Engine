@@ -2,7 +2,7 @@
 
 Camera::Camera(float aspect){
   this->aspect = aspect;
-  position = glm::vec3(1.0f, 1.0f, 1.0f);
+  position = glm::vec3(0.0f, 0.0f, 1.0f);
   rotation = glm::vec3(1.0f);
   fov = glm::radians(60.0f);
   nearPlane = 0.1f;
@@ -11,7 +11,7 @@ Camera::Camera(float aspect){
 
 glm::mat4 Camera::GetViewMatrix() const{
 
-  return glm::lookAt(position, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+  return glm::lookAt(position, glm::vec3(position[0], position[1], position[2] - 0.1f), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 glm::mat4 Camera::GetProjectionMatrix() const{
   return glm::perspective(fov, aspect, nearPlane, farPlane);

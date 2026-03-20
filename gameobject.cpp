@@ -13,23 +13,32 @@ GameObject::GameObject(std::string name, Shader* shader, Mesh* mesh, Transform* 
   this->mesh = mesh;
   this->transform = transform;
   this->shader->use();
-	memset(XBuffer, 0, sizeof(XBuffer));
-	XBuffer[0] = '\0';
-	memset(YBuffer, 0, sizeof(YBuffer));
-	YBuffer[0] = '\0';
-	memset(ZBuffer, 0, sizeof(ZBuffer));
-	ZBuffer[0] = '\0';
+	
 }
 void GameObject::toggleObjectMenu(){
 	const char* objectName = this->name.c_str();
-	ImGui::SetNextWindowSize(ImVec2(400, 300), ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowPos(ImVec2(1800, 0), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(600, 1900), ImGuiCond_Always);
+	ImGui::SetNextWindowPos(ImVec2(2000, 0), ImGuiCond_Always);
 	ImGui::Begin(objectName);
 	ImGui::SetWindowFontScale(1.5f);
-	ImGui::Text("Transform");
-	if(ImGui::InputText("Pos X",this->XBuffer, IM_ARRAYSIZE(XBuffer))){}
-	if(ImGui::InputText("Pos Y",this->YBuffer, IM_ARRAYSIZE(YBuffer))){}
-	if(ImGui:: InputText("Pos Z",this->ZBuffer, IM_ARRAYSIZE(ZBuffer))){}
+	ImGui::Text("Transforms");
+	if(ImGui::InputFloat("Pos X", &posX)){
+		this->transform->position[0] = posX;
+	}
+	if(ImGui::InputFloat("Pos Y", &posY)){
+		this->transform->position[1] = posY;
+	}
+	if(ImGui::InputFloat("Pos Z", &posZ)){
+		this->transform->position[2] = posZ;
+	}
+	ImGui::Text("\n");
+	if(ImGui::InputFloat("Scale X", &scaleX)){
+		this->transform->scale[0] = scaleX;
+	}	if(ImGui::InputFloat("Scale Y", &scaleY)){
+		this->transform->scale[1] = scaleY;
+	}	if(ImGui::InputFloat("Scale Z", &scaleZ)){
+		this->transform->scale[2] = scaleZ;
+	}
 	ImGui::End();
 }
 GameObject::GameObject(std::string name){
