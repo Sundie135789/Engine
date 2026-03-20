@@ -21,6 +21,7 @@
 #define WINDOW_HEIGHT 1920
 // implement moving forward (change camera position) on W.
 //
+  Camera *mainCamera = new Camera((float)WINDOW_WIDTH / WINDOW_HEIGHT);
 std::vector<GameObject *> gameobjects;
 bool lastMouseButtonState = false;
 double mouseX, mouseY;
@@ -36,6 +37,7 @@ float Xspeed = 0.01f;
 		}
 	}
 }*/
+
 void goTerminate() {
   for (auto g : gameobjects) {
     delete g;
@@ -66,7 +68,6 @@ int main(void) {
   ImGui::CreateContext();
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init();
-  Camera *mainCamera = new Camera((float)WINDOW_WIDTH / WINDOW_HEIGHT);
   float vertices[] = {-0.375f, -0.375f, 0.0f, 0.0f, 0.0f,
                       0.375f,  -0.375f, 0.0f, 1.0f, 0.0f,
                       0.0f,    0.375f,  0.0f, 0.5f, 1.0f};
@@ -80,7 +81,6 @@ int main(void) {
   gameobject->SetMesh(mesh);
   gameobject->SetTransform(transform);
   gameobjects.push_back(gameobject);
-	glfwSetCursorPosCallback(window, cursor_position_callback);
   while (!glfwWindowShouldClose(window)) {
     glfwPollEvents();
     ImGui_ImplOpenGL3_NewFrame();
