@@ -3,12 +3,14 @@
 #include "mesh.hpp"
 #include "transform.hpp"
 #include "camera.hpp"
+#include "material.hpp"
 #include <string>
 #include <stdbool.h>
 class GameObject{
   public:
-  Shader *shader;
-  Mesh* mesh;
+  /*Shader *shader;
+  Mesh* mesh;*/
+	Material* material;
   Transform* transform;
   std::string name;
   void draw(Camera& camera);
@@ -20,6 +22,7 @@ class GameObject{
   void SetMesh(Mesh *mesh);
   void SetName(std::string newName);
   void SetTransform(Transform* transform);
+	void SetMaterial(Material* material);
 	float posX = 0.0f;
 	float posY = 0.0f;
 	float posZ = 0.0f;

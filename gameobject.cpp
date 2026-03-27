@@ -75,9 +75,9 @@ void GameObject::draw(Camera& camera){
     std::exit(1);
   }
   shader->use();
-  shader->SetMatrix("view", camera.GetViewMatrix());
-  shader->SetMatrix("projection", camera.GetProjectionMatrix());
+  shader->SetMat4("view", camera.GetViewMatrix());
+  shader->SetMat4("projection", camera.GetProjectionMatrix());
   glm::mat4 model = transform->GetModelMatrix();
-  shader->SetMatrix("model", model);
+  shader->SetMat4("model", model);
   mesh->draw();
 }

@@ -1,7 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include <cstdlib>
-std::string LoadShader(std::string path){
+std::string LoadFile(std::string path){
   std::ifstream file(path);
   std::string text;
   if(!file.is_open()){

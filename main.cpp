@@ -19,8 +19,8 @@
 #include <iostream>
 #define WINDOW_WIDTH 2560
 #define WINDOW_HEIGHT 1920
-// implement moving forward (change camera position) on W.
-//
+//TODO: focus on sundiecube and GUI later, first do material class and make sure code compiles. material contains a Mesh and Shader pointer.
+//TODO: parse sundiecube.sundie, update github README.md to tell the downloader that we have to first run a specific script for blender support.
   Camera *mainCamera = new Camera((float)WINDOW_WIDTH / WINDOW_HEIGHT);
 std::vector<GameObject *> gameobjects;
 bool lastMouseButtonState = false;
@@ -72,14 +72,16 @@ int main(void) {
                       0.375f,  -0.375f, 0.0f, 1.0f, 0.0f,
                       0.0f,    0.375f,  0.0f, 0.5f, 1.0f};
   Texture *texture = new Texture("assets/monkey.png");
-  Mesh *mesh = new Mesh(vertices, 3, true);
+  Mesh *mesh = new Mesh(vertices, 3);
   Shader *shader = new Shader("shaders/texture.vert", "shaders/texture.frag");
   Transform *transform = new Transform();
-  shader->SetTexture(texture);
+	Material *material = new Material();
+
   GameObject *gameobject = new GameObject("triangle");
   gameobject->SetShader(shader);
   gameobject->SetMesh(mesh);
   gameobject->SetTransform(transform);
+	gameobject->SetMaterial(material);
   gameobjects.push_back(gameobject);
   while (!glfwWindowShouldClose(window)) {
     glfwPollEvents();

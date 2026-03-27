@@ -1,14 +1,12 @@
 #include "shader.hpp"
 #include <cassert>
-#include "readshader.hpp"
+#include "readfile.hpp"
 #include "global.hpp"
 #include <vector>
 #include <iostream>
 Shader::Shader(std::string vertPath, std::string fragPath){
-  this->hasColor = false;
-  this->hasTexture = false;
-  std::string vertexSource = LoadShader(vertPath);
-  std::string fragmentSource = LoadShader(fragPath);
+  std::string vertexSource = LoadFile(vertPath);
+  std::string fragmentSource = LoadFile(fragPath);
   const char* vertexCstr = vertexSource.c_str();
   const char* fragmentCstr = fragmentSource.c_str();
 
@@ -48,39 +46,44 @@ Shader::Shader(std::string vertPath, std::string fragPath){
   glDeleteShader(vertexShader);
   glDeleteShader(fragmentShader); 
 }
-void Shader::SetColor(float red, float green, float blue){
+/*void Shader::SetColor(float red, float green, float blue){
   this->red = red;
   this->green = green;
   this->blue = blue;
   hasColor = true;
-}
-void Shader::SetTexture(Texture* texture){
+}*/
+/*void Shader::SetTexture(Texture* texture){
   this->texture = texture;
   hasTexture = true;
-}
+}*/
 void Shader::use(){
 
   assert(shaderProgram != 0 );
   glUseProgram(shaderProgram);
-  if(hasColor && hasTexture){
-    std::cout << "Cannot have Both Color and Texture at Once in a mesh. Exiting..." << std::endl;
-    goTerminate();
-    std::exit(1);
-  }
-  if(hasColor == true){
-    glUniform3f(glGetUniformLocation(this->shaderProgram, "uColor"), red, green, blue);
-  }else if(hasTexture == true){
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture->textureID);
-    glUniform1i(glGetUniformLocation(this->shaderProgram, "uTexture"),0);
-  }
-  else{
-    glUniform3f(glGetUniformLocation(this->shaderProgram, "uColor"), 0.502f, 0.0f, 0.502f);
-  }
 }
-void Shader::SetMatrix(std::string uniformName, glm::mat4 matrix){
+void Shader::SetMat4(std::string uniformName, glm::mat4 set){
   const char* name = uniformName.c_str();
-  glUniformMatrix4fv(glGetUniformLocation(shaderProgram, name), 1, GL_FALSE, &matrix[0][0]);
+  glUniformMatrix4fv(glGetUniformLocation(shaderProgram, name), 1, GL_FALSE, &set[0][0]);
+}
+void Shader::SetMat3(std::string uniformName, glm::mat3 set){
+  const char* name = uniformName.c_str();
+  glUniformMatrix3fv(glGetUniformLocation(shaderProgram, name), 1, GL_FALSE, &set[0][0]);
+}
+void Shader::SetVec3(std::string uniformName, glm::vec3 set){
+  const char* name = uniformName.c_str();
+  glUniform3f(glGetUniformLocation(shaderProgram, name), set.x, set.y, set.z);
+}
+void Shader::SetVec4(std::string uniformName, glm::vec4 set){
+  const char* name = uniformName.c_str();
+  glUniform4f(glGetUniformLocation(shaderProgram, name), set.x, set.y, set.z, set.w);
+}
+void Shader::SetFloat(std::string uniformName, float value){
+  const char* name = uniformName.c_str();
+	glUniform1f(glGetUniformLocation(shaderProgram, name), value);
+}
+void Shader::SetInt(std::string uniformName, int value){
+  const char* name = uniformName.c_str();
+	glUniform1i(glGetUniformLocation(shaderProgram, name), value);
 }
 Shader::~Shader(){
   glDeleteProgram(shaderProgram);
