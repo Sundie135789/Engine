@@ -1,0 +1,5 @@
+  501  cd engine
+  502  ls
+  503  history
+  504  history | -head 5
+  505  history >> -head 5

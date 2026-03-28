@@ -11,6 +11,7 @@
 #include "headers/shader.hpp"
 #include "headers/texture.hpp"
 #include "headers/transform.hpp"
+#include "headers/material.hpp"
 #include "stb_image.h"
 #include <GL/gl.h>
 #include <GL/glew.h>
@@ -18,7 +19,8 @@
 #include <fstream>
 #include <iostream>
 #define WINDOW_WIDTH 2560
-#define WINDOW_HEIGHT 1920
+#define WINDOW_HEIGHT 1920/
+//TODO: just run it and see the error bro. peace chill out. (github people, if you are seeing this, i love hermione granger.)
 //TODO: focus on sundiecube and GUI later, first do material class and make sure code compiles. material contains a Mesh and Shader pointer.
 //TODO: parse sundiecube.sundie, update github README.md to tell the downloader that we have to first run a specific script for blender support.
   Camera *mainCamera = new Camera((float)WINDOW_WIDTH / WINDOW_HEIGHT);
@@ -71,15 +73,14 @@ int main(void) {
   float vertices[] = {-0.375f, -0.375f, 0.0f, 0.0f, 0.0f,
                       0.375f,  -0.375f, 0.0f, 1.0f, 0.0f,
                       0.0f,    0.375f,  0.0f, 0.5f, 1.0f};
-  Texture *texture = new Texture("assets/monkey.png");
+  Texture *texture = new Texture	("assets/monkey.png");
   Mesh *mesh = new Mesh(vertices, 3);
   Shader *shader = new Shader("shaders/texture.vert", "shaders/texture.frag");
   Transform *transform = new Transform();
-	Material *material = new Material();
+	Material *material = new Material(shader, mesh);
 
   GameObject *gameobject = new GameObject("triangle");
-  gameobject->SetShader(shader);
-  gameobject->SetMesh(mesh);
+  gameobject->SetMaterial(material);
   gameobject->SetTransform(transform);
 	gameobject->SetMaterial(material);
   gameobjects.push_back(gameobject);
@@ -118,6 +119,7 @@ int main(void) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     assert(mainCamera != nullptr);
     for (GameObject *g : gameobjects) {
+		assert(g !=nullptr);
       g->draw(*mainCamera);
 			if(g->menuOpen){
 				g->toggleObjectMenu();

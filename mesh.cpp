@@ -1,19 +1,60 @@
 #include "mesh.hpp"
-Mesh::Mesh(float* vertices, int verticeCount){
-   
+#include <vector>
+#include <stdbool.h>
+
+#include <cstdlib>
+/*
+	Attribute order for each vertex declared as follows:
+	Vertex data (3 floats) -> Normals data (3 floats) -> RGB data (optional 3 floats) -> UV data (optional 2 floats)
+	Max stride of a vertex = 11 * sizeof(float);
+	This is followed strictly.
+	
+*/
+Mesh::Mesh(std::vector<float> vertices, int verticeCount, int stride){
+	/*
+		-0.5f, -0.5f, 0.0f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,  0.0f, 0.0f,
+		0.5f, -0.5f, 0.0f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.5f, 0.0f, -0.5f, 0.0f, 0.0f,1.0f, 0.0f, 0.0f, 1.0f, 1.0f
+		
+	*/
+	_Bool hasTexture, hasColor;
+	switch(stride){
+		case 6: 
+			hasTexture = false;
+			hasColor = false;
+			break;
+		case 8: 
+			hasTexture = true;
+			hasColor = false;
+			break;
+		case 9: 
+			hasTexture = false;
+			hasColor = true;
+			break;
+		case 11:
+			hasTexture = true;
+			hasColor = true;
+			break;
+		default:
+			std::cout<< "Invalid vertex data given to mesh. Stride given: " << stride << "\nStride must be 6, 8, 9, or 11!" << std::endl;
+			exit(1);
+	}
+	assert(stride >= 6);
   this->vertices = vertices;
   this->verticeCount = verticeCount;
-  glGenBuffers(1,  &vbo);
+  gGenBuffers(1,  &vbo);
   glGenVertexArrays(1, &vao);
   glBindVertexArray(vao);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, 3 * verticeCount * sizeof(float), vertices, GL_DYNAMIC_DRAW);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
+  glBufferData(GL_ARRAY_BUFFER, stride * verticeCount * sizeof(float), vertices, GL_DYNAMIC_DRAW);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride*sizeof(float), (void*)0);
   glEnableVertexAttribArray(0);
-  /*if(hasTexCoords){
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, stride, (void*)(3*sizeof(float)));
-    glEnableVertexAttribArray(1);
-  }*/
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride*sizeof(float), (void*)(3*sizeof(float)));
+  glEnableVertexAttribArray(1);
+  if(hasTexCoords){
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, (void*)(6*sizeof(float)));
+    glEnableVertexAttribArray(2);
+  }
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 }

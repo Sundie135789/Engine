@@ -2,18 +2,17 @@
 #include"assets/imgui_impl_glfw.h"
 #include"assets/imgui_impl_opengl3.h"
 #include "gameobject.hpp"
+#include "material.hpp"
 #include <string>
 #include <cstring>
 #include <iostream>
 #include "global.hpp"
 //make sure object menu function toggles instead of only creating a new window.
-GameObject::GameObject(std::string name, Shader* shader, Mesh* mesh, Transform* transform){
+GameObject::GameObject(std::string name, Material* material, Transform* transform){
   this->name = name;
-  this->shader = shader;
-  this->mesh = mesh;
+	this->material = material;
   this->transform = transform;
-  this->shader->use();
-	
+  this->material->use();
 }
 void GameObject::toggleObjectMenu(){
 	const char* objectName = this->name.c_str();
@@ -43,14 +42,11 @@ void GameObject::toggleObjectMenu(){
 }
 GameObject::GameObject(std::string name){
   this->name = name;
-  this->shader = nullptr;
-  this->mesh = nullptr;
+	this->material = nullptr;
 }
-void GameObject::SetShader(Shader *shader){
-  this->shader = shader;
-}
-void GameObject::SetMesh(Mesh *mesh){
-  this->mesh = mesh;
+
+void GameObject::SetMaterial(Material* material){
+  this->material = material;
 }
 void GameObject::SetName(std::string newName){
   this->name = newName;
@@ -59,25 +55,24 @@ void GameObject::SetTransform(Transform* transform){
   this->transform = transform;
 }
 GameObject::~GameObject(){
-  delete mesh;
-  delete shader;
+	delete material;
 	delete transform;
 }
 void GameObject::draw(Camera& camera){
-  if(this->shader == nullptr){
-    std::cout << "GameObject.name: " << this->name << "\nGameObject.draw() called without setting shader." << std::endl;
+  if(this->material == nullptr){
+    std::cout << "GameObject.name: " << this->name << "\nDraw call without setting material." << std::endl;
     goTerminate();
     std::exit(1);
   }
-  if(this->mesh == nullptr){
-    std::cout << "GameObject.name: " << this->name << "\nGameObject.draw() called without setting mesh." << std::endl;
-    goTerminate();
-    std::exit(1);
-  }
-  shader->use();
+  /*shader->use();
   shader->SetMat4("view", camera.GetViewMatrix());
   shader->SetMat4("projection", camera.GetProjectionMatrix());
   glm::mat4 model = transform->GetModelMatrix();
   shader->SetMat4("model", model);
-  mesh->draw();
+  mesh->draw();*/
+	assert(material != nullptr);
+	assert(transform != nullptr);
+	assert(&camera != nullptr);
+	material->use();
+	material->draw(transform->GetModelMatrix(), camera.GetViewMatrix(), camera.GetProjectionMatrix());
 }

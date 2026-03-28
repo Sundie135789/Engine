@@ -15,11 +15,11 @@ class GameObject{
   std::string name;
   void draw(Camera& camera);
 	bool menuOpen = false;
-  GameObject(std::string name, Shader* shader, Mesh* mesh, Transform* transform);
+  GameObject(std::string name, Material* material, Transform* transform);
   GameObject(std::string name);
 	void toggleObjectMenu();
-  void SetShader(Shader *shader);
-  void SetMesh(Mesh *mesh);
+  /*void SetShader(Shader *shader);
+  void SetMesh(Mesh *mesh);*/
   void SetName(std::string newName);
   void SetTransform(Transform* transform);
 	void SetMaterial(Material* material);
