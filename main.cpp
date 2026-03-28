@@ -20,6 +20,7 @@
 #include <iostream>
 #define WINDOW_WIDTH 2560
 #define WINDOW_HEIGHT 1920/
+//TODO: Work on a rotating cube with phong lighting from scratch, listen to "Another Love - Tom Odell", try lucid dreaming.
 //TODO: just run it and see the error bro. peace chill out. (github people, if you are seeing this, i love hermione granger.)
 //TODO: focus on sundiecube and GUI later, first do material class and make sure code compiles. material contains a Mesh and Shader pointer.
 //TODO: parse sundiecube.sundie, update github README.md to tell the downloader that we have to first run a specific script for blender support.
