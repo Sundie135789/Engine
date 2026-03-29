@@ -1,12 +1,13 @@
 #include <GL/glew.h>
+#include <vector>
 #pragma once
 class Mesh{
   public:
     GLenum shape;
     GLuint vbo, vao;
-    Mesh(float* vertices, int verticeCount, int stride);
+    Mesh(std::vector<float> vertices, int verticeCount, int stride);
     ~Mesh();
     void draw();
     int verticeCount;
-    float* vertices;
+   std::vector <float> vertices;
 };

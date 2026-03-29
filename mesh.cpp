@@ -1,4 +1,6 @@
 #include "mesh.hpp"
+#include <cassert>
+#include <iostream>
 #include <vector>
 #include <stdbool.h>
 
@@ -42,19 +44,33 @@ Mesh::Mesh(std::vector<float> vertices, int verticeCount, int stride){
 	assert(stride >= 6);
   this->vertices = vertices;
   this->verticeCount = verticeCount;
-  gGenBuffers(1,  &vbo);
+  glGenBuffers(1,  &vbo);
   glGenVertexArrays(1, &vao);
   glBindVertexArray(vao);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, stride * verticeCount * sizeof(float), vertices, GL_DYNAMIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, stride * verticeCount * sizeof(float), vertices.data(), GL_DYNAMIC_DRAW);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride*sizeof(float), (void*)0);
   glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride*sizeof(float), (void*)(3*sizeof(float)));
   glEnableVertexAttribArray(1);
-  if(hasTexCoords){
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, (void*)(6*sizeof(float)));
-    glEnableVertexAttribArray(2);
+	/* --- EXAMPLE ---
+		std::vector<float> vertices = {
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,0.5f, 0.5f, 0.5f,  0.0f, 0.0f, //bottom left vertex, normals, UV 0,0
+		};
+	*/
+	int index = 1, offset = 3;
+  if(hasTexture){
+		index++;
+		offset += 3;
+    glVertexAttribPointer(index, 2, GL_FLOAT, GL_FALSE, stride, (void*)(offset*sizeof(float)));
+    glEnableVertexAttribArray(index);
   }
+	if(hasColor){
+		index++;
+		offset += 
+		glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, stride, (void*)(offset*sizeof(float)));
+    glEnableVertexAttribArray(index);
+	}
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 }
