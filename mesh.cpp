@@ -19,7 +19,7 @@ Mesh::Mesh(std::vector<float> vertices, int verticeCount, int stride){
 		0.0f, 0.5f, 0.0f, -0.5f, 0.0f, 0.0f,1.0f, 0.0f, 0.0f, 1.0f, 1.0f
 		
 	*/
-	_Bool hasTexture, hasColor;
+	_Bool hasTexture = false , hasColor = false;
 	switch(stride){
 		case 6: 
 			hasTexture = false;
@@ -58,21 +58,23 @@ Mesh::Mesh(std::vector<float> vertices, int verticeCount, int stride){
 			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,0.5f, 0.5f, 0.5f,  0.0f, 0.0f, //bottom left vertex, normals, UV 0,0
 		};
 	*/
-	int index = 1, offset = 3;
+	int attributeIndex = 2;
+	int byteOffset = 6 * sizeof(float);
   if(hasTexture){
-		index++;
-		offset += 3;
-    glVertexAttribPointer(index, 2, GL_FLOAT, GL_FALSE, stride, (void*)(offset*sizeof(float)));
-    glEnableVertexAttribArray(index);
+    glVertexAttribPointer(attributeIndex, 2, GL_FLOAT, GL_FALSE, stride*sizeof(float), (void*)byteOffset);
+    glEnableVertexAttribArray(attributeIndex);
+		attributeIndex++;
+		byteOffset += 2 *sizeof(float);
   }
 	if(hasColor){
-		index++;
-		offset += 
-		glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, stride, (void*)(offset*sizeof(float)));
-    glEnableVertexAttribArray(index);
+		glVertexAttribPointer(attributeIndex, 3, GL_FLOAT, GL_FALSE, stride*sizeof(float), (void*)byteOffset);
+    glEnableVertexAttribArray(attributeIndex);
+		attributeIndex++;
+		byteOffset += 3 * sizeof(float);
 	}
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
+
 }
 Mesh::~Mesh(){
   glDeleteBuffers(1, &this->vbo);
@@ -82,6 +84,6 @@ void Mesh::draw(){
   
   glBindVertexArray(vao);
   glBindBuffer(GL_ARRAY_BUFFER,vbo);
-	shape = GL_TRIANGLES;
-  glDrawArrays(shape, 0, verticeCount);
+  glDrawArrays(GL_TRIANGLES, 0, verticeCount);
+	glBindVertexArray(0);
 }

@@ -3,7 +3,6 @@
 #pragma once
 class Mesh{
   public:
-    GLenum shape;
     GLuint vbo, vao;
     Mesh(std::vector<float> vertices, int verticeCount, int stride);
     ~Mesh();

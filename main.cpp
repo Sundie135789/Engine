@@ -22,8 +22,7 @@
 #define WINDOW_WIDTH 2560
 #define WINDOW_HEIGHT 1920
 //Todo priority list below.
-
-//TODO: work on index and offset variables in mesh class. really hard stuff bro. (github people, if you are seeing this, i love hermione granger.)
+//TODO: go to ~/project/graphic, cube.cpp, add specular lighting, then understand it all, then come back and work on engine. 
 //TODO: focus on sundiecube and GUI later, first do material class and make sure code compiles. material contains a Mesh and Shader pointer.
 //TODO: Work on a rotating cube with phong lighting from scratch, listen to "Another Love - Tom Odell", try lucid dreaming.
 //TODO: parse sundiecube.sundie, update github README.md to tell the downloader that we have to first run a specific script for blender support.
@@ -83,7 +82,7 @@ int main(void) {
 
   Texture *texture = new Texture	("assets/monkey.png");
   Mesh *mesh = new Mesh(vertices, 3, 8);
-  Shader *shader = new Shader("shaders/texture.vert", "shaders/texture.frag");
+  Shader *shader = new Shader("shaders/plain.vert", "shaders/plain.frag");
   Transform *transform = new Transform();
 	Material *material = new Material(shader, mesh);
 
