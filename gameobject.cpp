@@ -12,8 +12,7 @@ GameObject::GameObject(std::string name, Material* material, Transform* transfor
   this->name = name;
 	this->material = material;
   this->transform = transform;
-  this->material->use();
-}
+}	
 void GameObject::toggleObjectMenu(){
 	const char* objectName = this->name.c_str();
 	ImGui::SetNextWindowSize(ImVec2(600, 1900), ImGuiCond_Always);
@@ -73,6 +72,5 @@ void GameObject::draw(Camera& camera){
 	assert(material != nullptr);
 	assert(transform != nullptr);
 	assert(&camera != nullptr);
-	material->use();
 	material->draw(transform->GetModelMatrix(), camera.GetViewMatrix(), camera.GetProjectionMatrix());
 }

@@ -22,7 +22,6 @@
 #define WINDOW_WIDTH 2560
 #define WINDOW_HEIGHT 1920
 //Todo priority list below.
-//TODO: go to ~/project/graphic, cube.cpp, add specular lighting, then understand it all, then come back and work on engine. 
 //TODO: focus on sundiecube and GUI later, first do material class and make sure code compiles. material contains a Mesh and Shader pointer.
 //TODO: Work on a rotating cube with phong lighting from scratch, listen to "Another Love - Tom Odell", try lucid dreaming.
 //TODO: parse sundiecube.sundie, update github README.md to tell the downloader that we have to first run a specific script for blender support.
@@ -75,21 +74,23 @@ int main(void) {
 	// 	Vertex data (3 floats) -> Normals data (3 floats) -> RGB data (optional 3 floats) -> UV data (optional 2 floats)
 
 	mainCamera = new Camera((float)WINDOW_WIDTH/(float)WINDOW_HEIGHT);
-  std::vector<float> vertices = {-0.375f, -0.375f, 0.0f,0.0f, 0.0f, 1.0f, 0.0f, 0.0f,// given: vertices, normals, UV
+  /*std::vector<float> vertices = {-0.375f, -0.375f, 0.0f,0.0f, 0.0f, 1.0f, 0.0f, 0.0f,// given: vertices, normals, UV
                       					 0.375f,  -0.375f, 0.0f,0.0f, 0.0f, 1.0f, 1.0f, 0.0f,// no color along with texture.
-                      					 0.0f,    0.375f,  0.0f,0.0f, 0.0f, 1.0f, 0.5f, 1.0f};
+                      					 0.0f,    0.375f,  0.0f,0.0f, 0.0f, 1.0f, 0.5f, 1.0f};*/
 	//     Mesh(std::vector<float> vertices, int verticeCount, int stride);
-
-  Texture *texture = new Texture	("assets/monkey.png");
-  Mesh *mesh = new Mesh(vertices, 3, 8);
+	std::vector<float> vertices = {
+		-0.375f, -0.375f, 0.0f, 0.0f, 0.0f, 1.0f, 0.5f, 0.5f, 0.5f,
+		0.375f, -0.375f, 0.0f, 0.0f, 0.0f, 1.0f, 0.5f, 0.5f, 0.5f,
+		0.0f, 0.375f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f
+	};
+ // Texture *texture = new Texture	("assets/monkey.png");
+  Mesh *mesh = new Mesh(vertices, 3, 9);
   Shader *shader = new Shader("shaders/plain.vert", "shaders/plain.frag");
   Transform *transform = new Transform();
 	Material *material = new Material(shader, mesh);
-
-  GameObject *gameobject = new GameObject("triangle");
+	GameObject* gameobject = new GameObject("triangle");
   gameobject->SetMaterial(material);
   gameobject->SetTransform(transform);
-	gameobject->SetMaterial(material);
   gameobjects.push_back(gameobject);
   while (!glfwWindowShouldClose(window)) {
     glfwPollEvents();

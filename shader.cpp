@@ -43,6 +43,17 @@ Shader::Shader(std::string vertPath, std::string fragPath){
   glAttachShader(shaderProgram, vertexShader);
   glAttachShader(shaderProgram, fragmentShader);
   glLinkProgram(shaderProgram);
+	GLint uniformCount;
+	glGetProgramiv(shaderProgram, GL_ACTIVE_UNIFORMS, &uniformCount);
+	for(GLint i =0;i<uniformCount;i++){
+		char name[256];
+		GLsizei nameLength;
+		GLint size;
+		GLenum type;
+		glGetActiveUniform(shaderProgram, i, sizeof(name), &nameLength, &size, &type, name);
+		GLint location = glGetUniformLocation(shaderProgram, name);
+		uniforms[std::string(name)] = {location, type, std::string(name)};
+	}
   glDeleteShader(vertexShader);
   glDeleteShader(fragmentShader); 
 }
@@ -52,15 +63,12 @@ Shader::Shader(std::string vertPath, std::string fragPath){
   this->blue = blue;
   hasColor = true;
 }*/
-/*void Shader::SetTexture(Texture* texture){
-  this->texture = texture;
-  hasTexture = true;
-}*/
 void Shader::use(){
 
   assert(shaderProgram != 0 );
   glUseProgram(shaderProgram);
 }
+
 void Shader::SetMat4(std::string uniformName, glm::mat4 set){
   const char* name = uniformName.c_str();
   glUniformMatrix4fv(glGetUniformLocation(shaderProgram, name), 1, GL_FALSE, &set[0][0]);
@@ -81,7 +89,7 @@ void Shader::SetFloat(std::string uniformName, float value){
   const char* name = uniformName.c_str();
 	glUniform1f(glGetUniformLocation(shaderProgram, name), value);
 }
-void Shader::SetInt(std::string uniformName, int value){
+void Shader::SetInt(std::string uniformName, GLuint value){
   const char* name = uniformName.c_str();
 	glUniform1i(glGetUniformLocation(shaderProgram, name), value);
 }
