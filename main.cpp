@@ -22,8 +22,9 @@
 #define WINDOW_WIDTH 2560
 #define WINDOW_HEIGHT 1920
 //Todo priority list below.
+//TODO: Focus on creating top bar, File->Create Object->Cube,Square,Triangle,etc., Quit button. all using ImGui.
+//TODO: Focus on Vertex class, replace mesh.cpp fragile stride and byteOffset with a Vertex struct. consisting of glm::vec3s. 
 //TODO: focus on sundiecube and GUI later, first do material class and make sure code compiles. material contains a Mesh and Shader pointer.
-//TODO: Work on a rotating cube with phong lighting from scratch, listen to "Another Love - Tom Odell", try lucid dreaming.
 //TODO: parse sundiecube.sundie, update github README.md to tell the downloader that we have to first run a specific script for blender support.
 Camera *mainCamera;
 std::vector<GameObject *> gameobjects;
@@ -85,13 +86,21 @@ int main(void) {
 	};
  // Texture *texture = new Texture	("assets/monkey.png");
   Mesh *mesh = new Mesh(vertices, 3, 9);
+  Mesh *mesh2 = new Mesh(vertices, 3, 9);
   Shader *shader = new Shader("shaders/plain.vert", "shaders/plain.frag");
   Transform *transform = new Transform();
+  Transform *transform2 = new Transform();
+	transform2->position[0] += 1.0f;
 	Material *material = new Material(shader, mesh);
+	Material *material2 = new Material(shader, mesh2);
 	GameObject* gameobject = new GameObject("triangle");
   gameobject->SetMaterial(material);
   gameobject->SetTransform(transform);
   gameobjects.push_back(gameobject);
+	GameObject* gameobject2 = new GameObject("second triangle");
+	gameobject2->SetMaterial(material2);
+	gameobject2->SetTransform(transform2);
+	gameobjects.push_back(gameobject2);
   while (!glfwWindowShouldClose(window)) {
     glfwPollEvents();
     ImGui_ImplOpenGL3_NewFrame();
@@ -108,8 +117,8 @@ int main(void) {
 		}if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS){
 			mainCamera->position[0] += Xspeed;
 		}
-		mainCamera->position[0] = glm::clamp(mainCamera->position[0], -5.0f, 5.0f);
-		mainCamera->position[2] = glm::clamp(mainCamera->position[2], 0.5f, 3.0f);
+		/*mainCamera->position[0] = glm::clamp(mainCamera->position[0], -5.0f, 5.0f);
+		mainCamera->position[2] = glm::clamp(mainCamera->position[2], 0.5f, 3.0f);*/
 		if(currentMouseButtonState && !lastMouseButtonState && !io.WantCaptureMouse){
 			glfwGetCursorPos(window, &mouseX, &mouseY);
 			if(mouseX < 1000){
