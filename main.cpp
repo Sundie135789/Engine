@@ -25,8 +25,8 @@
 //TODO: Focus on creating top bar, File->Create Object->Cube,Square,Triangle,etc., Quit button. all using ImGui.
 //TODO: Focus on Vertex class, replace mesh.cpp fragile stride and byteOffset with a Vertex struct. consisting of glm::vec3s. 
 //TODO: focus on sundiecube and GUI later, first do material class and make sure code compiles. material contains a Mesh and Shader pointer.
-//TODO: parse sundiecube.sundie, update github README.md to tell the downloader that we have to first run a specific script for blender support.
-Camera *mainCamera;
+//TODO: parse sundiecube.sundie, update github README.md to tell the downloader that we have to first run a specific script for blender support./
+Camera* mainCamera;
 std::vector<GameObject *> gameobjects;
 bool lastMouseButtonState = false;
 double mouseX, mouseY;
@@ -66,9 +66,10 @@ int main(void) {
     return 1;
   }
   glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-  // --- OpenGL Code ---
   // Setup Dear ImGui context
   ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	io.FontGlobalScale = 1.5f;
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init();
 	// Engine code
@@ -107,6 +108,7 @@ int main(void) {
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 		ImGuiIO& io = ImGui::GetIO();
+
 		bool currentMouseButtonState=  glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
 		if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
 			mainCamera->position[2] -= Zspeed;
@@ -142,7 +144,18 @@ int main(void) {
 				g->toggleObjectMenu();
 			}
     }
-		
+		if(ImGui::BeginMainMenuBar()){
+			if(ImGui::BeginMenu("File")){
+				if(ImGui::MenuItem("Open", "Ctrl+O")) {}
+				if(ImGui::MenuItem("Save", "Ctrl+S")) {}
+				ImGui::EndMenu();
+			}
+			if(ImGui::BeginMenu("Edit")){
+				if(ImGui::MenuItem("Undo", "Ctrl+Z")){}
+					ImGui::EndMenu();	
+			}
+			ImGui::EndMainMenuBar();
+		}
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     glfwSwapBuffers(window);
