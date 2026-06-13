@@ -1,0 +1,20 @@
+#!/bin/bash
+SRC="
+loadshader.cpp
+shader.cpp
+main.cpp
+mesh.cpp
+texture.cpp
+transform.cpp
+gameobject.cpp
+renderer.cpp
+material.cpp
+vendor/imgui/imgui.cpp
+vendor/imgui/imgui_draw.cpp
+vendor/imgui/imgui_tables.cpp
+vendor/imgui/imgui_widgets.cpp
+vendor/imgui/backends/imgui_impl_glfw.cpp
+vendor/imgui/backends/imgui_impl_opengl3.cpp
+"
+g++ $SRC -o main -lGLEW -lGL -lglfw -Ivendor/imgui -Ivendor/imgui/backends
+./main

@@ -1,0 +1,51 @@
+#include "headers/ui.hpp"
+#include "vendor/imgui/imgui.h"
+
+void UI::LoadInspector(Gameobject* gameobject){
+  ImGui::SetNextWindowPos(ImVec2(1900, 0), ImGuiCond_Always);
+  ImGui::SetNextWindowSize(ImVec2(1200, 1900), ImGuiCond_Always); // Note: This window width is 1200 within your 2560 viewport
+  ImGui::Begin("Properties", nullptr, ImGuiWindowFlags_NoResize);
+  ImGui::Text("Name: %s", gameobject->name.c_str());
+  ImGui::Separator();
+
+  if (ImGui::BeginTable("TransformTable", 2, ImGuiTableFlags_SizingFixedFit)) 
+  {
+    ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthFixed, 100.0f);
+    ImGui::TableSetupColumn("Inputs", ImGuiTableColumnFlags_WidthFixed, 400.0f); // Lock total input area to 400px
+
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(15.0f, 0.0f));
+
+    // --- ROW 1: POSITION ---
+    ImGui::TableNextRow();
+    ImGui::TableSetColumnIndex(0);
+    ImGui::Text("Position");
+    
+    ImGui::TableSetColumnIndex(1);
+    ImGui::SetNextItemWidth(400.0f); // Fixed width prevents the boxes from stretching out of bounds
+    ImGui::InputFloat3("##Pos", &gameobject->transform->position.x, "%.2f");
+
+    // --- ROW 2: ROTATION ---
+    ImGui::TableNextRow();
+    ImGui::TableSetColumnIndex(0);
+    ImGui::Text("Rotation");
+    
+    ImGui::TableSetColumnIndex(1);
+    ImGui::SetNextItemWidth(400.0f);
+    ImGui::InputFloat3("##Rot", &gameobject->transform->rotation.x, "%.2f");
+
+    // --- ROW 3: SCALE ---
+    ImGui::TableNextRow();
+    ImGui::TableSetColumnIndex(0);
+    ImGui::Text("Scale");
+    
+    ImGui::TableSetColumnIndex(1);
+    ImGui::SetNextItemWidth(400.0f);
+    ImGui::InputFloat3("##Scl", &gameobject->transform->scale.x, "%.2f");
+
+    ImGui::PopStyleVar();
+    ImGui::EndTable();
+  }
+
+  ImGui::End();
+}
+
