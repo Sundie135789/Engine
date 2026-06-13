@@ -21,7 +21,7 @@
 #include <cmath>
 #define USER_SPEED 10.0f
 #define SENSITIVITY 0.1f
-// use directional movement and trigonometry 
+// Add DirectionalLight class with direction and color.
 std::vector<Gameobject*> gameobjects;
 Camera* editorCamera = new Camera();
 float lastX, lastY;

@@ -1,0 +1,9 @@
+*.o
+*.bin
+*.txt
+*.ini
+*.glb
+*.gltf
+*.json
+*.zip
+Makefile

@@ -32,6 +32,10 @@ void Renderer::Submit(Gameobject* gameobject){
   glUniformMatrix4fv(glGetUniformLocation(gameobject->material->shader->shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
   gameobject->material->texture->Bind();
   glUniform1i(glGetUniformLocation(gameobject->material->shader->shaderProgram, "u_Texture"), 0);
+
+  //Lighting uniforms
+  glm::vec3 dir = glm::normalize(glm::vec3(0.3f, 0.8f, 0.4f));
+  glUniform3f(glGetUniformLocation(gameobject->material->shader->shaderProgram, "lightDirection"), dir.x, dir.y, dir.z);
   gameobject->mesh->Draw();
 }
 void Renderer::NewFrame(){
