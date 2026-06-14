@@ -7,3 +7,4 @@
 *.json
 *.zip
 Makefile
+imgui.ini

@@ -19,7 +19,8 @@
 #include <cmath>
 #define USER_SPEED 10.0f
 #define SENSITIVITY 0.1f
-// fix specular lighting 
+// adjust specular multiplier and shininess in renderer.cpp. dont hardcode shininess. then add specular color and strenght to material.cpp
+// then pass them through renderer to fragment shader. vec3 specular = spec * materialSpecular * lightColor * specularStrength;
 std::vector<Gameobject*> gameobjects;
 Camera* editorCamera = new Camera();
 float lastX, lastY;
@@ -65,7 +66,7 @@ int main(){
   glViewport(0,0,2560,1920);
   std::cout << "GLFWwindow created successfully!\n";
   Renderer renderer;
-  DirectionalLight light(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+  DirectionalLight light(glm::vec3(-0.5f, -1.0f, -0.8f), glm::vec3(1.0f, 1.0f, 1.0f));
   renderer.SetLight(&light);
   
   std::vector<Vertex> vertices = {
@@ -130,7 +131,8 @@ int main(){
   material.setColor(glm::vec3(1.0f, 1.0f, 1.0f));
   material.setShader(&shader);
   material.setTexture(&texture);
-  
+  float shine = 64.0f;
+  material.setShininess(&shine);
   Gameobject gameobject("Monkey Triangle");
   
   gameobject.SetMesh(&mesh);
