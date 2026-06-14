@@ -12,6 +12,9 @@
 Renderer::Renderer(){
   std::cout << "Renderer created successfully!" << std::endl;
 }
+void Renderer::SetLight(DirectionalLight* light){
+  this->light = light;
+}
 void Renderer::SetCamera(Camera* cam){
   this->camera = cam;
 }

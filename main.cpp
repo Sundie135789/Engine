@@ -2,9 +2,6 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <GLFW/glfw3.h>
-#include "vendor/imgui/imgui.h"
-#include "vendor/imgui/backends/imgui_impl_glfw.h"
-#include "vendor/imgui/backends/imgui_impl_opengl3.h"
 //Custom headers
 #include "headers/shader.hpp"
 #include "headers/mesh.hpp"
@@ -15,13 +12,14 @@
 #include "headers/material.hpp"
 #include "headers/ui.hpp"
 #include "headers/camera.hpp"
+#include "headers/dirlight.hpp"
 // C++ headers
 #include <vector>
 #include <iostream>
 #include <cmath>
 #define USER_SPEED 10.0f
 #define SENSITIVITY 0.1f
-// Add DirectionalLight class with direction and color.
+// clean up glfw code then add specular lighting.
 std::vector<Gameobject*> gameobjects;
 Camera* editorCamera = new Camera();
 float lastX, lastY;
@@ -62,17 +60,13 @@ int main(){
   glfwMakeContextCurrent(window);
   glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   glewInit();
-  IMGUI_CHECKVERSION();
-  ImGui::CreateContext();
-  ImGuiIO& io = ImGui::GetIO(); (void)io;
-  io.FontGlobalScale = 1.5f;
-  ImGui::StyleColorsDark();
-  ImGui_ImplGlfw_InitForOpenGL(window, true);
-  ImGui_ImplOpenGL3_Init("#version 330");
+  UI::Init(window);
   glEnable(GL_DEPTH_TEST);
   glViewport(0,0,2560,1920);
   std::cout << "GLFWwindow created successfully!\n";
   Renderer renderer;
+  DirectionalLight light(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+  renderer.SetLight(&light);
   
   std::vector<Vertex> vertices = {
 
@@ -152,9 +146,7 @@ int main(){
     lastFrame = currentFrame;
     glfwPollEvents();
     //ImGui Frame Start
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
+    UI::BeginFrame();
     Renderer::NewFrame();
     renderer.SetCamera(editorCamera);
     processInput(window, deltaTime);
@@ -165,8 +157,7 @@ int main(){
     if(selected != nullptr){
       UI::LoadInspector(selected);
     }
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    UI::EndFrame();
     glfwSwapBuffers(window);
   }
 

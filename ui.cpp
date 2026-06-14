@@ -1,6 +1,7 @@
 #include "headers/ui.hpp"
 #include "vendor/imgui/imgui.h"
-
+#include "vendor/imgui/backends/imgui_impl_glfw.h"
+#include "vendor/imgui/backends/imgui_impl_opengl3.h"
 void UI::LoadInspector(Gameobject* gameobject){
   ImGui::SetNextWindowPos(ImVec2(1900, 0), ImGuiCond_Always);
   ImGui::SetNextWindowSize(ImVec2(1200, 1900), ImGuiCond_Always); // Note: This window width is 1200 within your 2560 viewport
@@ -49,3 +50,22 @@ void UI::LoadInspector(Gameobject* gameobject){
   ImGui::End();
 }
 
+void UI::BeginFrame(){
+  ImGui_ImplOpenGL3_NewFrame();
+  ImGui_ImplGlfw_NewFrame();
+  ImGui::NewFrame();
+}
+void UI::EndFrame(){
+  ImGui::Render();
+  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+void UI::Init(GLFWwindow* window){
+  IMGUI_CHECKVERSION();
+  ImGui::CreateContext();
+  ImGuiIO& io = ImGui::GetIO();
+  io.FontGlobalScale = 1.5f;
+
+  ImGui::StyleColorsDark();
+  ImGui_ImplGlfw_InitForOpenGL(window, true);
+  ImGui_ImplOpenGL3_Init("#version 330");
+}

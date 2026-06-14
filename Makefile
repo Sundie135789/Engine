@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -g -Ivendor/imgui -Ivendor/imgui/backends -std=c++17
  
-SRC = main.cpp shader.cpp loadshader.cpp mesh.cpp texture.cpp transform.cpp gameobject.cpp renderer.cpp material.cpp ui.cpp camera.cpp
+SRC = main.cpp shader.cpp loadshader.cpp mesh.cpp texture.cpp transform.cpp gameobject.cpp renderer.cpp material.cpp ui.cpp camera.cpp dirlight.cpp window.cpp
 OBJ = $(SRC:.cpp=.o)
 
 IMGUI_SRC = \
