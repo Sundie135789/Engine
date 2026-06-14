@@ -10,5 +10,5 @@ void Window::SwapBuffers(){
 
 }
 bool Window::ShouldClose(){
-
+  return false;
 }

@@ -19,7 +19,7 @@
 #include <cmath>
 #define USER_SPEED 10.0f
 #define SENSITIVITY 0.1f
-// clean up glfw code then add specular lighting.
+// fix specular lighting 
 std::vector<Gameobject*> gameobjects;
 Camera* editorCamera = new Camera();
 float lastX, lastY;

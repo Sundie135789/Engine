@@ -39,6 +39,9 @@ void Renderer::Submit(Gameobject* gameobject){
   //Lighting uniforms
   glm::vec3 dir = glm::normalize(glm::vec3(0.3f, 0.8f, 0.4f));
   glUniform3f(glGetUniformLocation(gameobject->material->shader->shaderProgram, "lightDirection"), dir.x, dir.y, dir.z);
+  glUniform1f(glGetUniformLocation(gameobject->material->shader->shaderProgram, "shininess"), gameobject->material->shininess);
+  glUniform3f(glGetUniformLocation(gameobject->material->shader->shaderProgram, "viewPos"), camera->position.x, camera->position.y, camera->position.z);
+
   gameobject->mesh->Draw();
 }
 void Renderer::NewFrame(){
