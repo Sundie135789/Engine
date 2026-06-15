@@ -131,7 +131,7 @@ int main(){
   material.setColor(glm::vec3(1.0f, 1.0f, 1.0f));
   material.setShader(&shader);
   material.setTexture(&texture);
-  float shine = 64.0f;
+  float shine = 30.0f;
   material.setShininess(&shine);
   Gameobject gameobject("Monkey Triangle");
   
@@ -152,7 +152,7 @@ int main(){
     Renderer::NewFrame();
     renderer.SetCamera(editorCamera);
     processInput(window, deltaTime);
-    std::cout << editorCamera->position.x << editorCamera->position.y << editorCamera->position.z <<  std::endl;
+    //std::cout << editorCamera->position.x << editorCamera->position.y << editorCamera->position.z <<  std::endl;
     for(Gameobject* object : gameobjects){
       renderer.Submit(object);
     }

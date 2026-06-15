@@ -26,11 +26,11 @@ void main(){
     // Diffuse
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = diff * lightColor;
-
-    // Specular (Phong) - BOOSTED
-    vec3 reflectDir = reflect(-lightDir, norm);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
-    vec3 specular = spec * lightColor * 2.0;     
+    
+    // Blinn Phong model - specular lighting
+    vec3 halfwayDir = normalize(lightDir + viewDir);
+    float spec = pow(max(dot(norm, halfwayDir), 0.0), shininess);
+    vec3 specular = spec * lightColor * 4.0;        
 
     vec3 finalColor = (ambient + diffuse) * objectColor + specular;
 
