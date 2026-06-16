@@ -131,8 +131,9 @@ int main(){
   material.setColor(glm::vec3(1.0f, 1.0f, 1.0f));
   material.setShader(&shader);
   material.setTexture(&texture);
-  float shine = 30.0f;
-  material.setShininess(&shine);
+  material.setShininess(30.0f);
+  material.setSpecularColor(glm::vec3(0.5f, 1.0f, 1.0f));
+  material.setSpecularStrength(6.0f);
   Gameobject gameobject("Monkey Triangle");
   
   gameobject.SetMesh(&mesh);

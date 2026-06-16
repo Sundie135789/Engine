@@ -8,6 +8,8 @@ uniform sampler2D u_Texture;
 uniform vec3 lightDirection;
 uniform vec3 viewPos;
 uniform float shininess;
+uniform float specularStrength;
+uniform vec3 specularColor;
 
 out vec4 FragColor;
 
@@ -30,9 +32,8 @@ void main(){
     // Blinn Phong model - specular lighting
     vec3 halfwayDir = normalize(lightDir + viewDir);
     float spec = pow(max(dot(norm, halfwayDir), 0.0), shininess);
-    vec3 specular = spec * lightColor * 4.0;        
+    vec3 specular = spec * specularColor * lightColor * specularStrength;
 
     vec3 finalColor = (ambient + diffuse) * objectColor + specular;
-
     FragColor = vec4(finalColor, texColor.a);
 }

@@ -40,8 +40,10 @@ void Renderer::Submit(Gameobject* gameobject){
   glm::vec3 lightDir = glm::normalize(-light->lightDir);
   glUniform3f(glGetUniformLocation(gameobject->material->shader->shaderProgram, "lightDirection"), lightDir.x, lightDir.y, lightDir.z);
   glUniform1f(glGetUniformLocation(gameobject->material->shader->shaderProgram, "shininess"), gameobject->material->shininess);
-
   glUniform3f(glGetUniformLocation(gameobject->material->shader->shaderProgram, "viewPos"), camera->position.x, camera->position.y, camera->position.z);
+  // Specular uniforms
+  glUniform3fv(glGetUniformLocation(gameobject->material->shader->shaderProgram, "specularColor"), 1,glm::value_ptr(gameobject->material->specularColor));    
+  glUniform1f(glGetUniformLocation(gameobject->material->shader->shaderProgram, "specularStrength"), gameobject->material->specularStrength);
 
   gameobject->mesh->Draw();
 }
