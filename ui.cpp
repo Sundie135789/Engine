@@ -69,3 +69,20 @@ void UI::Init(GLFWwindow* window){
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init("#version 330");
 }
+void UI::Menubar(){
+  if(ImGui::BeginMainMenuBar()){
+    if(ImGui::BeginMenu("File")){
+      if(ImGui::MenuItem("Save Scene")){
+        //TODO save scene
+      }
+    }
+    if(ImGui::BeginMenu("GameObject")){
+      if(ImGui::MenuItem("Cube")){
+        //TODO: spawn cube
+      }
+      if(ImGui::MenuItem("Plane")){
+        //TODO: spawn 
+      }
+    }
+  }
+}

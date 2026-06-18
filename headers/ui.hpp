@@ -7,6 +7,7 @@ class UI{
   static void BeginFrame();
   static void EndFrame();
   static void Init(GLFWwindow* window);
+  static void Menubar();
 };
 
 
