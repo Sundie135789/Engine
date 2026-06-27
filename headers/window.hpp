@@ -7,13 +7,15 @@ class Window{
     void PollEvents();
     void SwapBuffers();
     bool ShouldClose();
-    void Init();
     int GetKey(int key);
     void GetCursorPos(double& xPos, double& yPos);
     void setCursorMode(int mode);
     float GetTime();
     GLFWwindow* GetWindowHandle();
     void Terminate();
+    int GetMouseButton(int button);
+    int GetCursorMode();
   private:
     GLFWwindow* window;
+    int cursorMode;
 };

@@ -19,8 +19,11 @@ Texture::Texture(std::string path){
     std::cout << "Texture loaded: " << path << std::endl;
   }
   else{
-    std::cout << "Failed to load texture: " << path << std::endl;
-    std::exit(0);
+    path = "assets/missing_texture.png";
+    image = stbi_load(path.c_str(), &width, &height, &channels, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    std::cout << "Texture loaded: " << path << std::endl;
   }
 }
 void Texture::Bind(int unit) const{

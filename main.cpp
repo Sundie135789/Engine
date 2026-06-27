@@ -27,6 +27,8 @@ Camera* editorCamera = new Camera();
 float lastX, lastY;
 bool firstMouse = true;
 void processInput(GLFWwindow* window, float deltaTime){
+  if(mainWindow->GetCursorMode() != GLFW_CURSOR_DISABLED) 
+    return;
   double mouseX, mouseY;
   mainWindow->GetCursorPos(mouseX, mouseY);
 
@@ -57,8 +59,6 @@ void processInput(GLFWwindow* window, float deltaTime){
 }
 bool gameObjectSelected = false;
 int main(){
-  
-  glfwInit();
   UI::Init(mainWindow->GetWindowHandle());
   std::cout << "GLFWwindow created successfully!\n";
   Renderer renderer;
@@ -123,7 +123,7 @@ int main(){
   transform.setRotation(&rotation);
   transform.setScale(&scale);
   Material material;
-  Texture texture("assets/monkey.png");
+  Texture texture("");
   material.setColor(glm::vec3(1.0f, 1.0f, 1.0f));
   material.setShader(&shader);
   material.setTexture(&texture);

@@ -4,39 +4,69 @@
 #include "headers/window.hpp"
 void Window::setCursorMode(int mode){
   glfwSetInputMode(window, GLFW_CURSOR, mode);
+  cursorMode = mode;
 }
 Window::Window(int width, int height, std::string title){
+  glfwInit();
   window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
+  if(!window){
+    std::cout << "Failed to create GLFW window\n";
+    std::exit(0);
+  }
   glewExperimental = GL_TRUE;
   glfwMakeContextCurrent(window);
-  this->setCursorMode(GLFW_CURSOR_NORMAL);
   glewInit();
+  setCursorMode(GLFW_CURSOR_NORMAL);
   glEnable(GL_DEPTH_TEST);
   glViewport(0,0,width, height);
   std::cout << "GLFWwindow created successfully!\n" << std::endl;
 }
+int Window::GetMouseButton(int button){
+  return glfwGetMouseButton(window, button);
+}
 void Window::PollEvents(){
   glfwPollEvents();
 }
+int Window::GetCursorMode(){
+  return cursorMode;
+}
 void Window::SwapBuffers(){
-  glfwSwapBuffers(window);
+  if(window){
+    glfwSwapBuffers(window);
+    return;
+  }
+  std::cout << "Window found null in Window::SwapBuffers\n";
+  std::exit(1);
 }
 bool Window::ShouldClose(){
-  return glfwWindowShouldClose(window);
-}
-void Window::Init(){
-  glfwInit();
+  if(window){
+    return glfwWindowShouldClose(window);
+  }
+  std::cout << "Window found null in Window::ShouldClose()\n";
+  std::exit(1);
 }
 int Window::GetKey(int key){
-  return glfwGetKey(this->window, key);
+  if(window){
+    return glfwGetKey(this->window, key);
+  }
+  std::cout << "Window found null in Window::GetKey()\n";
+  std::exit(1);
 }
 
 void Window::GetCursorPos(double& xPos, double& yPos){
-  glfwGetCursorPos(this->window, &xPos, &yPos);
+  if(window){
+    return glfwGetCursorPos(this->window, &xPos, &yPos);
+  }
+  std::cout << "Window found null in Window::GetCursorPos()\n";
+  std::exit(1);
 }
 
 GLFWwindow* Window::GetWindowHandle(){
-  return this->window;
+  if(window){
+    return window;
+  }
+  std::cout << "Window found null in WIndow::GetWindowHandle()\n";
+  std::exit(1);
 }
 float Window::GetTime(){
   return glfwGetTime();
