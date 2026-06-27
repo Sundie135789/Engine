@@ -27,3 +27,21 @@ bool Window::ShouldClose(){
 void Window::Init(){
   glfwInit();
 }
+int Window::GetKey(int key){
+  return glfwGetKey(this->window, key);
+}
+
+void Window::GetCursorPos(double& xPos, double& yPos){
+  glfwGetCursorPos(this->window, &xPos, &yPos);
+}
+
+GLFWwindow* Window::GetWindowHandle(){
+  return this->window;
+}
+float Window::GetTime(){
+  return glfwGetTime();
+}
+void Window::Terminate(){
+  glfwTerminate();
+}
+                                                             

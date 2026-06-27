@@ -1,7 +1,6 @@
 // Graphics header
 #include <GL/glew.h>
 #include <GL/gl.h>
-#include <GLFW/glfw3.h>
 //Custom headers
 #include "headers/shader.hpp"
 #include "headers/mesh.hpp"
@@ -13,20 +12,24 @@
 #include "headers/ui.hpp"
 #include "headers/camera.hpp"
 #include "headers/dirlight.hpp"
+#include "headers/window.hpp"
 // C++ headers
 #include <vector>
 #include <iostream>
 #include <cmath>
+#include <memory>
 // TODO 49 to 52 lines, replace with Window class functions. remve errors, add helper functions for input, use in processInput, then test.
 #define USER_SPEED 10.0f
 #define SENSITIVITY 0.1f
+std::unique_ptr<Window> mainWindow = std::make_unique<Window>(2560, 1920, "Game Engine - x64");
 std::vector<Gameobject*> gameobjects;
 Camera* editorCamera = new Camera();
 float lastX, lastY;
 bool firstMouse = true;
 void processInput(GLFWwindow* window, float deltaTime){
   double mouseX, mouseY;
-  glfwGetCursorPos(mainWindow, &mouseX, &mouseY);
+  mainWindow->GetCursorPos(mouseX, mouseY);
+
   float deltaX = mouseX - lastX;
   float deltaY = lastY - mouseY; 
   if(firstMouse)
@@ -47,17 +50,16 @@ void processInput(GLFWwindow* window, float deltaTime){
   float speed = USER_SPEED * deltaTime;
   glm::vec3 flatFront = glm::normalize(glm::vec3(editorCamera->front.x, 0.0f, editorCamera->front.z));
   glm::vec3 right = glm::normalize(glm::cross(editorCamera->front, glm::vec3(0,1,0)));
-  if(glfwGetKey(mainWindow, GLFW_KEY_W) == GLFW_PRESS)  editorCamera->position += flatFront * speed;
-  if(glfwGetKey(mainWindow, GLFW_KEY_S) == GLFW_PRESS)  editorCamera->position -= flatFront * speed;
-  if(glfwGetKey(mainWindow, GLFW_KEY_A) == GLFW_PRESS)  editorCamera->position -= right * speed;
-  if(glfwGetKey(mainWindow, GLFW_KEY_D) == GLFW_PRESS)  editorCamera->position += right * speed;
+  if(mainWindow->GetKey(GLFW_KEY_W))   editorCamera->position += flatFront * speed;
+  if(mainWindow->GetKey(GLFW_KEY_S))  editorCamera->position -= flatFront * speed;
+  if(mainWindow->GetKey(GLFW_KEY_D))  editorCamera->position -= right * speed;
+  if(mainWindow->GetKey(GLFW_KEY_A))  editorCamera->position += right * speed;
 }
 bool gameObjectSelected = false;
-std::unique_ptr<Window> mainWindow = std::make_unique<Window>(2560, 1920, "Game Engine - x64");
 int main(){
   
   glfwInit();
-  UI::Init(mainWindow);
+  UI::Init(mainWindow->GetWindowHandle());
   std::cout << "GLFWwindow created successfully!\n";
   Renderer renderer;
   DirectionalLight light(glm::vec3(-0.5f, -1.0f, -0.8f), glm::vec3(1.0f, 1.0f, 1.0f));
@@ -134,20 +136,17 @@ int main(){
   gameobject.SetMaterial(&material);
   gameobject.SetTransform(&transform);
   gameobjects.push_back(&gameobject);
-  //Texture texture("assets/monkey.png");
   Gameobject* selected = &gameobject;
   float deltaTime, lastFrame = 0.0f;
-  while(!glfwWindowShouldClose(mainWindow)){
-    float currentFrame = glfwGetTime();
+  while(!mainWindow->ShouldClose()){
+    float currentFrame = mainWindow->GetTime();
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
-    glfwPollEvents();
-    //ImGui Frame Start
+    mainWindow->PollEvents();
     UI::BeginFrame();
     Renderer::NewFrame();
     renderer.SetCamera(editorCamera);
-    processInput(mainWindow, deltaTime);
-    //std::cout << editorCamera->position.x << editorCamera->position.y << editorCamera->position.z <<  std::endl;
+    processInput(mainWindow->GetWindowHandle(), deltaTime);
     for(Gameobject* object : gameobjects){
       renderer.Submit(object);
     }
@@ -155,10 +154,10 @@ int main(){
       UI::LoadInspector(selected);
     }
     UI::EndFrame();
-    glfwSwapBuffers(mainWindow);
+    mainWindow->SwapBuffers();
   }
 
-  glfwDestroyWindow(mainWindow);
+  mainWindow->Terminate();
   glfwTerminate();
   return 0;
 }
