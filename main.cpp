@@ -17,17 +17,16 @@
 #include <vector>
 #include <iostream>
 #include <cmath>
+// TODO 49 to 52 lines, replace with Window class functions. remve errors, add helper functions for input, use in processInput, then test.
 #define USER_SPEED 10.0f
 #define SENSITIVITY 0.1f
-// adjust specular multiplier and shininess in renderer.cpp. dont hardcode shininess. then add specular color and strenght to material.cpp
-// then pass them through renderer to fragment shader. vec3 specular = spec * materialSpecular * lightColor * specularStrength;
 std::vector<Gameobject*> gameobjects;
 Camera* editorCamera = new Camera();
 float lastX, lastY;
 bool firstMouse = true;
 void processInput(GLFWwindow* window, float deltaTime){
   double mouseX, mouseY;
-  glfwGetCursorPos(window, &mouseX, &mouseY);
+  glfwGetCursorPos(mainWindow, &mouseX, &mouseY);
   float deltaX = mouseX - lastX;
   float deltaY = lastY - mouseY; 
   if(firstMouse)
@@ -48,22 +47,17 @@ void processInput(GLFWwindow* window, float deltaTime){
   float speed = USER_SPEED * deltaTime;
   glm::vec3 flatFront = glm::normalize(glm::vec3(editorCamera->front.x, 0.0f, editorCamera->front.z));
   glm::vec3 right = glm::normalize(glm::cross(editorCamera->front, glm::vec3(0,1,0)));
-  if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)  editorCamera->position += flatFront * speed;
-  if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)  editorCamera->position -= flatFront * speed;
-  if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)  editorCamera->position -= right * speed;
-  if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)  editorCamera->position += right * speed;
+  if(glfwGetKey(mainWindow, GLFW_KEY_W) == GLFW_PRESS)  editorCamera->position += flatFront * speed;
+  if(glfwGetKey(mainWindow, GLFW_KEY_S) == GLFW_PRESS)  editorCamera->position -= flatFront * speed;
+  if(glfwGetKey(mainWindow, GLFW_KEY_A) == GLFW_PRESS)  editorCamera->position -= right * speed;
+  if(glfwGetKey(mainWindow, GLFW_KEY_D) == GLFW_PRESS)  editorCamera->position += right * speed;
 }
 bool gameObjectSelected = false;
+std::unique_ptr<Window> mainWindow = std::make_unique<Window>(2560, 1920, "Game Engine - x64");
 int main(){
+  
   glfwInit();
-  GLFWwindow* window = glfwCreateWindow(2560, 1920, "Game Engine - x64", nullptr, nullptr);
-  glewExperimental = GL_TRUE;
-  glfwMakeContextCurrent(window);
-  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-  glewInit();
-  UI::Init(window);
-  glEnable(GL_DEPTH_TEST);
-  glViewport(0,0,2560,1920);
+  UI::Init(mainWindow);
   std::cout << "GLFWwindow created successfully!\n";
   Renderer renderer;
   DirectionalLight light(glm::vec3(-0.5f, -1.0f, -0.8f), glm::vec3(1.0f, 1.0f, 1.0f));
@@ -132,7 +126,7 @@ int main(){
   material.setShader(&shader);
   material.setTexture(&texture);
   material.setShininess(30.0f);
-  material.setSpecularColor(glm::vec3(0.5f, 1.0f, 1.0f));
+  material.setSpecularColor(glm::vec3(1.0f, 1.0f, 1.0f));
   material.setSpecularStrength(6.0f);
   Gameobject gameobject("Monkey Triangle");
   
@@ -143,7 +137,7 @@ int main(){
   //Texture texture("assets/monkey.png");
   Gameobject* selected = &gameobject;
   float deltaTime, lastFrame = 0.0f;
-  while(!glfwWindowShouldClose(window)){
+  while(!glfwWindowShouldClose(mainWindow)){
     float currentFrame = glfwGetTime();
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
@@ -152,7 +146,7 @@ int main(){
     UI::BeginFrame();
     Renderer::NewFrame();
     renderer.SetCamera(editorCamera);
-    processInput(window, deltaTime);
+    processInput(mainWindow, deltaTime);
     //std::cout << editorCamera->position.x << editorCamera->position.y << editorCamera->position.z <<  std::endl;
     for(Gameobject* object : gameobjects){
       renderer.Submit(object);
@@ -161,10 +155,10 @@ int main(){
       UI::LoadInspector(selected);
     }
     UI::EndFrame();
-    glfwSwapBuffers(window);
+    glfwSwapBuffers(mainWindow);
   }
 
-  glfwDestroyWindow(window);
+  glfwDestroyWindow(mainWindow);
   glfwTerminate();
   return 0;
 }

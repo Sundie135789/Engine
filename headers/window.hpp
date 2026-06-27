@@ -7,6 +7,8 @@ class Window{
     void PollEvents();
     void SwapBuffers();
     bool ShouldClose();
+    void Init();
+    void setCursorMode(int mode);
   private:
     GLFWwindow* window;
 };
