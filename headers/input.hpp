@@ -5,7 +5,7 @@
 #include "camera.hpp"
 class Input{
   public:
-    static void HandleEngineInput(Window* window, Camera* editorCamera, float deltaTime, float lastX, float lastY, bool lastMouse);
+    static void HandleEngineInput(Window* window, Camera* editorCamera, float deltaTime, float& lastX, float& lastY, bool& lastMouse);
     static void HandleGameInput();
     static double mouseX;
     static double mouseY;

@@ -105,6 +105,7 @@ int main(){
     float currentFrame = mainWindow->GetTime();
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
+    std::cout << 1.0f/deltaTime << " FPS\n";
     UI::BeginFrame();
     Renderer::NewFrame();
     if(g_EngineState == EngineState::Playing){
