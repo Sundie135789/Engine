@@ -23,7 +23,6 @@ Texture::Texture(std::string path){
     image = stbi_load(path.c_str(), &width, &height, &channels, 0);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
     glGenerateMipmap(GL_TEXTURE_2D);
-    std::cout << "Texture loaded: " << path << std::endl;
   }
 }
 void Texture::Bind(int unit) const{

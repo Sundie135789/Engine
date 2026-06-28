@@ -2,21 +2,20 @@
 #include "headers/window.hpp"
 #include "headers/camera.hpp"
 #include <glm/trigonometric.hpp>
+double Input::mouseX = 0.0f;
+double Input::mouseY = 0.0f;
 void Input::HandleEngineInput(Window* window,Camera* editorCamera, float deltaTime, float lastX, float lastY, bool firstMouse){
-  if(window->GetCursorMode() != GLFW_CURSOR_DISABLED)
-    return;
-  
-  window->GetCursorPos(Input::mouseX, Input::mouseY);
-  float deltaX = Input::mouseX - lastX;
-  float deltaY = lastY - Input::mouseY;
+  window->GetCursorPos(mouseX, mouseY);
+  float deltaX = mouseX - lastX;
+  float deltaY = lastY - mouseY;
   if(firstMouse)
   {
-    lastX = Input::mouseX;
-    lastY = Input::mouseY;
+    lastX = mouseX;
+    lastY = mouseY;
     firstMouse = false;
   }
-  lastX = Input::mouseX;
-  lastY = Input::mouseY;
+  lastX = mouseX;
+  lastY = mouseY;
   editorCamera->yaw += deltaX * SENSITIVITY;
   editorCamera->pitch += deltaY * SENSITIVITY;
   glm::vec3 direction;
@@ -41,19 +40,19 @@ void Input::HandleGameInput(){
  *  void processInput(GLFWwindow* window, float deltaTime){
   if(mainWindow->GetCursorMode() != GLFW_CURSOR_DISABLED) 
     return;
-  double Input::mouseX, Input::mouseY;
-  mainWindow->GetCursorPos(Input::mouseX, Input::mouseY);
+  double mouseX, mouseY;
+  mainWindow->GetCursorPos(mouseX, mouseY);
 
-  float deltaX = Input::mouseX - lastX;
-  float deltaY = lastY - Input::mouseY; 
+  float deltaX = mouseX - lastX;
+  float deltaY = lastY - mouseY; 
   if(firstMouse)
   {
-    lastX = Input::mouseX;
-    lastY = Input::mouseY;
+    lastX = mouseX;
+    lastY = mouseY;
     firstMouse = false;
   }
-  lastX = Input::mouseX;
-  lastY = Input::mouseY;
+  lastX = mouseX;
+  lastY = mouseY;
   editorCamera->yaw += deltaX * SENSITIVITY;
   editorCamera->pitch += deltaY * SENSITIVITY;
   glm::vec3 direction;

@@ -10,26 +10,16 @@
 #include "headers/renderer.hpp"
 #include "headers/material.hpp"
 #include "headers/ui.hpp"
-#include "headers/camera.hpp"
 #include "headers/dirlight.hpp"
-#include "headers/window.hpp"
 #include "headers/input.hpp"
+#include "headers/globals.hpp"
 // C++ headers
 #include <vector>
 #include <iostream>
-#include <memory>
-// right click to do free movement, only if in engine mode.
+// put if right mouse button pressed right now, then move, in the input.cpp + testing
+// right click to do free movement, only if in engine mode. (currently doing)
 // convert UI to zTheme style + testing
 
-std::unique_ptr<Window> mainWindow = std::make_unique<Window>(2560, 1920, "Game Engine - x64");
-std::vector<Gameobject*> gameobjects;
-Camera* editorCamera = new Camera();
-Camera*gameCamera = new Camera();
-float lastX, lastY;
-bool firstMouse = true;
-bool gameObjectSelected = false;
-// TODO replace with enum EngineState or EngineMode
-bool playing = false;
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
   std::cout << "GLFWwindow created successfully!\n";
@@ -95,7 +85,7 @@ int main(){
   transform.setRotation(&rotation);
   transform.setScale(&scale);
   Material material;
-  Texture texture("");
+  Texture texture("assets/monkey.png");
   material.setColor(glm::vec3(1.0f, 1.0f, 1.0f));
   material.setShader(&shader);
   material.setTexture(&texture);
@@ -111,21 +101,20 @@ int main(){
   Gameobject* selected = &gameobject;
   float deltaTime, lastFrame = 0.0f;
   while(!mainWindow->ShouldClose()){
+    mainWindow->PollEvents();
     float currentFrame = mainWindow->GetTime();
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
-    mainWindow->PollEvents();
     UI::BeginFrame();
     Renderer::NewFrame();
-    renderer.SetCamera(editorCamera);
-    if(playing){
+    if(g_EngineState == EngineState::Playing){
       renderer.SetCamera(gameCamera);
       Input::HandleGameInput();
-    }else{
+    }else if(g_EngineState == EngineState::Editing){
       renderer.SetCamera(editorCamera);
-      Input::HandleEngineInput(
-            mainWindow.get(), editorCamera, deltaTime, lastX, lastY, firstMouse
-          );
+        Input::HandleEngineInput(
+          mainWindow.get(), editorCamera, deltaTime, lastX, lastY, firstMouse
+        );
     }
     for(Gameobject* object : gameobjects){
       renderer.Submit(object);
