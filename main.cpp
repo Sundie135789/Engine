@@ -18,7 +18,10 @@
 #include <iostream>
 #include <cmath>
 #include <memory>
-// TODO 49 to 52 lines, replace with Window class functions. remve errors, add helper functions for input, use in processInput, then test.
+// right click to do free movement, only if in engine mode.
+// engineInput and gameInput are different. handle differently
+// convert UI to zTheme style + testing
+
 #define USER_SPEED 10.0f
 #define SENSITIVITY 0.1f
 std::unique_ptr<Window> mainWindow = std::make_unique<Window>(2560, 1920, "Game Engine - x64");
