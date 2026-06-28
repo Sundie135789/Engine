@@ -16,8 +16,7 @@
 // C++ headers
 #include <vector>
 #include <iostream>
-// put if right mouse button pressed right now, then move, in the input.cpp + testing
-// right click to do free movement, only if in engine mode. (currently doing)
+// manual obj loader is goal, 
 // convert UI to zTheme style + testing
 
 int main(){
