@@ -13,20 +13,20 @@
 #include "headers/dirlight.hpp"
 #include "headers/input.hpp"
 #include "headers/globals.hpp"
+#include "headers/model.hpp"
 // C++ headers
 #include <vector>
 #include <iostream>
-// manual obj loader is goal, 
+// find a obj + mtl + some png/jpeg model, and load it. obj + mtl will load, send png jpeg to Texture to load through stbi.
 // convert UI to zTheme style + testing
 
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
-  std::cout << "GLFWwindow created successfully!\n";
   Renderer renderer;
   DirectionalLight light(glm::vec3(-0.5f, -1.0f, -0.8f), glm::vec3(1.0f, 1.0f, 1.0f));
   renderer.SetLight(&light);
   
-  std::vector<Vertex> vertices = {
+  /*std::vector<Vertex> vertices = {
 
     // FRONT (+Z)
     { {-0.5f,-0.5f, 0.5f}, {0,0,1}, {0.6f,0.2f,0.8f}, {0,0} },
@@ -75,23 +75,27 @@ int main(){
     { { 0.5f,-0.5f, 0.5f}, {0,-1,0}, {0.6f,0.2f,0.8f}, {1,0} },
     { {-0.5f,-0.5f, 0.5f}, {0,-1,0}, {0.6f,0.2f,0.8f}, {0,0} },
     { {-0.5f,-0.5f,-0.5f}, {0,-1,0}, {0.6f,0.2f,0.8f}, {0,1} }
-};
+};*/
   Shader shader("shaders/basic.vert", "shaders/basic.frag");
-  Mesh mesh(vertices);
+  ModelData carData = Model::LoadOBJ("assets/.obj");
+  Mesh mesh(carData.vertices);
   Transform transform;
   glm::vec3 position(0.0f, 0.0f, 0.0f), rotation(0.0f, 0.0f, 0.0f), scale(1.0f, 1.0f, 1.0f);
   transform.setPosition(&position);
   transform.setRotation(&rotation);
   transform.setScale(&scale);
   Material material;
-  Texture texture("assets/monkey.png");
   material.setColor(glm::vec3(1.0f, 1.0f, 1.0f));
   material.setShader(&shader);
-  material.setTexture(&texture);
+  if(!carData.texturePath.empty()){
+    std::string fullTexPath = "assets/" + carData.texturePath;
+    static Texture carTexture(fullTexPath.c_str());
+    material.setTexture(&carTexture);
+  }
   material.setShininess(30.0f);
   material.setSpecularColor(glm::vec3(1.0f, 1.0f, 1.0f));
   material.setSpecularStrength(6.0f);
-  Gameobject gameobject("Monkey Triangle");
+  Gameobject gameobject("Monkey Cube");
   
   gameobject.SetMesh(&mesh);
   gameobject.SetMaterial(&material);
