@@ -15,6 +15,7 @@ Window::Window(int width, int height, std::string title){
   }
   glewExperimental = GL_TRUE;
   glfwMakeContextCurrent(window);
+  glfwSwapInterval(1);
   glewInit();
   setCursorMode(GLFW_CURSOR_NORMAL);
   glEnable(GL_DEPTH_TEST);
@@ -26,6 +27,9 @@ int Window::GetMouseButton(int button){
 }
 void Window::PollEvents(){
   glfwPollEvents();
+}
+void Window::setTitle(std::string title){
+  glfwSetWindowTitle(GetWindowHandle(), title.c_str());
 }
 int Window::GetCursorMode(){
   return cursorMode;

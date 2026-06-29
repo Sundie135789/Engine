@@ -79,7 +79,6 @@ void UI::Menubar(){
     }
     if(ImGui::BeginMenu("GameObject")){
       if(ImGui::MenuItem("Cube")){
-        //TODO: spawn cube
       }
       if(ImGui::MenuItem("Plane")){
         //TODO: spawn 

@@ -35,6 +35,7 @@ void Renderer::Submit(Gameobject* gameobject){
   glUniformMatrix4fv(glGetUniformLocation(gameobject->material->shader->shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
   gameobject->material->texture->Bind();
   glUniform1i(glGetUniformLocation(gameobject->material->shader->shaderProgram, "u_Texture"), 0);
+  glUniform3fv(glGetUniformLocation(gameobject->material->shader->shaderProgram, "materialColor"), 1, glm::value_ptr(gameobject->material->color));
 
   //Lighting uniforms
   glm::vec3 lightDir = glm::normalize(-light->lightDir);
@@ -44,7 +45,7 @@ void Renderer::Submit(Gameobject* gameobject){
   // Specular uniforms
   glUniform3fv(glGetUniformLocation(gameobject->material->shader->shaderProgram, "specularColor"), 1,glm::value_ptr(gameobject->material->specularColor));    
   glUniform1f(glGetUniformLocation(gameobject->material->shader->shaderProgram, "specularStrength"), gameobject->material->specularStrength);
-
+  
   gameobject->mesh->Draw();
 }
 void Renderer::NewFrame(){

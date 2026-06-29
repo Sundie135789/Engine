@@ -15,6 +15,7 @@ class Window{
     void Terminate();
     int GetMouseButton(int button);
     int GetCursorMode();
+    void setTitle(std::string title);
   private:
     GLFWwindow* window;
     int cursorMode;

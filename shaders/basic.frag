@@ -1,6 +1,5 @@
 #version 330 core
 in vec3 Normal;
-in vec3 Color;
 in vec2 UV;
 in vec3 FragPos;
 
@@ -10,13 +9,13 @@ uniform vec3 viewPos;
 uniform float shininess;
 uniform float specularStrength;
 uniform vec3 specularColor;
-
+uniform vec3 materialColor;
 out vec4 FragColor;
 
 void main(){
     vec3 lightColor = vec3(1.0, 1.0, 1.0);
     vec4 texColor = texture(u_Texture, UV);
-    vec3 objectColor = mix(Color, texColor.rgb, 0.5);
+    vec3 objectColor = mix(materialColor, texColor.rgb, 0.5);
 
     vec3 norm = normalize(Normal);
     vec3 lightDir = normalize(lightDirection);
