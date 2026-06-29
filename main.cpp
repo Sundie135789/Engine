@@ -16,6 +16,7 @@
 // C++ headers
 #include <vector>
 #include <iostream>
+// switch from mesh system to submesh {mesh + material}
 // put the cube spawning code in UI::MenuBar OR make a Hierarchy UI on the left side 
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
