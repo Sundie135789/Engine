@@ -10,8 +10,8 @@ Texture::Texture(std::string path){
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR);
   int width, height, channels;
-  const uint8_t* image = stbi_load(path.c_str(), &width, &height, &channels,0);
   stbi_set_flip_vertically_on_load(true);
+  const uint8_t* image = stbi_load(path.c_str(), &width, &height, &channels,0);
   if(image)
   {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);

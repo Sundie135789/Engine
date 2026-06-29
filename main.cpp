@@ -13,12 +13,9 @@
 #include "headers/dirlight.hpp"
 #include "headers/input.hpp"
 #include "headers/globals.hpp"
-#include "headers/model.hpp"
 // C++ headers
 #include <vector>
 #include <iostream>
-// find a obj + mtl + some png/jpeg model, and load it. obj + mtl will load, send png jpeg to Texture to load through stbi.
-// convert UI to zTheme style + testing
 
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
@@ -26,7 +23,7 @@ int main(){
   DirectionalLight light(glm::vec3(-0.5f, -1.0f, -0.8f), glm::vec3(1.0f, 1.0f, 1.0f));
   renderer.SetLight(&light);
   
-  /*std::vector<Vertex> vertices = {
+  std::vector<Vertex> vertices = {
 
     // FRONT (+Z)
     { {-0.5f,-0.5f, 0.5f}, {0,0,1}, {0.6f,0.2f,0.8f}, {0,0} },
@@ -75,11 +72,11 @@ int main(){
     { { 0.5f,-0.5f, 0.5f}, {0,-1,0}, {0.6f,0.2f,0.8f}, {1,0} },
     { {-0.5f,-0.5f, 0.5f}, {0,-1,0}, {0.6f,0.2f,0.8f}, {0,0} },
     { {-0.5f,-0.5f,-0.5f}, {0,-1,0}, {0.6f,0.2f,0.8f}, {0,1} }
-};*/
+};
   Shader shader("shaders/basic.vert", "shaders/basic.frag");
-  Model model("assets/house.fbx");
-  Mesh mesh(/* What goes here? */);
-  Texture texture("assets/missing_texture.png");
+
+  Mesh mesh(vertices);
+  Texture texture("assets/monkey.png");
   Transform transform;
   glm::vec3 position(0.0f, 0.0f, 0.0f), rotation(0.0f, 0.0f, 0.0f), scale(1.0f, 1.0f, 1.0f);
   transform.setPosition(&position);
