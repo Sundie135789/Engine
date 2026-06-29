@@ -9,5 +9,5 @@ struct ModelData{
 };
 class Model{
   public:
-    static ModelData LoadOBJ(const char* path);
+    static ModelData LoadModel(const char* path);
 };

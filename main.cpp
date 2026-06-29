@@ -77,8 +77,9 @@ int main(){
     { {-0.5f,-0.5f,-0.5f}, {0,-1,0}, {0.6f,0.2f,0.8f}, {0,1} }
 };*/
   Shader shader("shaders/basic.vert", "shaders/basic.frag");
-  ModelData carData = Model::LoadOBJ("assets/.obj");
-  Mesh mesh(carData.vertices);
+  Model model("assets/house.fbx");
+  Mesh mesh(/* What goes here? */);
+  Texture texture("assets/missing_texture.png");
   Transform transform;
   glm::vec3 position(0.0f, 0.0f, 0.0f), rotation(0.0f, 0.0f, 0.0f), scale(1.0f, 1.0f, 1.0f);
   transform.setPosition(&position);
@@ -87,11 +88,7 @@ int main(){
   Material material;
   material.setColor(glm::vec3(1.0f, 1.0f, 1.0f));
   material.setShader(&shader);
-  if(!carData.texturePath.empty()){
-    std::string fullTexPath = "assets/" + carData.texturePath;
-    static Texture carTexture(fullTexPath.c_str());
-    material.setTexture(&carTexture);
-  }
+  material.setTexture(&texture);
   material.setShininess(30.0f);
   material.setSpecularColor(glm::vec3(1.0f, 1.0f, 1.0f));
   material.setSpecularStrength(6.0f);
