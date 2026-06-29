@@ -75,6 +75,7 @@ void UI::Menubar(){
       if(ImGui::MenuItem("Save Scene")){
         //TODO save scene
       }
+      ImGui::EndMenu();
     }
     if(ImGui::BeginMenu("GameObject")){
       if(ImGui::MenuItem("Cube")){
@@ -83,6 +84,8 @@ void UI::Menubar(){
       if(ImGui::MenuItem("Plane")){
         //TODO: spawn 
       }
+      ImGui::EndMenu();
     }
+    ImGui::EndMainMenuBar();
   }
 }

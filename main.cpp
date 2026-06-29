@@ -120,6 +120,7 @@ int main(){
     if(selected != nullptr){
       UI::LoadInspector(selected);
     }
+    UI::Menubar();
     UI::EndFrame();
     mainWindow->SwapBuffers();
   }
