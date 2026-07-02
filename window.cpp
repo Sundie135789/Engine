@@ -1,5 +1,6 @@
 #include "GL/glew.h"
 #include <iostream>
+#define GLFW_INCLUDE_NONE
 #include "GLFW/glfw3.h"
 #include "headers/window.hpp"
 void Window::setCursorMode(int mode){
@@ -17,6 +18,8 @@ Window::Window(int width, int height, std::string title){
   glfwMakeContextCurrent(window);
   glfwSwapInterval(1);
   glewInit();
+  glDisable(GL_CULL_FACE);
+  glFrontFace(GL_CCW);
   setCursorMode(GLFW_CURSOR_NORMAL);
   glEnable(GL_DEPTH_TEST);
   glViewport(0,0,width, height);

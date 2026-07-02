@@ -1,6 +1,5 @@
 // Graphics header
 #include <GL/glew.h>
-#include <GL/gl.h>
 //Custom headers
 #include "headers/shader.hpp"
 #include "headers/mesh.hpp"
@@ -15,9 +14,8 @@
 #include "headers/globals.hpp"
 // C++ headers
 #include <vector>
-#include <iostream>
+//Make hierarchy UI and fix plane not rendering in Gameobject::CreatePlane
 // switch from mesh system to submesh {mesh + material}
-// put the cube spawning code in UI::MenuBar OR make a Hierarchy UI on the left side 
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
   Renderer renderer;
@@ -114,7 +112,7 @@ int main(){
           mainWindow.get(), editorCamera, deltaTime, lastX, lastY, firstMouse
         );
     }
-    for(Gameobject* object : gameobjects){
+    for(Gameobject *object : gameobjects){
       renderer.Submit(object);
     }
     if(selected != nullptr){

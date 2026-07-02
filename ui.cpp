@@ -2,6 +2,9 @@
 #include "vendor/imgui/imgui.h"
 #include "vendor/imgui/backends/imgui_impl_glfw.h"
 #include "vendor/imgui/backends/imgui_impl_opengl3.h"
+void UI::Hierarchy(){
+//TODO
+}
 void UI::LoadInspector(Gameobject* gameobject){
   ImGui::SetNextWindowPos(ImVec2(1900, 0), ImGuiCond_Always);
   ImGui::SetNextWindowSize(ImVec2(1200, 1900), ImGuiCond_Always); // Note: This window width is 1200 within your 2560 viewport
@@ -79,10 +82,10 @@ void UI::Menubar(){
     }
     if(ImGui::BeginMenu("GameObject")){
       if(ImGui::MenuItem("Cube")){
-          //TODO
+        Gameobject::CreateCube();
       }
       if(ImGui::MenuItem("Plane")){
-        //TODO: spawn 
+        Gameobject::CreatePlane();
       }
       ImGui::EndMenu();
     }

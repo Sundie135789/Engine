@@ -1,8 +1,7 @@
 #pragma once
 #include <vector>
-#include "vertex.hpp"
 #include <GL/glew.h>
-#include <GL/gl.h>
+#include "vertex.hpp"
 class Mesh{
   public:
     Mesh(std::vector<Vertex> vertices);

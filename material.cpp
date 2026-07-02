@@ -1,7 +1,7 @@
 #include "headers/material.hpp"
 Material::Material(){
   this->color = glm::vec3(0.0f);
-  this->shader = new Shader("shaders/undefined.vert", "shaders/undefined.frag");
+  this->shader = new Shader("shaders/basic.vert", "shaders/basic.frag");
   this->texture = new Texture("assets/missing_texture.png");
   this->shininess = 8.0f;
   this->specularColor = glm::vec3(1.0f);

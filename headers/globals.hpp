@@ -9,7 +9,7 @@ extern std::vector<Gameobject*> gameobjects;
 extern Camera* editorCamera, *gameCamera;
 extern float lastX, lastY;
 extern bool firstMouse, gameObjectSelected;
-
+extern int untitled_number;
 enum class EngineState{
   Playing,
   Editing

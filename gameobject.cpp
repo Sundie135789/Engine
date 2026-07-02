@@ -2,6 +2,7 @@
 #include "headers/mesh.hpp"
 #include "headers/material.hpp"
 #include "headers/transform.hpp"
+#include "headers/globals.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 Gameobject::Gameobject(std::string name){
@@ -24,6 +25,86 @@ void Gameobject::SetMaterial(Material* material){
 }
 void Gameobject::SetName(std::string* name){
   this->name = *name;
+}
+void Gameobject::CreateCube(){
+  Gameobject *gameobject = new Gameobject((untitled_number == 0) ? "Cube Untitled" : "Cube Untitled #" + std::to_string(untitled_number));
+  untitled_number++;
+  std::vector<Vertex> vertices = {{ {-0.5f,-0.5f, 0.5f}, {0,0,1}, {0,0} },
+    { { 0.5f,-0.5f, 0.5f}, {0,0,1}, {1,0} },
+    { { 0.5f, 0.5f, 0.5f}, {0,0,1}, {1,1} },
+    { { 0.5f, 0.5f, 0.5f}, {0,0,1}, {1,1} },
+    { {-0.5f, 0.5f, 0.5f}, {0,0,1}, {0,1} },
+    { {-0.5f,-0.5f, 0.5f}, {0,0,1}, {0,0} },
+
+    // BACK (-Z)
+    { {-0.5f,-0.5f,-0.5f}, {0,0,-1}, {0,0} },
+    { {-0.5f, 0.5f,-0.5f}, {0,0,-1}, {0,1} },
+    { { 0.5f, 0.5f,-0.5f}, {0,0,-1}, {1,1} },
+    { { 0.5f, 0.5f,-0.5f}, {0,0,-1}, {1,1} },
+    { { 0.5f,-0.5f,-0.5f}, {0,0,-1}, {1,0} },
+    { {-0.5f,-0.5f,-0.5f}, {0,0,-1}, {0,0} },
+
+    // LEFT (-X)
+    { {-0.5f, 0.5f, 0.5f}, {-1,0,0}, {1,1} },
+    { {-0.5f, 0.5f,-0.5f}, {-1,0,0}, {0,1} },
+    { {-0.5f,-0.5f,-0.5f}, {-1,0,0}, {0,0} },
+    { {-0.5f,-0.5f,-0.5f}, {-1,0,0}, {0,0} },
+    { {-0.5f,-0.5f, 0.5f}, {-1,0,0}, {1,0} },
+    { {-0.5f, 0.5f, 0.5f}, {-1,0,0}, {1,1} },
+
+    // RIGHT (+X)
+    { { 0.5f, 0.5f, 0.5f}, {1,0,0}, {1,1} },
+    { { 0.5f,-0.5f,-0.5f}, {1,0,0}, {0,0} },
+    { { 0.5f, 0.5f,-0.5f}, {1,0,0}, {0,1} },
+    { { 0.5f,-0.5f,-0.5f}, {1,0,0}, {0,0} },
+    { { 0.5f, 0.5f, 0.5f}, {1,0,0}, {1,1} },
+    { { 0.5f,-0.5f, 0.5f}, {1,0,0}, {1,0} },
+
+    // TOP (+Y)
+    { {-0.5f, 0.5f,-0.5f}, {0,1,0}, {0,1} },
+    { {-0.5f, 0.5f, 0.5f}, {0,1,0}, {0,0} },
+    { { 0.5f, 0.5f, 0.5f}, {0,1,0}, {1,0} },
+    { { 0.5f, 0.5f, 0.5f}, {0,1,0}, {1,0} },
+    { { 0.5f, 0.5f,-0.5f}, {0,1,0}, {1,1} },
+    { {-0.5f, 0.5f,-0.5f}, {0,1,0}, {0,1} },
+
+    // BOTTOM (-Y)
+    { {-0.5f,-0.5f,-0.5f}, {0,-1,0}, {0,1} },
+    { { 0.5f,-0.5f,-0.5f}, {0,-1,0}, {1,1} },
+    { { 0.5f,-0.5f, 0.5f}, {0,-1,0}, {1,0} },
+    { { 0.5f,-0.5f, 0.5f}, {0,-1,0}, {1,0} },
+    { {-0.5f,-0.5f, 0.5f}, {0,-1,0}, {0,0} },
+    { {-0.5f,-0.5f,-0.5f}, {0,-1,0}, {0,1} }};
+  Mesh* mesh = new Mesh(vertices);
+  Material* material = new Material();
+  Transform* transform = new Transform();
+  gameobject->SetMesh(mesh);
+  gameobject->SetMaterial(material);
+  gameobject->SetTransform(transform);
+  gameobjects.push_back(gameobject);
+}
+void Gameobject::CreatePlane(){
+ Gameobject *gameobject = new Gameobject((untitled_number == 0) ? "Plane Untitled" : "Plane Untitled #" + std::to_string(untitled_number));
+untitled_number++;
+std::vector<Vertex> vertices = {
+    // Triangle 1
+    { {-0.5f, 0.0f, -0.5f}, {0,1,0}, {0,0} },
+    { { 0.5f, 0.0f, -0.5f}, {0,1,0}, {1,0} },
+    { { 0.5f, 0.0f,  0.5f}, {0,1,0}, {1,1} },
+
+    // Triangle 2
+    { { 0.5f, 0.0f,  0.5f}, {0,1,0}, {1,1} },
+    { {-0.5f, 0.0f,  0.5f}, {0,1,0}, {0,1} },
+    { {-0.5f, 0.0f, -0.5f}, {0,1,0}, {0,0} }
+};
+
+Mesh* mesh = new Mesh(vertices);
+Material* material = new Material();
+Transform* transform = new Transform();
+gameobject->SetMesh(mesh);
+gameobject->SetMaterial(material);
+gameobject->SetTransform(transform);
+gameobjects.push_back(gameobject);
 }
 glm::mat4 Gameobject::getModelMatrix(Transform* transform){
   glm::mat4 model = glm::mat4(1.0f);
