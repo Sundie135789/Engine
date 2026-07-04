@@ -7,6 +7,7 @@
 #include "headers/transform.hpp"
 #include "headers/gameobject.hpp"
 #include "headers/renderer.hpp"
+#include <iostream>
 #include "headers/material.hpp"
 #include "headers/ui.hpp"
 #include "headers/dirlight.hpp"
@@ -14,7 +15,8 @@
 #include "headers/globals.hpp"
 // C++ headers
 #include <vector>
-//Make hierarchy UI and fix plane not rendering in Gameobject::CreatePlane
+// dynamic viewport using window resize in window.cpp
+//Make hierarchy UI 
 // switch from mesh system to submesh {mesh + material}
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
@@ -74,14 +76,14 @@ int main(){
   Shader shader("shaders/basic.vert", "shaders/basic.frag");
 
   Mesh mesh(vertices);
-  Texture texture("assets/monkey.png");
+  Texture texture("assets/pennywise.png");
   Transform transform;
   glm::vec3 position(0.0f, 0.0f, 0.0f), rotation(0.0f, 0.0f, 0.0f), scale(1.0f, 1.0f, 1.0f);
   transform.setPosition(&position);
   transform.setRotation(&rotation);
   transform.setScale(&scale);
   Material material;
-  material.setColor(glm::vec3(0.6f, 0.2f, 0.8));
+  material.setColor(glm::vec3(1.0f, 1.0f, 1.0f));
   material.setShader(&shader);
   material.setTexture(&texture);
   material.setShininess(30.0f);
@@ -114,6 +116,10 @@ int main(){
     }
     for(Gameobject *object : gameobjects){
       renderer.Submit(object);
+    }
+    GLenum err;
+    while((err = glGetError()) != GL_NO_ERROR){
+      std::cout << "OpenGL error flag detected: " << err << std::endl;
     }
     if(selected != nullptr){
       UI::LoadInspector(selected);

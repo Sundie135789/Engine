@@ -1,13 +1,14 @@
 #include "headers/ui.hpp"
+#include <iostream>
 #include "vendor/imgui/imgui.h"
 #include "vendor/imgui/backends/imgui_impl_glfw.h"
 #include "vendor/imgui/backends/imgui_impl_opengl3.h"
 void UI::Hierarchy(){
-//TODO
+  // TIDI
 }
 void UI::LoadInspector(Gameobject* gameobject){
   ImGui::SetNextWindowPos(ImVec2(1900, 0), ImGuiCond_Always);
-  ImGui::SetNextWindowSize(ImVec2(1200, 1900), ImGuiCond_Always); // Note: This window width is 1200 within your 2560 viewport
+  ImGui::SetNextWindowSize(ImVec2(1200, 1900), ImGuiCond_Always); 
   ImGui::Begin("Properties", nullptr, ImGuiWindowFlags_NoResize);
   ImGui::Text("Name: %s", gameobject->name.c_str());
   ImGui::Separator();
@@ -15,7 +16,7 @@ void UI::LoadInspector(Gameobject* gameobject){
   if (ImGui::BeginTable("TransformTable", 2, ImGuiTableFlags_SizingFixedFit)) 
   {
     ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthFixed, 100.0f);
-    ImGui::TableSetupColumn("Inputs", ImGuiTableColumnFlags_WidthFixed, 400.0f); // Lock total input area to 400px
+    ImGui::TableSetupColumn("Inputs", ImGuiTableColumnFlags_WidthFixed, 400.0f); 
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(15.0f, 0.0f));
 
@@ -25,7 +26,7 @@ void UI::LoadInspector(Gameobject* gameobject){
     ImGui::Text("Position");
     
     ImGui::TableSetColumnIndex(1);
-    ImGui::SetNextItemWidth(400.0f); // Fixed width prevents the boxes from stretching out of bounds
+    ImGui::SetNextItemWidth(400.0f); 
     ImGui::InputFloat3("##Pos", &gameobject->transform->position.x, "%.2f");
 
     // --- ROW 2: ROTATION ---

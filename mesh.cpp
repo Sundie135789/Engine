@@ -13,6 +13,7 @@ Mesh::Mesh(std::vector<Vertex> vertices){
   glEnableVertexAttribArray(0);
   glEnableVertexAttribArray(1);
   glEnableVertexAttribArray(2);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
   std::cout << "Mesh loaded: Vertex Count " << vertices.size() << std::endl;
 }

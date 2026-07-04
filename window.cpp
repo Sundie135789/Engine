@@ -20,6 +20,7 @@ Window::Window(int width, int height, std::string title){
   glewInit();
   glDisable(GL_CULL_FACE);
   glFrontFace(GL_CCW);
+  glCullFace(GL_BACK);
   setCursorMode(GLFW_CURSOR_NORMAL);
   glEnable(GL_DEPTH_TEST);
   glViewport(0,0,width, height);
@@ -81,4 +82,5 @@ float Window::GetTime(){
 void Window::Terminate(){
   glfwTerminate();
 }
+// TODO window resize detect, gl view port
                                                              
