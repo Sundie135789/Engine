@@ -15,8 +15,8 @@
 #include "headers/globals.hpp"
 // C++ headers
 #include <vector>
+// add Texture drop down in inspector, with a assign texture button. global std::vector<std::string> textures = {}, display in combo dropdown
 // dynamic viewport using window resize in window.cpp
-//Make hierarchy UI 
 // switch from mesh system to submesh {mesh + material}
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
@@ -89,13 +89,12 @@ int main(){
   material.setShininess(30.0f);
   material.setSpecularColor(glm::vec3(1.0f, 1.0f, 1.0f));
   material.setSpecularStrength(6.0f);
-  Gameobject gameobject("Monkey Cube");
+  Gameobject gameobject("Clown Cube");
   
   gameobject.SetMesh(&mesh);
   gameobject.SetMaterial(&material);
   gameobject.SetTransform(&transform);
   gameobjects.push_back(&gameobject);
-  Gameobject* selected = &gameobject;
   float deltaTime, lastFrame = 0.0f;
   while(!mainWindow->ShouldClose()){
     mainWindow->PollEvents();
@@ -121,10 +120,11 @@ int main(){
     while((err = glGetError()) != GL_NO_ERROR){
       std::cout << "OpenGL error flag detected: " << err << std::endl;
     }
-    if(selected != nullptr){
-      UI::LoadInspector(selected);
+    if(selected != -1){
+      UI::LoadInspector();
     }
     UI::Menubar();
+    UI::Hierarchy();
     UI::EndFrame();
     mainWindow->SwapBuffers();
   }

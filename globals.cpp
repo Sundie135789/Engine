@@ -9,3 +9,4 @@ bool firstMouse = true;
 bool gameObjectSelected = true;
 EngineState g_EngineState = EngineState::Editing;
 int untitled_number = 0;
+int selected = -1;

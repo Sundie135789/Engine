@@ -88,19 +88,19 @@ void Gameobject::CreatePlane(){
 untitled_number++;
 std::vector<Vertex> vertices = {
     // Triangle 1
-    { {-0.5f, 0.0f, -0.5f}, {0,1,0}, {0,0} },
-    { { 0.5f, 0.0f,  0.5f}, {0,1,0}, {1,1} },
-    { { 0.5f, 0.0f, -0.5f}, {0,1,0}, {1,0} },
+    { {-0.5f, -0.0f, -0.5f}, {0,1,0}, {0,0} },
+    { { 0.5f, -0.0f,  0.5f}, {0,1,0}, {1,1} },
+    { { 0.5f, -0.0f, -0.5f}, {0,1,0}, {1,0} },
 
     // Triangle 2
-    { {-0.5f, 0.0f, -0.5f}, {0,1,0}, {0,0} },
-    { {-0.5f, 0.0f,  0.5f}, {0,1,0}, {0,1} },
-    { { 0.5f, 0.0f,  0.5f}, {0,1,0}, {1,1} }
+    { {-0.5f, -0.0f, -0.5f}, {0,1,0}, {0,0} },
+    { {-0.5f, -0.0f,  0.5f}, {0,1,0}, {0,1} },
+    { { 0.5f, -0.0f,  0.5f}, {0,1,0}, {1,1} }
 };
 Mesh* mesh = new Mesh(vertices);
 Material* material = new Material();
 Transform* transform = new Transform();
-transform->position = glm::vec3(0.0f, -0.5f, 0.0f);
+//transform->position = glm::vec3(0.0f, -0.5f, 0.0f);
 gameobject->SetMesh(mesh);
 gameobject->SetMaterial(material);
 gameobject->SetTransform(transform);

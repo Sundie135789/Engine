@@ -1,16 +1,31 @@
 #include "headers/ui.hpp"
+#include "headers/globals.hpp"
 #include <iostream>
 #include "vendor/imgui/imgui.h"
 #include "vendor/imgui/backends/imgui_impl_glfw.h"
 #include "vendor/imgui/backends/imgui_impl_opengl3.h"
 void UI::Hierarchy(){
-  // TIDI
+  ImGui::SetNextWindowPos(ImVec2(0, 30), ImGuiCond_Always);
+  ImGui::SetNextWindowSize(ImVec2(400, 1900), ImGuiCond_Always);
+  ImGui::Begin("Hierarchy", nullptr, ImGuiWindowFlags_NoResize);
+  for(int i=0;i<gameobjects.size();i++){
+    if(ImGui::Selectable(gameobjects[i]->name.c_str())){
+      selected = i;
+    }
+  }
+  if(selected != -1 && (ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace))){
+    if(!ImGui::GetIO().WantCaptureKeyboard){
+      gameobjects.erase(gameobjects.begin() + selected);
+      selected = -1;
+    }
+  }
+  ImGui::End();
 }
-void UI::LoadInspector(Gameobject* gameobject){
+void UI::LoadInspector(){
   ImGui::SetNextWindowPos(ImVec2(1900, 0), ImGuiCond_Always);
   ImGui::SetNextWindowSize(ImVec2(1200, 1900), ImGuiCond_Always); 
   ImGui::Begin("Properties", nullptr, ImGuiWindowFlags_NoResize);
-  ImGui::Text("Name: %s", gameobject->name.c_str());
+  ImGui::Text("Name: %s", gameobjects[selected]->name.c_str());
   ImGui::Separator();
 
   if (ImGui::BeginTable("TransformTable", 2, ImGuiTableFlags_SizingFixedFit)) 
@@ -27,7 +42,7 @@ void UI::LoadInspector(Gameobject* gameobject){
     
     ImGui::TableSetColumnIndex(1);
     ImGui::SetNextItemWidth(400.0f); 
-    ImGui::InputFloat3("##Pos", &gameobject->transform->position.x, "%.2f");
+    ImGui::InputFloat3("##Pos", &gameobjects[selected]->transform->position.x, "%.2f");
 
     // --- ROW 2: ROTATION ---
     ImGui::TableNextRow();
@@ -36,7 +51,7 @@ void UI::LoadInspector(Gameobject* gameobject){
     
     ImGui::TableSetColumnIndex(1);
     ImGui::SetNextItemWidth(400.0f);
-    ImGui::InputFloat3("##Rot", &gameobject->transform->rotation.x, "%.2f");
+    ImGui::InputFloat3("##Rot", &gameobjects[selected]->transform->rotation.x, "%.2f");
 
     // --- ROW 3: SCALE ---
     ImGui::TableNextRow();
@@ -45,7 +60,7 @@ void UI::LoadInspector(Gameobject* gameobject){
     
     ImGui::TableSetColumnIndex(1);
     ImGui::SetNextItemWidth(400.0f);
-    ImGui::InputFloat3("##Scl", &gameobject->transform->scale.x, "%.2f");
+    ImGui::InputFloat3("##Scl", &gameobjects[selected]->transform->scale.x, "%.2f");
 
     ImGui::PopStyleVar();
     ImGui::EndTable();
@@ -66,8 +81,7 @@ void UI::EndFrame(){
 void UI::Init(GLFWwindow* window){
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
-  ImGuiIO& io = ImGui::GetIO();
-  io.FontGlobalScale = 1.5f;
+  ImGui::GetIO().FontGlobalScale = 1.5f;
 
   ImGui::StyleColorsDark();
   ImGui_ImplGlfw_InitForOpenGL(window, true);

@@ -6,6 +6,7 @@
 #include "gameobject.hpp"
 extern std::unique_ptr<Window> mainWindow;
 extern std::vector<Gameobject*> gameobjects;
+extern int selected;
 extern Camera* editorCamera, *gameCamera;
 extern float lastX, lastY;
 extern bool firstMouse, gameObjectSelected;

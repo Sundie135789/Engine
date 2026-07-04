@@ -3,6 +3,7 @@
 #include "vendor/stb_image.h"
 #include <iostream>
 Texture::Texture(std::string path){
+  this->path = path;
   glGenTextures(1, &texture);
   glBindTexture(GL_TEXTURE_2D, texture);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
