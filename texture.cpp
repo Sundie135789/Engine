@@ -3,6 +3,9 @@
 #include "vendor/stb_image.h"
 #include <iostream>
 Texture::Texture(std::string path){
+  LoadTexture(path);
+}
+void Texture::LoadTexture(std::string path){
   this->path = path;
   glGenTextures(1, &texture);
   glBindTexture(GL_TEXTURE_2D, texture);
@@ -25,6 +28,7 @@ Texture::Texture(std::string path){
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
     glGenerateMipmap(GL_TEXTURE_2D);
   }
+  stbi_image_free((void*)image);
 }
 void Texture::Bind(int unit) const{
   glActiveTexture(GL_TEXTURE0 + unit);

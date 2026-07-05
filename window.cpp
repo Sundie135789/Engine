@@ -1,4 +1,5 @@
 #include "GL/glew.h"
+#include "headers/globals.hpp"
 #include <iostream>
 #define GLFW_INCLUDE_NONE
 #include "GLFW/glfw3.h"
@@ -16,7 +17,7 @@ Window::Window(int width, int height, std::string title){
   }
   glewExperimental = GL_TRUE;
   glfwMakeContextCurrent(window);
-  glfwSwapInterval(1);
+  SetVerticalSync();
   glewInit();
   glDisable(GL_CULL_FACE);
   glFrontFace(GL_CCW);
@@ -28,6 +29,9 @@ Window::Window(int width, int height, std::string title){
 }
 int Window::GetMouseButton(int button){
   return glfwGetMouseButton(window, button);
+}
+void Window::SetVerticalSync(){
+  glfwSwapInterval(vsync ? 1 : 0);
 }
 void Window::PollEvents(){
   glfwPollEvents();

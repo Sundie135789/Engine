@@ -15,9 +15,11 @@
 #include "headers/globals.hpp"
 // C++ headers
 #include <vector>
-// add Texture drop down in inspector, with a assign texture button. global std::vector<std::string> textures = {}, display in combo dropdown
+// Add directional light spawning to gameobject, then do save scene.
 // dynamic viewport using window resize in window.cpp
 // switch from mesh system to submesh {mesh + material}
+//
+// BEST LINE: ui.cpp -> around line 55, if condition for combo dropdown.
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
   Renderer renderer;
@@ -95,13 +97,22 @@ int main(){
   gameobject.SetMaterial(&material);
   gameobject.SetTransform(&transform);
   gameobjects.push_back(&gameobject);
-  float deltaTime, lastFrame = 0.0f;
+  float deltaTime, lastFrame = 0.0f, currentFrame;
+  float fps, titleTimer = 0.0f;
+  int fpsFrameCount = 0;
   while(!mainWindow->ShouldClose()){
     mainWindow->PollEvents();
-    float currentFrame = mainWindow->GetTime();
+    currentFrame = mainWindow->GetTime();
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
-    mainWindow->setTitle(std::to_string(1/deltaTime));
+    titleTimer += deltaTime;
+    fpsFrameCount++;
+    if(titleTimer >= 0.5f){
+      float averageFPS = fpsFrameCount / titleTimer;
+      mainWindow->setTitle("FPS: " + std::to_string(static_cast<int>(averageFPS)));
+      titleTimer = 0.0f;
+      fpsFrameCount = 0.0f;
+    }
     UI::BeginFrame();
     Renderer::NewFrame();
     if(g_EngineState == EngineState::Playing){

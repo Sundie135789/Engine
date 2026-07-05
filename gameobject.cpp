@@ -27,8 +27,8 @@ void Gameobject::SetName(std::string* name){
   this->name = *name;
 }
 void Gameobject::CreateCube(){
-  Gameobject *gameobject = new Gameobject((untitled_number == 0) ? "Cube Untitled" : "Cube Untitled #" + std::to_string(untitled_number));
-  untitled_number++;
+  Gameobject *gameobject = new Gameobject((cube_untitled_number == 0) ? "Cube Untitled" : "Cube Untitled #" + std::to_string(cube_untitled_number));
+  cube_untitled_number++;
   std::vector<Vertex> vertices = {{ {-0.5f,-0.5f, 0.5f}, {0,0,1}, {0,0} },
     { { 0.5f,-0.5f, 0.5f}, {0,0,1}, {1,0} },
     { { 0.5f, 0.5f, 0.5f}, {0,0,1}, {1,1} },
@@ -84,8 +84,8 @@ void Gameobject::CreateCube(){
   gameobjects.push_back(gameobject);
 }
 void Gameobject::CreatePlane(){
- Gameobject *gameobject = new Gameobject((untitled_number == 0) ? "Plane Untitled" : "Plane Untitled #" + std::to_string(untitled_number));
-untitled_number++;
+ Gameobject *gameobject = new Gameobject((plane_untitled_number == 0) ? "Plane Untitled" : "Plane Untitled #" + std::to_string(plane_untitled_number));
+plane_untitled_number++;
 std::vector<Vertex> vertices = {
     // Triangle 1
     { {-0.5f, -0.0f, -0.5f}, {0,1,0}, {0,0} },

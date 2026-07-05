@@ -7,4 +7,5 @@ class Texture{
     Texture(std::string path);
     void Bind(int unit = 0) const;
     std::string path;
+    void LoadTexture(std::string path);
 };

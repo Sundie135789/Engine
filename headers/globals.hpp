@@ -10,9 +10,12 @@ extern int selected;
 extern Camera* editorCamera, *gameCamera;
 extern float lastX, lastY;
 extern bool firstMouse, gameObjectSelected;
-extern int untitled_number;
 enum class EngineState{
   Playing,
   Editing
 };
 extern EngineState g_EngineState;
+extern int cube_untitled_number;
+extern int plane_untitled_number;
+extern std::vector<std::string> textures; 
+extern bool vsync;

@@ -8,5 +8,13 @@ float lastX, lastY;
 bool firstMouse = true;
 bool gameObjectSelected = true;
 EngineState g_EngineState = EngineState::Editing;
-int untitled_number = 0;
 int selected = -1;
+int cube_untitled_number = 0;
+int plane_untitled_number = 0;
+std::vector<std::string> textures = {
+  "assets/missing_texture.png",
+  "assets/wood.png",
+  "assets/pennywise.png",
+  "assets/monkey.png"
+};
+bool vsync = true;

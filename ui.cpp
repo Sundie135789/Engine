@@ -21,54 +21,53 @@ void UI::Hierarchy(){
   }
   ImGui::End();
 }
-void UI::LoadInspector(){
+void UI::LoadInspector() {
   ImGui::SetNextWindowPos(ImVec2(1900, 0), ImGuiCond_Always);
   ImGui::SetNextWindowSize(ImVec2(1200, 1900), ImGuiCond_Always); 
   ImGui::Begin("Properties", nullptr, ImGuiWindowFlags_NoResize);
-  ImGui::Text("Name: %s", gameobjects[selected]->name.c_str());
+
+  auto* obj = gameobjects[selected];
+  ImGui::Text("Name: %s", obj->name.c_str());
   ImGui::Separator();
 
-  if (ImGui::BeginTable("TransformTable", 2, ImGuiTableFlags_SizingFixedFit)) 
-  {
+  if (ImGui::BeginTable("TransformTable", 2, ImGuiTableFlags_SizingFixedFit)) {
     ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthFixed, 100.0f);
     ImGui::TableSetupColumn("Inputs", ImGuiTableColumnFlags_WidthFixed, 400.0f); 
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(15.0f, 0.0f));
 
-    // --- ROW 1: POSITION ---
-    ImGui::TableNextRow();
-    ImGui::TableSetColumnIndex(0);
-    ImGui::Text("Position");
-    
-    ImGui::TableSetColumnIndex(1);
-    ImGui::SetNextItemWidth(400.0f); 
-    ImGui::InputFloat3("##Pos", &gameobjects[selected]->transform->position.x, "%.2f");
+    auto drawRow = [](const char* label, const char* id, float* data) {
+      ImGui::TableNextColumn(); ImGui::Text("%s", label);
+      ImGui::TableNextColumn(); ImGui::SetNextItemWidth(400.0f);
+      ImGui::InputFloat3(id, data, "%.2f");
+    };
 
-    // --- ROW 2: ROTATION ---
-    ImGui::TableNextRow();
-    ImGui::TableSetColumnIndex(0);
-    ImGui::Text("Rotation");
-    
-    ImGui::TableSetColumnIndex(1);
-    ImGui::SetNextItemWidth(400.0f);
-    ImGui::InputFloat3("##Rot", &gameobjects[selected]->transform->rotation.x, "%.2f");
-
-    // --- ROW 3: SCALE ---
-    ImGui::TableNextRow();
-    ImGui::TableSetColumnIndex(0);
-    ImGui::Text("Scale");
-    
-    ImGui::TableSetColumnIndex(1);
-    ImGui::SetNextItemWidth(400.0f);
-    ImGui::InputFloat3("##Scl", &gameobjects[selected]->transform->scale.x, "%.2f");
+    drawRow("Position", "##Pos", &obj->transform->position.x);
+    drawRow("Rotation", "##Rot", &obj->transform->rotation.x);
+    drawRow("Scale",    "##Scl", &obj->transform->scale.x);
 
     ImGui::PopStyleVar();
     ImGui::EndTable();
   }
-
+  ImGui::Separator();
+  ImGui::SetNextItemWidth(400.0f);
+  if(ImGui::BeginCombo("Available Textures", obj->material->texture->path.substr(7).c_str())){
+    for(int i=0;i<textures.size();i++){
+      std::string textureName = textures[i].substr(7);
+      bool isSelected = (obj->material->texture->path == textures[i]);
+      if(ImGui::Selectable(textureName.c_str(), isSelected)){
+        obj->material->texture->LoadTexture(textures[i]);
+      }
+    }
+    ImGui::EndCombo();
+  }
+  ImGui::Separator();
+  ImGui::SetNextItemWidth(400.0f);
+  if(ImGui::ColorEdit3("Color", &obj->material->color.x, ImGuiColorEditFlags_NoInputs |
+        ImGuiColorEditFlags_NoOptions | ImGuiColorEditFlags_NoSidePreview)){
+  }
   ImGui::End();
 }
-
 void UI::BeginFrame(){
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
@@ -101,6 +100,12 @@ void UI::Menubar(){
       }
       if(ImGui::MenuItem("Plane")){
         Gameobject::CreatePlane();
+      }
+      ImGui::EndMenu();
+    }
+    if(ImGui::BeginMenu("Settings")){
+      if(ImGui::Checkbox("V-Sync", &vsync)){
+        mainWindow->SetVerticalSync();
       }
       ImGui::EndMenu();
     }
