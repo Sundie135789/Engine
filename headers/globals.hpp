@@ -4,6 +4,7 @@
 #include "window.hpp"
 #include <memory>
 #include "gameobject.hpp"
+#include "dirlight.hpp"
 extern std::unique_ptr<Window> mainWindow;
 extern std::vector<Gameobject*> gameobjects;
 extern int selected;
@@ -19,3 +20,4 @@ extern int cube_untitled_number;
 extern int plane_untitled_number;
 extern std::vector<std::string> textures; 
 extern bool vsync;
+extern DirectionalLight* mainDirLight;

@@ -16,17 +16,16 @@
 // C++ headers
 #include <vector>
 #include <iostream>
-//save scene.
+// add logic for load scene. 
+// press key combo to run the actual game. press key combo to switch back to normal editor.
 // dynamic viewport using window resize in window.cpp
-// switch from mesh system to submesh {mesh + material}
 //
 // BEST LINE: ui.cpp -> around line 55, if condition for combo dropdown.
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
   Renderer renderer;
-  DirectionalLight light(glm::vec3(-0.5f, -1.0f, -0.8f), glm::vec3(1.0f, 1.0f, 1.0f));
-  renderer.SetLight(&light);
-   std::vector<Vertex> vertices = {
+  renderer.SetLight(mainDirLight);
+ /*  std::vector<Vertex> vertices = {
 
     // FRONT (+Z)
     { {-0.5f,-0.5f, 0.5f}, {0,0,1}, {0,0} },
@@ -97,7 +96,7 @@ int main(){
   gameobject.SetMesh(&mesh);
   gameobject.SetMaterial(&material);
   gameobject.SetTransform(&transform);
-  gameobjects.push_back(&gameobject);
+  gameobjects.push_back(&gameobject);*/
   float deltaTime, lastFrame = 0.0f, currentFrame;
   float fps, titleTimer = 0.0f;
   int fpsFrameCount = 0;

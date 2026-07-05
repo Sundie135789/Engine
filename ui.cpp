@@ -88,8 +88,11 @@ void UI::Init(GLFWwindow* window){
 void UI::Menubar(){
   if(ImGui::BeginMainMenuBar()){
     if(ImGui::BeginMenu("File")){
-      if(ImGui::MenuItem("Save Scene")){
+      if(ImGui::MenuItem("Save World")){
         
+      }
+      if(ImGui::MenuItem("Load World")){
+
       }
       ImGui::EndMenu();
     }

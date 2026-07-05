@@ -1,4 +1,5 @@
 #include "headers/globals.hpp"
+#include "headers/dirlight.hpp"
 
 std::unique_ptr<Window> mainWindow = std::make_unique<Window>(2560, 1920, "Game Engine - x64");
 std::vector<Gameobject*> gameobjects;
@@ -18,3 +19,4 @@ std::vector<std::string> textures = {
   "assets/monkey.png"
 };
 bool vsync = true;
+DirectionalLight* mainDirLight = new DirectionalLight(glm::vec3(-0.5f, -1.0f, -0.8f), glm::vec3(1.0f, 1.0f, 1.0f));
