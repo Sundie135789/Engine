@@ -106,6 +106,8 @@ gameobject->SetMaterial(material);
 gameobject->SetTransform(transform);
 gameobjects.push_back(gameobject);
 }
+void Gameobject::CreateDirectionalLight(){
+}
 glm::mat4 Gameobject::getModelMatrix(Transform* transform){
   glm::mat4 model = glm::mat4(1.0f);
   model = glm::translate(model, transform->position);

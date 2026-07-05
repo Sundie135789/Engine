@@ -5,6 +5,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 Shader::Shader(std::string vertexPath, std::string fragmentPath){
+  this->vertexPath = vertexPath;
+  this->fragmentPath = fragmentPath;
   std::string vertexSource = LoadShader(vertexPath);
   std::string fragmentSource = LoadShader(fragmentPath);
   GLuint vertex, fragment;

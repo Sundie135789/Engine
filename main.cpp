@@ -7,15 +7,16 @@
 #include "headers/transform.hpp"
 #include "headers/gameobject.hpp"
 #include "headers/renderer.hpp"
-#include <iostream>
 #include "headers/material.hpp"
 #include "headers/ui.hpp"
 #include "headers/dirlight.hpp"
 #include "headers/input.hpp"
 #include "headers/globals.hpp"
+#include "headers/serialize.hpp"
 // C++ headers
 #include <vector>
-// Add directional light spawning to gameobject, then do save scene.
+#include <iostream>
+//save scene.
 // dynamic viewport using window resize in window.cpp
 // switch from mesh system to submesh {mesh + material}
 //
@@ -140,6 +141,7 @@ int main(){
     mainWindow->SwapBuffers();
   }
 
+  Serialize::SaveWorld("worlds/first.json");
   mainWindow->Terminate();
   glfwTerminate();
   return 0;

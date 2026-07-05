@@ -63,8 +63,7 @@ void UI::LoadInspector() {
   }
   ImGui::Separator();
   ImGui::SetNextItemWidth(400.0f);
-  if(ImGui::ColorEdit3("Color", &obj->material->color.x, ImGuiColorEditFlags_NoInputs |
-        ImGuiColorEditFlags_NoOptions | ImGuiColorEditFlags_NoSidePreview)){
+  if(ImGui::ColorEdit3("Color", &obj->material->color.x)){
   }
   ImGui::End();
 }
@@ -90,16 +89,19 @@ void UI::Menubar(){
   if(ImGui::BeginMainMenuBar()){
     if(ImGui::BeginMenu("File")){
       if(ImGui::MenuItem("Save Scene")){
-        //TODO save scene
+        
       }
       ImGui::EndMenu();
     }
     if(ImGui::BeginMenu("GameObject")){
-      if(ImGui::MenuItem("Cube")){
+      if(ImGui::MenuItem("Create Cube")){
         Gameobject::CreateCube();
       }
-      if(ImGui::MenuItem("Plane")){
+      if(ImGui::MenuItem("Create Plane")){
         Gameobject::CreatePlane();
+      }
+      if(ImGui::MenuItem("Create Point Light")){
+        //TODO
       }
       ImGui::EndMenu();
     }

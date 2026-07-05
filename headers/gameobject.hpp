@@ -20,4 +20,5 @@ class Gameobject{
     // creation
     static void CreateCube();
     static void CreatePlane();
+    static void CreateDirectionalLight();
 };
