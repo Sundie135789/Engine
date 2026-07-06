@@ -9,12 +9,12 @@ class Gameobject{
     Gameobject(std::string name);
     void SetMesh(const Mesh& mesh);
   //  void Render();
-    void SetMaterial(Material& material);
+    void SetMaterial(Material* material);
     void SetTransform(const Transform& transform);
     void SetName(const std::string& name);
     glm::mat4 getModelMatrix();
     Mesh mesh;
-    Material material;
+    Material* material;
     Transform transform;
     std::string name;
     // creation

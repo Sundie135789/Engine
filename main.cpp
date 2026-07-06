@@ -79,13 +79,13 @@ int main(){
 }; 
   Shader* shader = new Shader("shaders/basic.vert", "shaders/basic.frag");
   Texture* texture = new Texture("assets/pennywise.png");
-  Material material;
-  material.setColor(glm::vec3(1.0f, 1.0f, 1.0f));
-  material.setShader(shader);
-  material.setTexture(texture);
-  material.setShininess(30.0f);
-  material.setSpecularColor(glm::vec3(1.0f, 1.0f, 1.0f));
-  material.setSpecularStrength(6.0f);
+  Material* material = new Material();
+  material->setColor(glm::vec3(1.0f, 1.0f, 1.0f));
+  material->setShader(shader);
+  material->setTexture(texture);
+  material->setShininess(30.0f);
+  material->setSpecularColor(glm::vec3(1.0f, 1.0f, 1.0f));
+  material->setSpecularStrength(6.0f);
   auto gameobject = std::make_unique<Gameobject>("Clown Cube");
   
   gameobject->SetMesh(Mesh(vertices));

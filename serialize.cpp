@@ -25,7 +25,7 @@ namespace Serialize{
             goJson["transform"]["rotation"].get<glm::vec3>(),
             goJson["transform"]["scale"].get<glm::vec3>()
             ));
-      go->SetMaterial(Material(
+      Material* material = new Material(
             goJson["material"]["specularColor"].get<glm::vec3>(),
             goJson["material"]["specularStrength"].get<float>(),
             goJson["material"]["color"].get<glm::vec3>(),
@@ -33,10 +33,12 @@ namespace Serialize{
             goJson["material"]["texture"].get<std::string>(),
             goJson["material"]["shader"][0].get<std::string>(), //Vertex shader
             goJson["material"]["shader"][1].get<std::string>() //Fragment shader
-            ));
+
+          );
+      go->SetMaterial(material);
       int nVertices = goJson["mesh"]["vertices"].size();
       std::cout << "\n\n" << nVertices << "\n\n";
-      //for(int k = 0;k < 
+      for(int k = 0;k < 
     }
   }
   void SaveWorld(std::string path){
