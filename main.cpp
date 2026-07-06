@@ -16,6 +16,7 @@
 // C++ headers
 #include <vector>
 #include <iostream>
+// update github repo readme photo after compiling
 // store material as non object
 // add logic for load scene. 
 // press key combo to run the actual game. press key combo to switch back to normal editor.
