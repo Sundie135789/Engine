@@ -2,7 +2,7 @@
 #include "headers/dirlight.hpp"
 
 std::unique_ptr<Window> mainWindow = std::make_unique<Window>(2560, 1920, "Game Engine - x64");
-std::vector<Gameobject*> gameobjects;
+std::vector<std::unique_ptr<Gameobject>> gameobjects;
 Camera* editorCamera = new Camera();
 Camera* gameCamera = new Camera();
 float lastX, lastY;

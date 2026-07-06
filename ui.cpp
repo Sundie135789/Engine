@@ -26,7 +26,7 @@ void UI::LoadInspector() {
   ImGui::SetNextWindowSize(ImVec2(1200, 1900), ImGuiCond_Always); 
   ImGui::Begin("Properties", nullptr, ImGuiWindowFlags_NoResize);
 
-  auto* obj = gameobjects[selected];
+  auto& obj = gameobjects[selected];
   ImGui::Text("Name: %s", obj->name.c_str());
   ImGui::Separator();
 
@@ -42,28 +42,28 @@ void UI::LoadInspector() {
       ImGui::InputFloat3(id, data, "%.2f");
     };
 
-    drawRow("Position", "##Pos", &obj->transform->position.x);
-    drawRow("Rotation", "##Rot", &obj->transform->rotation.x);
-    drawRow("Scale",    "##Scl", &obj->transform->scale.x);
+    drawRow("Position", "##Pos", &obj->transform.position.x);
+    drawRow("Rotation", "##Rot", &obj->transform.rotation.x);
+    drawRow("Scale",    "##Scl", &obj->transform.scale.x);
 
     ImGui::PopStyleVar();
     ImGui::EndTable();
   }
   ImGui::Separator();
   ImGui::SetNextItemWidth(400.0f);
-  if(ImGui::BeginCombo("Available Textures", obj->material->texture->path.substr(7).c_str())){
+  if(ImGui::BeginCombo("Available Textures", obj->material.texture->path.substr(7).c_str())){
     for(int i=0;i<textures.size();i++){
       std::string textureName = textures[i].substr(7);
-      bool isSelected = (obj->material->texture->path == textures[i]);
+      bool isSelected = (obj->material.texture->path == textures[i]);
       if(ImGui::Selectable(textureName.c_str(), isSelected)){
-        obj->material->texture->LoadTexture(textures[i]);
+        obj->material.texture->LoadTexture(textures[i]);
       }
     }
     ImGui::EndCombo();
   }
   ImGui::Separator();
   ImGui::SetNextItemWidth(400.0f);
-  if(ImGui::ColorEdit3("Color", &obj->material->color.x)){
+  if(ImGui::ColorEdit3("Color", &obj->material.color.x)){
   }
   ImGui::End();
 }

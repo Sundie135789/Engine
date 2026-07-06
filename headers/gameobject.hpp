@@ -7,15 +7,15 @@
 class Gameobject{
   public:
     Gameobject(std::string name);
-    void SetMesh(Mesh *mesh);
+    void SetMesh(const Mesh& mesh);
   //  void Render();
-    void SetMaterial(Material* material);
-    void SetTransform(Transform *transform);
-    void SetName(std::string* name);
-    glm::mat4 getModelMatrix(Transform* transform);
-    Mesh *mesh;
-    Material *material;
-    Transform *transform;
+    void SetMaterial(Material& material);
+    void SetTransform(const Transform& transform);
+    void SetName(const std::string& name);
+    glm::mat4 getModelMatrix();
+    Mesh mesh;
+    Material material;
+    Transform transform;
     std::string name;
     // creation
     static void CreateCube();

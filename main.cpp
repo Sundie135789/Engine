@@ -16,6 +16,7 @@
 // C++ headers
 #include <vector>
 #include <iostream>
+// store material as non object
 // add logic for load scene. 
 // press key combo to run the actual game. press key combo to switch back to normal editor.
 // dynamic viewport using window resize in window.cpp
@@ -23,9 +24,10 @@
 // BEST LINE: ui.cpp -> around line 55, if condition for combo dropdown.
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
+  //Serialize::LoadWorld("worlds/first.json");
   Renderer renderer;
   renderer.SetLight(mainDirLight);
- /*  std::vector<Vertex> vertices = {
+   std::vector<Vertex> vertices = {
 
     // FRONT (+Z)
     { {-0.5f,-0.5f, 0.5f}, {0,0,1}, {0,0} },
@@ -75,28 +77,21 @@ int main(){
     { {-0.5f,-0.5f, 0.5f}, {0,-1,0}, {0,0} },
     { {-0.5f,-0.5f,-0.5f}, {0,-1,0}, {0,1} }
 }; 
-  Shader shader("shaders/basic.vert", "shaders/basic.frag");
-
-  Mesh mesh(vertices);
-  Texture texture("assets/pennywise.png");
-  Transform transform;
-  glm::vec3 position(0.0f, 0.0f, 0.0f), rotation(0.0f, 0.0f, 0.0f), scale(1.0f, 1.0f, 1.0f);
-  transform.setPosition(&position);
-  transform.setRotation(&rotation);
-  transform.setScale(&scale);
+  Shader* shader = new Shader("shaders/basic.vert", "shaders/basic.frag");
+  Texture* texture = new Texture("assets/pennywise.png");
   Material material;
   material.setColor(glm::vec3(1.0f, 1.0f, 1.0f));
-  material.setShader(&shader);
-  material.setTexture(&texture);
+  material.setShader(shader);
+  material.setTexture(texture);
   material.setShininess(30.0f);
   material.setSpecularColor(glm::vec3(1.0f, 1.0f, 1.0f));
   material.setSpecularStrength(6.0f);
-  Gameobject gameobject("Clown Cube");
+  auto gameobject = std::make_unique<Gameobject>("Clown Cube");
   
-  gameobject.SetMesh(&mesh);
-  gameobject.SetMaterial(&material);
-  gameobject.SetTransform(&transform);
-  gameobjects.push_back(&gameobject);*/
+  gameobject->SetMesh(Mesh(vertices));
+  gameobject->SetMaterial(material);
+  gameobject->SetTransform(Transform());
+  gameobjects.push_back(std::move(gameobject));
   float deltaTime, lastFrame = 0.0f, currentFrame;
   float fps, titleTimer = 0.0f;
   int fpsFrameCount = 0;
@@ -124,8 +119,8 @@ int main(){
           mainWindow.get(), editorCamera, deltaTime, lastX, lastY, firstMouse
         );
     }
-    for(Gameobject *object : gameobjects){
-      renderer.Submit(object);
+    for(auto& go : gameobjects){
+      renderer.Submit(go.get());
     }
     GLenum err;
     while((err = glGetError()) != GL_NO_ERROR){
@@ -140,7 +135,7 @@ int main(){
     mainWindow->SwapBuffers();
   }
 
-  Serialize::SaveWorld("worlds/first.json");
+  //Serialize::SaveWorld("worlds/first.json");
   mainWindow->Terminate();
   glfwTerminate();
   return 0;

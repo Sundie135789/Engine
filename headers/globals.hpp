@@ -6,7 +6,7 @@
 #include "gameobject.hpp"
 #include "dirlight.hpp"
 extern std::unique_ptr<Window> mainWindow;
-extern std::vector<Gameobject*> gameobjects;
+extern std::vector<std::unique_ptr<Gameobject>> gameobjects;
 extern int selected;
 extern Camera* editorCamera, *gameCamera;
 extern float lastX, lastY;
