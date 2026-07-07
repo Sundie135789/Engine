@@ -1,14 +1,18 @@
-# Engine
-Engine is a 3D game engine implemented using C++, OpenGL, and ImGui by Mudit Bhandari.
+# 3D Game Engine
 
-### Current Features:
-Mesh
-Shader
-Material
-Texture
-Lighting
-Renderer
-3D movement with freelook camera
-Basic UI
+A custom 3D game engine pipeline written from scratch in C++ using OpenGL.
 
-<img width="2560" height="1440" alt="Screenshot_20260628_181417" src="https://github.com/user-attachments/assets/3b5d42d7-de07-44fc-9e94-a2bed9ba343f" />
+## Current Engine Features
+
+*   **Renderer:** Handles the core OpenGL drawing loop, state management, and frame initialization.
+*   **Shaders:** Loads, compiles, and links custom Vertex and Fragment shader source files.
+*   **Textures & Materials:** Handles PNG image loading and sets material attributes (Color, Shininess, Specular Strength, and Specular Color).
+*   **Transform Engine:** Computes 3D coordinate transformations using translation, rotation, and scale parameters.
+*   **Lighting:** Implements a single Directional Light source for real-time vertex and fragment illumination.
+*   **Camera System:** Manages the view matrix calculations for runtime navigation.
+*   **GameObjects & Meshes:** Combines 3D vertex position vectors, normal vectors, and UV texture coordinates to construct and track runtime objects.
+*   **State Machine:** Implements an EngineState toggle to switch context between editing variables and running active gameplay.
+*   **User Interface:** Uses Dear ImGui to display real-time variables, a component Inspector window, a scene Hierarchy list, and menu navigation bars.
+*   **Serialization:** Saves and loads runtime scenes created inside the engine.
+*   
+*   <img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/81542bb3-9b28-4639-9620-b15c21ee02a1" />
