@@ -1,6 +1,4 @@
 #pragma once
-#define SENSITIVITY 0.1f
-#define ENGINE_CAMERA_SPEED 10.0f
 #include "window.hpp"
 #include "camera.hpp"
 class Input{

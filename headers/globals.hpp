@@ -11,6 +11,8 @@ extern int selected;
 extern Camera* editorCamera, *gameCamera;
 extern float lastX, lastY;
 extern bool firstMouse, gameObjectSelected;
+extern float camera_speed;
+extern float sensitivity;
 enum class EngineState{
   Playing,
   Editing

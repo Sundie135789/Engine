@@ -19,5 +19,8 @@ std::vector<std::string> textures = {
   "assets/monkey.png"
 };
 bool vsync = true;
-DirectionalLight* mainDirLight = nullptr;
+DirectionalLight* mainDirLight = new DirectionalLight(glm::vec3(-0.5f, -1.0f, -0.8f), glm::vec3(1.0f, 1.0f, 1.0f));
+//DirectionalLight* mainDirLight = nullptr;
 std::vector<Texture*> g_loadedTextures;
+float camera_speed = 10.0f;
+float sensitivity = 0.1f;

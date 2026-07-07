@@ -10,6 +10,7 @@ uniform float shininess;
 uniform float specularStrength;
 uniform vec3 specularColor;
 uniform vec3 materialColor;
+uniform float timeOffset;
 out vec4 FragColor;
 
 void main(){
@@ -33,6 +34,6 @@ void main(){
     float spec = pow(max(dot(norm, halfwayDir), 0.0), shininess);
     vec3 specular = spec * specularColor * lightColor * specularStrength;
 
-    vec3 finalColor = (ambient + diffuse) * objectColor + specular;
-    FragColor = vec4(finalColor, texColor.a);
+    vec3 finalColor = (ambient + diffuse) * objectColor + specular ;
+    FragColor = vec4(finalColor, texColor.a) ;
 }

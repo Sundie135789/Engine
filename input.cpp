@@ -20,14 +20,14 @@ void Input::HandleEngineInput(Window* window,Camera* editorCamera, float deltaTi
     float deltaX = mouseX - lastX;
     lastX = mouseX;
     lastY = mouseY;
-    editorCamera->yaw += deltaX * SENSITIVITY;
-    editorCamera->pitch += deltaY * SENSITIVITY;
+    editorCamera->yaw += deltaX * sensitivity;
+    editorCamera->pitch += deltaY * sensitivity;
     glm::vec3 direction;
     direction.x = cos(glm::radians(editorCamera->yaw)) * cos(glm::radians(editorCamera->pitch));
     direction.y = sin(glm::radians(editorCamera->pitch));
     direction.z = sin(glm::radians(editorCamera->yaw)) * cos(glm::radians(editorCamera->pitch));
     editorCamera->front = glm::normalize(direction);
-    float speed = ENGINE_CAMERA_SPEED * deltaTime;
+    float speed = camera_speed * deltaTime;
     glm::vec3 flatFront = glm::normalize(glm::vec3(editorCamera->front.x, 0.0f, editorCamera->front.z));
     glm::vec3 right = glm::normalize(glm::cross(editorCamera->front, glm::vec3(0,1,0)));
     if(window->GetKey(GLFW_KEY_W))   editorCamera->position += flatFront * speed;

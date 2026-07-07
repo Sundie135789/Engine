@@ -14,83 +14,18 @@
 #include "headers/globals.hpp"
 #include "headers/serialize.hpp"
 // C++ headers
-#include <vector>
 #include <iostream>
-// add logic for load scene. 
+// save and load file pop up in ui.cpp
+// add settings pop up in ui.cpp
 // press key combo to run the actual game. press key combo to switch back to normal editor.
 // dynamic viewport using window resize in window.cpp
 //
 // BEST LINE: ui.cpp -> around line 55, if condition for combo dropdown.
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
-  Serialize::LoadWorld("worlds/first.json");
+ Serialize::LoadWorld("worlds/first.json");
   Renderer renderer;
   renderer.SetLight(mainDirLight);
-   /*std::vector<Vertex> vertices = {
-
-    // FRONT (+Z)
-    { {-0.5f,-0.5f, 0.5f}, {0,0,1}, {0,0} },
-    { { 0.5f,-0.5f, 0.5f}, {0,0,1}, {1,0} },
-    { { 0.5f, 0.5f, 0.5f}, {0,0,1}, {1,1} },
-    { { 0.5f, 0.5f, 0.5f}, {0,0,1}, {1,1} },
-    { {-0.5f, 0.5f, 0.5f}, {0,0,1}, {0,1} },
-    { {-0.5f,-0.5f, 0.5f}, {0,0,1}, {0,0} },
-
-    // BACK (-Z)
-    { {-0.5f,-0.5f,-0.5f}, {0,0,-1}, {0,0} },
-    { {-0.5f, 0.5f,-0.5f}, {0,0,-1}, {0,1} },
-    { { 0.5f, 0.5f,-0.5f}, {0,0,-1}, {1,1} },
-    { { 0.5f, 0.5f,-0.5f}, {0,0,-1}, {1,1} },
-    { { 0.5f,-0.5f,-0.5f}, {0,0,-1}, {1,0} },
-    { {-0.5f,-0.5f,-0.5f}, {0,0,-1}, {0,0} },
-
-    // LEFT (-X)
-    { {-0.5f, 0.5f, 0.5f}, {-1,0,0}, {1,1} },
-    { {-0.5f, 0.5f,-0.5f}, {-1,0,0}, {0,1} },
-    { {-0.5f,-0.5f,-0.5f}, {-1,0,0}, {0,0} },
-    { {-0.5f,-0.5f,-0.5f}, {-1,0,0}, {0,0} },
-    { {-0.5f,-0.5f, 0.5f}, {-1,0,0}, {1,0} },
-    { {-0.5f, 0.5f, 0.5f}, {-1,0,0}, {1,1} },
-
-    // RIGHT (+X)
-    { { 0.5f, 0.5f, 0.5f}, {1,0,0}, {1,1} },
-    { { 0.5f,-0.5f,-0.5f}, {1,0,0}, {0,0} },
-    { { 0.5f, 0.5f,-0.5f}, {1,0,0}, {0,1} },
-    { { 0.5f,-0.5f,-0.5f}, {1,0,0}, {0,0} },
-    { { 0.5f, 0.5f, 0.5f}, {1,0,0}, {1,1} },
-    { { 0.5f,-0.5f, 0.5f}, {1,0,0}, {1,0} },
-
-    // TOP (+Y)
-    { {-0.5f, 0.5f,-0.5f}, {0,1,0}, {0,1} },
-    { {-0.5f, 0.5f, 0.5f}, {0,1,0}, {0,0} },
-    { { 0.5f, 0.5f, 0.5f}, {0,1,0}, {1,0} },
-    { { 0.5f, 0.5f, 0.5f}, {0,1,0}, {1,0} },
-    { { 0.5f, 0.5f,-0.5f}, {0,1,0}, {1,1} },
-    { {-0.5f, 0.5f,-0.5f}, {0,1,0}, {0,1} },
-
-    // BOTTOM (-Y)
-    { {-0.5f,-0.5f,-0.5f}, {0,-1,0}, {0,1} },
-    { { 0.5f,-0.5f,-0.5f}, {0,-1,0}, {1,1} },
-    { { 0.5f,-0.5f, 0.5f}, {0,-1,0}, {1,0} },
-    { { 0.5f,-0.5f, 0.5f}, {0,-1,0}, {1,0} },
-    { {-0.5f,-0.5f, 0.5f}, {0,-1,0}, {0,0} },
-    { {-0.5f,-0.5f,-0.5f}, {0,-1,0}, {0,1} }
-}; 
-  Shader* shader = new Shader("shaders/basic.vert", "shaders/basic.frag");
-  Texture* texture = new Texture("assets/pennywise.png");
-  Material material;
-  material.setColor(glm::vec3(1.0f, 1.0f, 1.0f));
-  material.setShader(shader);
-  material.setTexture(texture);
-  material.setShininess(30.0f);
-  material.setSpecularColor(glm::vec3(1.0f, 1.0f, 1.0f));
-  material.setSpecularStrength(6.0f);
-  auto gameobject = std::make_unique<Gameobject>("Clown Cube");
-  
-  gameobject->SetMesh(Mesh(vertices));
-  gameobject->SetMaterial(material);
-  gameobject->SetTransform(Transform());
-  gameobjects.push_back(std::move(gameobject));*/
   float deltaTime, lastFrame = 0.0f, currentFrame;
   float fps, titleTimer = 0.0f;
   int fpsFrameCount = 0;

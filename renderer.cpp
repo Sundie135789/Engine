@@ -1,4 +1,5 @@
 #include "headers/renderer.hpp"
+#include "headers/globals.hpp"
 #include "headers/gameobject.hpp"
 #include "headers/mesh.hpp"
 #include "headers/material.hpp"
@@ -46,7 +47,8 @@ void Renderer::Submit(Gameobject* gameobject){
   // Specular uniforms
   glUniform3fv(glGetUniformLocation(gameobject->material.shader->shaderProgram, "specularColor"), 1,glm::value_ptr(gameobject->material.specularColor));    
   glUniform1f(glGetUniformLocation(gameobject->material.shader->shaderProgram, "specularStrength"), gameobject->material.specularStrength);
-  
+  // Animation
+  glUniform1f(glGetUniformLocation(gameobject->material.shader->shaderProgram, "timeOffset"), mainWindow->GetTime());
   gameobject->mesh.Draw();
 }
 void Renderer::NewFrame(){

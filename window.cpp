@@ -3,7 +3,15 @@
 #include <iostream>
 #define GLFW_INCLUDE_NONE
 #include "GLFW/glfw3.h"
+#include "headers/serialize.hpp"
 #include "headers/window.hpp"
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
+  if(key == GLFW_KEY_S && action == GLFW_PRESS){
+    if(mods & GLFW_MOD_CONTROL){
+      Serialize::SaveWorld("worlds/first.json");
+    }
+  }
+}
 void Window::setCursorMode(int mode){
   glfwSetInputMode(window, GLFW_CURSOR, mode);
   cursorMode = mode;
@@ -25,6 +33,7 @@ Window::Window(int width, int height, std::string title){
   setCursorMode(GLFW_CURSOR_NORMAL);
   glEnable(GL_DEPTH_TEST);
   glViewport(0,0,width, height);
+  glfwSetKeyCallback(GetWindowHandle(), key_callback);
   std::cout << "GLFWwindow created successfully!\n" << std::endl;
 }
 int Window::GetMouseButton(int button){

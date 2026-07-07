@@ -5,6 +5,8 @@
 #include "vendor/imgui/imgui.h"
 #include "vendor/imgui/backends/imgui_impl_glfw.h"
 #include "vendor/imgui/backends/imgui_impl_opengl3.h"
+static char saveFile[64] = "first";
+static char loadFile[64] = "first";
 void UI::Hierarchy(){
   ImGui::SetNextWindowPos(ImVec2(0, 30), ImGuiCond_Always);
   ImGui::SetNextWindowSize(ImVec2(400, 1900), ImGuiCond_Always);
@@ -90,13 +92,30 @@ void UI::Init(GLFWwindow* window){
   ImGui_ImplOpenGL3_Init("#version 330");
 }
 void UI::Menubar(){
+  bool shouldCloseMenu = false;
   if(ImGui::BeginMainMenuBar()){
     if(ImGui::BeginMenu("File")){
-      if(ImGui::MenuItem("Save World")){
-        Serialize::SaveWorld("worlds/first.json");
+      ImGui::Text("Save World:");
+      ImGui::SameLine();
+      ImGui::SetNextItemWidth(150);
+      ImGui::InputText("##save_field", saveFile, 64);
+      ImGui::SameLine();
+      if(ImGui::Button("Save")){
+        Serialize::SaveWorld("worlds/" + std::string(saveFile) + ".json");
+        shouldCloseMenu = true;
       }
-      if(ImGui::MenuItem("Load World")){
-        Serialize::LoadWorld("worlds/first.json");
+      ImGui::Separator();
+      ImGui::Text("Load World:");
+      ImGui::SameLine();
+      ImGui::SetNextItemWidth(150);
+      ImGui::InputText("##load_field", loadFile, 64);
+      ImGui::SameLine();
+      if(ImGui::Button("Load")){
+        Serialize::LoadWorld("worlds/" + std::string(loadFile) + ".json");
+        shouldCloseMenu = true;
+      }
+      if(shouldCloseMenu){
+        ImGui::CloseCurrentPopup();
       }
       ImGui::EndMenu();
     }
@@ -107,15 +126,18 @@ void UI::Menubar(){
       if(ImGui::MenuItem("Create Plane")){
         Gameobject::CreatePlane();
       }
-      if(ImGui::MenuItem("Create Point Light")){
+      //if(ImGui::MenuItem("Create Point Light")){
         //TODO
-      }
+      //}
       ImGui::EndMenu();
     }
     if(ImGui::BeginMenu("Settings")){
       if(ImGui::Checkbox("V-Sync", &vsync)){
         mainWindow->SetVerticalSync();
       }
+      ImGui::Text("Controls");
+      ImGui::SliderFloat("Movement speed", &camera_speed, 1.0f, 20.0f, "%.1f m/s");
+      ImGui::SliderFloat("Camera sensitivity", &sensitivity, 0.05f, 0.25f, "%.2f");
       ImGui::EndMenu();
     }
     ImGui::EndMainMenuBar();
