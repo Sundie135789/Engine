@@ -21,3 +21,4 @@ extern int plane_untitled_number;
 extern std::vector<std::string> textures; 
 extern bool vsync;
 extern DirectionalLight* mainDirLight;
+extern std::vector<Texture*> g_loadedTextures;

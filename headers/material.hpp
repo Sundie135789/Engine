@@ -30,7 +30,7 @@ class Material {
 
     void setColor(glm::vec3 color);
     void setShader(Shader* shader);
-    void setTexture(Texture* texture);
+    void setTexture(const std::string& texturePath);
     void setShininess(float shininess);
     void setSpecularColor(glm::vec3 specularColor);
     void setSpecularStrength(float specularStrength);

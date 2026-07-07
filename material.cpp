@@ -13,7 +13,7 @@ Material::Material()
 {
   //Default shader and texture 
   shader = new Shader("shaders/basic.vert", "shaders/basic.frag");
-  texture = new Texture("assets/missing_texture.png");
+  texture = Texture::CheckLoaded("assets/missing_texture.png");
 }
 
 // Fully defined material
@@ -32,7 +32,7 @@ Material::Material(glm::vec3 specularColor,
 {
   // Shader and Texture are pointers and need separate handling.
   shader = new Shader(vertexPath, fragmentPath);
-  this->texture = new Texture(texture);
+  this->texture = Texture::CheckLoaded(texture);
 }
 
 void Material::setColor(glm::vec3 color) {
@@ -43,8 +43,8 @@ void Material::setShader(Shader* shader) {
     this->shader = shader;
 }
 
-void Material::setTexture(Texture* texture) {
-    this->texture = texture;
+void Material::setTexture(const std::string& texturePath) {
+    this->texture = Texture::CheckLoaded(texturePath);
 }
 
 void Material::setShininess(float shininess) {

@@ -1,4 +1,5 @@
 #include "headers/ui.hpp"
+#include "headers/serialize.hpp"
 #include "headers/globals.hpp"
 #include <iostream>
 #include "vendor/imgui/imgui.h"
@@ -59,7 +60,7 @@ void UI::LoadInspector() {
       std::string textureName = textures[i].substr(7);
       bool isSelected = (obj->material.texture->path == textures[i]);
       if(ImGui::Selectable(textureName.c_str(), isSelected)){
-        obj->material.texture->LoadTexture(textures[i]);
+        obj->material.texture = Texture::CheckLoaded(textures[i]);
       }
     }
     ImGui::EndCombo();
@@ -92,10 +93,10 @@ void UI::Menubar(){
   if(ImGui::BeginMainMenuBar()){
     if(ImGui::BeginMenu("File")){
       if(ImGui::MenuItem("Save World")){
-        
+        Serialize::SaveWorld("worlds/first.json");
       }
       if(ImGui::MenuItem("Load World")){
-
+        Serialize::LoadWorld("worlds/first.json");
       }
       ImGui::EndMenu();
     }

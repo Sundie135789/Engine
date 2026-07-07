@@ -20,3 +20,4 @@ std::vector<std::string> textures = {
 };
 bool vsync = true;
 DirectionalLight* mainDirLight = nullptr;
+std::vector<Texture*> g_loadedTextures;
