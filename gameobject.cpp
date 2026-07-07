@@ -5,8 +5,7 @@
 #include "headers/globals.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
-Gameobject::Gameobject(std::string name) : mesh(std::vector<Vertex>()), transform(), name(name){
-  material = new Material();
+Gameobject::Gameobject(std::string name) : mesh(std::vector<Vertex>()),material(), transform(), name(name){
   std::cout << "Gameobject created: " << this->name << std::endl;
 }
 /*void Gameobject::SetShader(Shader* shader){
@@ -18,7 +17,7 @@ void Gameobject::SetMesh(const Mesh& mesh){
 void Gameobject::SetTransform(const Transform& transform){
   this->transform = transform;
 }
-void Gameobject::SetMaterial(Material* material){
+void Gameobject::SetMaterial(const Material& material){
   this->material = material;
 }
 void Gameobject::SetName(const std::string& name){
@@ -74,8 +73,7 @@ void Gameobject::CreateCube(){
     { {-0.5f,-0.5f, 0.5f}, {0,-1,0}, {0,0} },
     { {-0.5f,-0.5f,-0.5f}, {0,-1,0}, {0,1} }};
   gameobject->SetMesh(Mesh(vertices));
-  Material* material = new Material();
-  gameobject->SetMaterial(material);
+  gameobject->SetMaterial(Material());
   gameobject->SetTransform(Transform());
   gameobjects.push_back(std::move(gameobject));
 }
@@ -94,8 +92,7 @@ std::vector<Vertex> vertices = {
     { { 0.5f, -0.0f,  0.5f}, {0,1,0}, {1,1} }
 };
 gameobject->SetMesh(Mesh(vertices));
-Material* material = new Material();
-gameobject->SetMaterial(material);
+gameobject->SetMaterial(Material());
 gameobject->SetTransform(Transform());
 gameobjects.push_back(std::move(gameobject));
 }

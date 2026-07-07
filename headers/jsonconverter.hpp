@@ -9,4 +9,8 @@ namespace glm{
              j.at(1).get<float>(),
              j.at(2).get<float>());
   }
+  inline void from_json(const json& j, vec2& v){
+    v = vec2(j.at(0).get<float>(),
+             j.at(1).get<float>());
+  }
 };

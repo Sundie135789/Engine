@@ -1,5 +1,6 @@
 #include "headers/serialize.hpp"
 
+#include "headers/dirlight.hpp"
 #include "headers/globals.hpp"
 #include "vendor/json/json.hpp"
 #include "headers/jsonconverter.hpp"
@@ -20,12 +21,13 @@ namespace Serialize{
     for(int i = 0;i<nGameobjects;i++){
       auto go = std::make_unique<Gameobject>(j["gameobjects"][i]["name"].get<std::string>());
       json goJson = j["gameobjects"][i];
-      go->SetTransform(Transform(
+      Transform transform(
             goJson["transform"]["position"].get<glm::vec3>(),
             goJson["transform"]["rotation"].get<glm::vec3>(),
             goJson["transform"]["scale"].get<glm::vec3>()
-            ));
-      Material* material = new Material(
+            );
+      go->SetTransform(transform);
+      Material material(
             goJson["material"]["specularColor"].get<glm::vec3>(),
             goJson["material"]["specularStrength"].get<float>(),
             goJson["material"]["color"].get<glm::vec3>(),
@@ -37,9 +39,35 @@ namespace Serialize{
           );
       go->SetMaterial(material);
       int nVertices = goJson["mesh"]["vertices"].size();
-      std::cout << "\n\n" << nVertices << "\n\n";
-      for(int k = 0;k < 
-    }
+      std::vector<Vertex> vertices;
+      for(int k = 0;k < nVertices; k++){
+        goJson["mesh"]["vertices"][k];
+        vertices.push_back(Vertex(
+               goJson["mesh"]["vertices"][k]["position"].get<glm::vec3>(),
+               goJson["mesh"]["vertices"][k]["normal"].get<glm::vec3>(),
+               goJson["mesh"]["vertices"][k]["uv"].get<glm::vec2>()
+              ));
+      }
+      go->SetMesh(Mesh(vertices));
+      gameobjects.push_back(std::move(go));
+      
+    } mainDirLight = new DirectionalLight(
+          j["dirlight"]["lightDir"].get<glm::vec3>(),
+          j["dirlight"]["color"].get<glm::vec3>()
+          );
+      gameCamera = new Camera(
+            j["game_camera"]["fov"].get<float>(),
+            j["game_camera"]["aspect"].get<float>(),
+            j["game_camera"]["nearPlane"].get<float>(),
+            j["game_camera"]["farPlane"].get<float>()
+          );
+      editorCamera = new Camera(
+            j["editor_camera"]["fov"].get<float>(),
+            j["editor_camera"]["aspect"].get<float>(),
+            j["editor_camera"]["nearPlane"].get<float>(),
+            j["editor_camera"]["farPlane"].get<float>()
+          );
+
   }
   void SaveWorld(std::string path){
     std::ofstream file(path.c_str());

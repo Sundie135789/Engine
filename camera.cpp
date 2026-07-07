@@ -10,6 +10,14 @@ Camera::Camera(){
   nearPlane = 0.1f;
   farPlane = 100.0f;
 }
+Camera::Camera(float fov, float aspect, float nearPlane, float farPlane) :
+  fov(fov), aspect(aspect), nearPlane(nearPlane), farPlane(farPlane)
+{
+  position = {0.0f, 1.0f, 3.0f};
+  front = {0.0f, 0.0f, -1.0f};
+  pitch = 0.0f;
+  yaw = -90.0f;
+}
 glm::mat4 Camera::GetViewMatrix(){
   glm::mat4 view = glm::lookAt(position, position + front, glm::vec3(0.0f, 1.0f, 0.0f));
   return view;

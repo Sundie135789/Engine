@@ -3,6 +3,7 @@
 class Camera{
   public:
     Camera();
+    Camera(float fov, float aspect, float nearPlane, float farPlane);
     glm::vec3 position;
     glm::vec3 front;
     float pitch;
