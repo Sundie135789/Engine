@@ -6,10 +6,10 @@ A custom 3D game engine pipeline written from scratch in C++ using OpenGL.
 
 *   **Renderer:** Handles the core OpenGL drawing loop, state management, and frame initialization.
 *   **Shaders:** Loads, compiles, and links custom Vertex and Fragment shader source files.
-*   **Textures & Materials:** Handles PNG image loading and sets material attributes (Color, Shininess, Specular Strength, and Specular Color).
+*   **Textures & Materials:** Handles 8-bit PNG and JPEG image loading and sets material attributes
 *   **Transform Engine:** Computes 3D coordinate transformations using translation, rotation, and scale parameters.
-*   **Lighting:** Implements a single Directional Light source for real-time vertex and fragment illumination.
-*   **Camera System:** Manages the view matrix calculations for runtime navigation.
+*   **Lighting:** Implements a single Directional Light source for real-time vertex and fragment illumination. (Later, Point lights and attentuation will be added)
+*   **Camera System:** Manages the view matrix calculations for runtime scene navigation.
 *   **GameObjects & Meshes:** Combines 3D vertex position vectors, normal vectors, and UV texture coordinates to construct and track runtime objects.
 *   **State Machine:** Implements an EngineState toggle to switch context between editing variables and running active gameplay.
 *   **User Interface:** Uses Dear ImGui to display real-time variables, a component Inspector window, a scene Hierarchy list, and menu navigation bars.
