@@ -7,9 +7,14 @@
 #include <csetjmp>
 #include <filesystem>
 namespace fs = std::filesystem;
+
 static char worldName[128] = "";
 static bool openSavePopup = false, openLoadPopup = false, openErrorPopup = false;
 static std::string errorMsg = "";
+void UI::SaveAndExit(){
+  if(strcmp(worldName, "")) 
+    Serialize::SaveWorld("worlds/" + std::string(worldName)+ ".json");
+}
 void UI::Hierarchy(){
   ImGui::SetNextWindowPos(ImVec2(0, 30), ImGuiCond_Always);
   ImGui::SetNextWindowSize(ImVec2(400, 1900), ImGuiCond_Always);

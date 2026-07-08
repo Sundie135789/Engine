@@ -11,6 +11,7 @@ class UI{
   static void Init(GLFWwindow* window);
   static void Menubar();
   static void Hierarchy();
+  static void SaveAndExit();
 };
 
 

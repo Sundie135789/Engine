@@ -1,20 +1,14 @@
 // Graphics header
 #include <GL/glew.h>
 //Custom headers
-#include "headers/shader.hpp"
-#include "headers/mesh.hpp"
-#include "headers/texture.hpp"
-#include "headers/transform.hpp"
-#include "headers/gameobject.hpp"
 #include "headers/renderer.hpp"
-#include "headers/material.hpp"
 #include "headers/ui.hpp"
-#include "headers/dirlight.hpp"
 #include "headers/input.hpp"
 #include "headers/globals.hpp"
 #include "headers/serialize.hpp"
 // C++ headers
 #include <iostream>
+//switch to submesh system
 // add settings pop up in ui.cpp
 // press key combo to run the actual game. press key combo to switch back to normal editor.
 //
@@ -46,7 +40,7 @@ int main(){
     Renderer::NewFrame();
     if(g_EngineState == EngineState::Playing){
       renderer.SetCamera(gameCamera);
-      Input::HandleGameInput();
+      Input::HandleGameInput(mainWindow.get(), gameCamera);
     }else if(g_EngineState == EngineState::Editing){
       renderer.SetCamera(editorCamera);
         Input::HandleEngineInput(
@@ -68,8 +62,7 @@ int main(){
     UI::EndFrame();
     mainWindow->SwapBuffers();
   }
-
-  Serialize::SaveWorld("worlds/first.json");
+  UI::SaveAndExit();
   mainWindow->Terminate();
   glfwTerminate();
   return 0;

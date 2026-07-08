@@ -8,6 +8,8 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height ){
   if(width == 0 || height == 0) return;
   glViewport(0, 0, width, height);
+  editorCamera->aspect = (float)width / (float)height;
+  gameCamera->aspect = (float)width / (float)height;
 }
 void Window::setCursorMode(int mode){
   glfwSetInputMode(window, GLFW_CURSOR, mode);
