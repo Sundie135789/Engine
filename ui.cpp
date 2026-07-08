@@ -1,12 +1,15 @@
 #include "headers/ui.hpp"
 #include "headers/serialize.hpp"
 #include "headers/globals.hpp"
-#include <iostream>
 #include "vendor/imgui/imgui.h"
 #include "vendor/imgui/backends/imgui_impl_glfw.h"
 #include "vendor/imgui/backends/imgui_impl_opengl3.h"
-static char saveFile[64] = "first";
-static char loadFile[64] = "first";
+#include <csetjmp>
+#include <filesystem>
+namespace fs = std::filesystem;
+static char worldName[128] = "";
+static bool openSavePopup = false, openLoadPopup = false, openErrorPopup = false;
+static std::string errorMsg = "";
 void UI::Hierarchy(){
   ImGui::SetNextWindowPos(ImVec2(0, 30), ImGuiCond_Always);
   ImGui::SetNextWindowSize(ImVec2(400, 1900), ImGuiCond_Always);
@@ -95,29 +98,71 @@ void UI::Menubar(){
   bool shouldCloseMenu = false;
   if(ImGui::BeginMainMenuBar()){
     if(ImGui::BeginMenu("File")){
-      ImGui::Text("Save World:");
-      ImGui::SameLine();
-      ImGui::SetNextItemWidth(150);
-      ImGui::InputText("##save_field", saveFile, 64);
-      ImGui::SameLine();
-      if(ImGui::Button("Save")){
-        Serialize::SaveWorld("worlds/" + std::string(saveFile) + ".json");
-        shouldCloseMenu = true;
+      if(ImGui::MenuItem("Save World")){
+        strcpy(worldName, "");
+        openSavePopup = true;
       }
-      ImGui::Separator();
-      ImGui::Text("Load World:");
-      ImGui::SameLine();
-      ImGui::SetNextItemWidth(150);
-      ImGui::InputText("##load_field", loadFile, 64);
-      ImGui::SameLine();
-      if(ImGui::Button("Load")){
-        Serialize::LoadWorld("worlds/" + std::string(loadFile) + ".json");
-        shouldCloseMenu = true;
-      }
-      if(shouldCloseMenu){
-        ImGui::CloseCurrentPopup();
+      if(ImGui::MenuItem("Load World")){
+        strcpy(worldName, "");
+        openLoadPopup = true;
       }
       ImGui::EndMenu();
+    }
+    if(openSavePopup){
+      ImGui::OpenPopup("Save World Popup");
+      openSavePopup = false;
+    }
+    if(openLoadPopup){
+      ImGui::OpenPopup("Load World Popup");
+      openLoadPopup = false;
+    }
+    if(openErrorPopup){
+      ImGui::OpenPopup("Error Popup");
+      openErrorPopup = false;
+    }
+    if(ImGui::BeginPopupModal("Save World Popup", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
+      ImGui::Text("Enter world name:");
+      ImGui::InputText("###saveworld", worldName, IM_ARRAYSIZE(worldName));
+      if(ImGui::Button("Save")){
+        if(strlen(worldName) > 0){
+          std::string path = std::string("worlds/") + worldName + ".json";
+          Serialize::SaveWorld(path);
+        }
+          ImGui::CloseCurrentPopup();
+      }
+      ImGui::SameLine();
+      if(ImGui::Button( "Cancel")){
+        ImGui::CloseCurrentPopup();
+      }
+      ImGui::EndPopup();
+    }
+      if(ImGui::BeginPopupModal("Load World Popup", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
+      ImGui::Text("Enter world name:");
+      ImGui::InputText("###loadworld", worldName, IM_ARRAYSIZE(worldName));
+      if(ImGui::Button("Load")){
+        if(strlen(worldName) > 0){
+          std::string path = std::string("worlds/") + worldName + ".json";
+          if(!fs::exists(path)){
+            errorMsg = "File not found!";
+            openErrorPopup = true;
+          }else{
+            Serialize::LoadWorld(path);
+          }
+        }
+          ImGui::CloseCurrentPopup();
+      }
+      ImGui::SameLine();
+      if(ImGui::Button( "Cancel")){
+        ImGui::CloseCurrentPopup();
+      }
+      ImGui::EndPopup();
+    }
+    if(ImGui::BeginPopupModal("Error Popup", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
+      ImGui::Text("%s", errorMsg.c_str());
+      if(ImGui::Button("OK")){
+        ImGui::CloseCurrentPopup();
+      }
+      ImGui::EndPopup();
     }
     if(ImGui::BeginMenu("GameObject")){
       if(ImGui::MenuItem("Create Cube")){

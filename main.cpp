@@ -15,15 +15,15 @@
 #include "headers/serialize.hpp"
 // C++ headers
 #include <iostream>
-// save and load file pop up in ui.cpp
 // add settings pop up in ui.cpp
 // press key combo to run the actual game. press key combo to switch back to normal editor.
-// dynamic viewport using window resize in window.cpp
 //
 // BEST LINE: ui.cpp -> around line 55, if condition for combo dropdown.
+// at the start, load 
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
- Serialize::LoadWorld("worlds/first.json");
+  Serialize::LoadEmptyWorld();
+  /* Do not ship with this line */// Serialize::LoadWorld("worlds/first.json");
   Renderer renderer;
   renderer.SetLight(mainDirLight);
   float deltaTime, lastFrame = 0.0f, currentFrame;

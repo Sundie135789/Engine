@@ -8,6 +8,14 @@
 #include <iostream>
 using json = nlohmann::json;
 namespace Serialize{
+  void LoadEmptyWorld(){
+    mainDirLight = new DirectionalLight({-0.5f, -1.0f, -0.8f}, {1.0f, 1.0f, 1.0f});
+    editorCamera = new Camera(glm::radians(60.0f), 2560.0f/1920.0f, 0.1f, 100.0f);
+    gameCamera = new Camera(glm::radians(60.0f), 2560.0f/1920.0f, 0.1f, 100.0f);
+    editorCamera->position = {0.0f, 1.0f, 3.0f};
+    gameCamera->position = {0.0f, 0.0f, 0.0f};
+    gameobjects.clear();
+  }
   void LoadWorld(std::string path){
     std::ifstream file(path.c_str());
     if(!file){
