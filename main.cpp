@@ -8,14 +8,9 @@
 #include "headers/serialize.hpp"
 // C++ headers
 #include <iostream>
-//switch to submesh system
-// add settings pop up in ui.cpp
-// press key combo to run the actual game. press key combo to switch back to normal editor.
-//
-// BEST LINE: ui.cpp -> around line 55, if condition for combo dropdown.
-// at the start, load 
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
+   
   Serialize::LoadEmptyWorld();
   /* Do not ship with this line */// Serialize::LoadWorld("worlds/first.json");
   Renderer renderer;
@@ -54,11 +49,12 @@ int main(){
     while((err = glGetError()) != GL_NO_ERROR){
       std::cout << "OpenGL error flag detected: " << err << std::endl;
     }
-    if(selected != -1){
-      UI::LoadInspector();
+    if(g_EngineState == EngineState::Editing){
+      if(selected != -1)
+        UI::LoadInspector();
+      UI::Hierarchy();
+      UI::Menubar();
     }
-    UI::Menubar();
-    UI::Hierarchy();
     UI::EndFrame();
     mainWindow->SwapBuffers();
   }

@@ -6,9 +6,6 @@
 double Input::mouseX = 0.0f;
 double Input::mouseY = 0.0f;
 void Input::HandleEngineInput(Window* window,Camera* editorCamera, float deltaTime, float& lastX, float& lastY, bool& firstMouse){
-  if(window->GetKey(GLFW_KEY_F3)){
-    g_EngineState = EngineState::Playing;
-  }
   if(window->GetMouseButton(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS){
 
     window->setCursorMode(GLFW_CURSOR_DISABLED);
@@ -43,9 +40,6 @@ void Input::HandleEngineInput(Window* window,Camera* editorCamera, float deltaTi
   }
 }
 void Input::HandleGameInput(Window* window, Camera* camera){
-  if(window->GetKey(GLFW_KEY_F3)){
-    g_EngineState = EngineState::Editing;
-  }
   //TODO
 }
 

@@ -16,6 +16,7 @@ void UI::SaveAndExit(){
     Serialize::SaveWorld("worlds/" + std::string(worldName)+ ".json");
 }
 void UI::Hierarchy(){
+  
   ImGui::SetNextWindowPos(ImVec2(0, 30), ImGuiCond_Always);
   ImGui::SetNextWindowSize(ImVec2(400, 1900), ImGuiCond_Always);
   ImGui::Begin("Hierarchy", nullptr, ImGuiWindowFlags_NoResize);
@@ -31,7 +32,7 @@ void UI::Hierarchy(){
     }
   }
   ImGui::End();
-}
+  }
 void UI::LoadInspector() {
   ImGui::SetNextWindowPos(ImVec2(1900, 0), ImGuiCond_Always);
   ImGui::SetNextWindowSize(ImVec2(1200, 1900), ImGuiCond_Always); 

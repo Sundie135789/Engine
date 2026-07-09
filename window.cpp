@@ -11,6 +11,12 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height ){
   editorCamera->aspect = (float)width / (float)height;
   gameCamera->aspect = (float)width / (float)height;
 }
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
+  if(key == GLFW_KEY_F2 && action == GLFW_PRESS){
+
+    g_EngineState = g_EngineState == EngineState::Editing ? EngineState::Playing : EngineState::Editing;
+  }
+}
 void Window::setCursorMode(int mode){
   glfwSetInputMode(window, GLFW_CURSOR, mode);
   cursorMode = mode;
@@ -33,6 +39,7 @@ Window::Window(int width, int height, std::string title){
   glEnable(GL_DEPTH_TEST);
   glViewport(0,0,width, height);
   glfwSetFramebufferSizeCallback(window,framebuffer_size_callback);
+  glfwSetKeyCallback(window, key_callback);
   std::cout << "GLFWwindow created successfully!\n" << std::endl;
 }
 int Window::GetMouseButton(int button){
