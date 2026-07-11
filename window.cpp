@@ -3,7 +3,6 @@
 #include <iostream>
 #define GLFW_INCLUDE_NONE
 #include "GLFW/glfw3.h"
-#include "headers/serialize.hpp"
 #include "headers/window.hpp"
 void framebuffer_size_callback(GLFWwindow* window, int width, int height ){
   if(width == 0 || height == 0) return;
@@ -12,8 +11,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height ){
   gameCamera->aspect = (float)width / (float)height;
 }
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
-  if(key == GLFW_KEY_F2 && action == GLFW_PRESS){
-
+  if(key == GLFW_KEY_F3 && action == GLFW_PRESS){
     g_EngineState = g_EngineState == EngineState::Editing ? EngineState::Playing : EngineState::Editing;
   }
 }

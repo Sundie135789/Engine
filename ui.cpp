@@ -8,8 +8,8 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
-static char worldName[128] = "";
-static bool openSavePopup = false, openLoadPopup = false, openErrorPopup = false;
+static char worldName[128] = "", objRename[128];
+static bool openSavePopup = false, openLoadPopup = false, openLoadErrorPopup = false, openEmptyRenamePopup = false;
 static std::string errorMsg = "";
 void UI::SaveAndExit(){
   if(strcmp(worldName, "")) 
@@ -25,10 +25,32 @@ void UI::Hierarchy(){
       selected = i;
     }
   }
-  if(selected != -1 && (ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace))){
-    if(!ImGui::GetIO().WantCaptureKeyboard){
-      gameobjects.erase(gameobjects.begin() + selected);
-      selected = -1;
+  if(selected != -1){
+    if(ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace)){
+      if(!ImGui::GetIO().WantCaptureKeyboard){
+        gameobjects.erase(gameobjects.begin() + selected);
+        selected = -1;
+      }
+    }
+    if(ImGui::IsKeyPressed(ImGuiKey_F2)){
+      ImGui::OpenPopup("rename_popup");
+    }
+    if(ImGui::BeginPopup("rename_popup")){
+      ImGui::Text("Enter new name");
+      ImGui::SetKeyboardFocusHere();
+      if(ImGui::InputText("###name", objRename, 128, ImGuiInputTextFlags_EnterReturnsTrue)){
+        if(objRename[0] != '\0'){
+          gameobjects[selected]->name = std::string(objRename);
+          ImGui::CloseCurrentPopup();
+          openEmptyRenamePopup = false;
+        }else {
+          openEmptyRenamePopup = true;
+        }
+      }
+      if(openEmptyRenamePopup){
+        ImGui::TextColored(ImVec4(1,0,0,1), "Name cannot be empty!");
+      }
+      ImGui::EndPopup();
     }
   }
   ImGui::End();
@@ -122,9 +144,9 @@ void UI::Menubar(){
       ImGui::OpenPopup("Load World Popup");
       openLoadPopup = false;
     }
-    if(openErrorPopup){
+    if(openLoadErrorPopup){
       ImGui::OpenPopup("Error Popup");
-      openErrorPopup = false;
+      openLoadErrorPopup = false;
     }
     if(ImGui::BeginPopupModal("Save World Popup", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
       ImGui::Text("Enter world name:");
@@ -150,7 +172,7 @@ void UI::Menubar(){
           std::string path = std::string("worlds/") + worldName + ".json";
           if(!fs::exists(path)){
             errorMsg = "File not found!";
-            openErrorPopup = true;
+            openLoadErrorPopup= true;
           }else{
             Serialize::LoadWorld(path);
           }
