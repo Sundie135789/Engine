@@ -20,7 +20,7 @@ void Renderer::SetCamera(Camera* cam){
   this->camera = cam;
 }
 void Renderer::Submit(Gameobject* gameobject){
-  if(!camera || !gameobject || gameobject->mesh.vertices.empty() || !gameobject->material.texture || !gameobject->material.shader)
+  if(!camera ||  !gameobject || gameobject->mesh.vertices.empty() || !gameobject->material.texture || !gameobject->material.shader)
   {
     std::cout << "Renderer::Submit -> null pointer" << std::endl;
     std::exit(0);

@@ -8,5 +8,4 @@ class Texture{
     void Bind(int unit = 0) const;
     std::string path;
     void LoadTexture(std::string path);
-    static Texture* CheckLoaded(const std::string& path);
 };

@@ -26,7 +26,6 @@ class Material {
              std::string fragmentPath
              );
 
-    ~Material();
 
     void setColor(glm::vec3 color);
     void setShader(Shader* shader);

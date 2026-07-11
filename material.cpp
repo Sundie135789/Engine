@@ -1,7 +1,5 @@
 #include "headers/material.hpp"
-
-// Destructor (no ownership assumed here for now)
-Material::~Material() = default;
+#include "headers/assetmanager.hpp"
 
 // Default material (safe null init OR external assignment later)
 Material::Material()
@@ -13,7 +11,7 @@ Material::Material()
 {
   //Default shader and texture 
   shader = new Shader("shaders/basic.vert", "shaders/basic.frag");
-  texture = Texture::CheckLoaded("assets/missing_texture.png");
+  texture = AssetManager::GetTexture("assets/missing_texture.png");
 }
 
 // Fully defined material
@@ -32,7 +30,7 @@ Material::Material(glm::vec3 specularColor,
 {
   // Shader and Texture are pointers and need separate handling.
   shader = new Shader(vertexPath, fragmentPath);
-  this->texture = Texture::CheckLoaded(texture);
+  this->texture = AssetManager::GetTexture(texture);
 }
 
 void Material::setColor(glm::vec3 color) {
@@ -44,7 +42,7 @@ void Material::setShader(Shader* shader) {
 }
 
 void Material::setTexture(const std::string& texturePath) {
-    this->texture = Texture::CheckLoaded(texturePath);
+    this->texture = AssetManager::GetTexture(texturePath);
 }
 
 void Material::setShininess(float shininess) {

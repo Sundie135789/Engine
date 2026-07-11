@@ -6,8 +6,9 @@
 #include "headers/input.hpp"
 #include "headers/globals.hpp"
 #include "headers/serialize.hpp"
+#include "headers/model.hpp"
 // C++ headers
-// use single texture models 
+// implement asset manager: gettexture, cleanup
 #include <iostream>
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
@@ -16,6 +17,16 @@ int main(){
   /* Do not ship with this line */// Serialize::LoadWorld("worlds/first.json");
   Renderer renderer;
   renderer.SetLight(mainDirLight);
+  std::vector<Vertex> vertices;
+  Material material;
+  Model::LoadModel("assets/rabbit.fbx", vertices, material);
+  Mesh mesh(vertices);
+  std::unique_ptr<Gameobject> gameobject = std::make_unique<Gameobject>("Rabbit");
+  gameobject->SetMesh(mesh);
+  gameobject->SetTransform(Transform());
+  gameobject->SetMaterial(material);
+  
+  gameobjects.push_back(std::move(gameobject));
   float deltaTime, lastFrame = 0.0f, currentFrame;
   float fps, titleTimer = 0.0f;
   int fpsFrameCount = 0;

@@ -3,16 +3,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "vendor/stb_image.h"
 #include <iostream>
-Texture* Texture::CheckLoaded(const std::string& path){
-  for(Texture* texture : g_loadedTextures){
-    if(texture != nullptr && texture->path == path){
-      return texture;
-    }
-  }
-  Texture* newTex = new Texture(path);
-  g_loadedTextures.push_back(newTex);
-  return newTex;
-}
 Texture::Texture(std::string path){
   LoadTexture(path);
 }
