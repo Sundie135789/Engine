@@ -7,6 +7,7 @@
 #include "headers/globals.hpp"
 #include "headers/serialize.hpp"
 // C++ headers
+// use single texture models 
 #include <iostream>
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
