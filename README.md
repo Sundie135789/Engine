@@ -19,4 +19,4 @@ A custom 3D game engine pipeline written from scratch in C++ using OpenGL.
 
 * Model Loading (fbx file format)
    
-*   <img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/81542bb3-9b28-4639-9620-b15c21ee02a1" />
+   <img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/81542bb3-9b28-4639-9620-b15c21ee02a1" />
