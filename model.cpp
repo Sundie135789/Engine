@@ -1,4 +1,5 @@
 #include "headers/model.hpp"
+#include "headers/assetmanager.hpp"
 #include "headers/vertex.hpp"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -37,7 +38,7 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene, std::vector<Vertex>&
                     if (mesh->mTextureCoords[0]) { // Check first UV channel
                         vertex.uv.x = mesh->mTextureCoords[0][index].x;
                         // Flip Y-axis: FBX layout maps top-to-bottom, OpenGL processes bottom-to-top
-                        vertex.uv.y = 1.0f - mesh->mTextureCoords[0][index].y;
+                        vertex.uv.y = mesh->mTextureCoords[0][index].y;
                     } else {
                         vertex.uv = glm::vec2(0.0f);
                     }
@@ -67,18 +68,25 @@ void Model::LoadModel(const std::string& path, std::vector<Vertex>& out_vertices
     srcMat->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor);
     srcMat->Get(AI_MATKEY_COLOR_SPECULAR, specularColor);
     srcMat->Get(AI_MATKEY_SHININESS, shininess);
+    if(shininess <= 0.1f){
+      shininess = 32.0f;
+    }
     material.color = glm::vec3(diffuseColor.r, diffuseColor.g, diffuseColor.b);
     material.specularColor = glm::vec3(specularColor.r, specularColor.g, specularColor.b);
     material.shininess = shininess;
     material.specularStrength = 3.0f;
     aiString texturePath;
     if(srcMat->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath) == AI_SUCCESS){
-      std::string textureFileName = texturePath.C_Str();
-      Texture* texture = new Texture(textureFileName);
-      material.texture = texture;
+      //std::cout << "\n\nFOUND TEXTURE IN RABBIT MODEL: " << texturePath.C_Str() << "\n\n";
+      std::string textureFilename = texturePath.C_Str();
+      std::replace(textureFilename.begin(), textureFilename.end(), '\\', '/');
+      std::string directory = path.substr(0, path.find_last_of('/'));
+      std::string fullPath = directory + "/" + textureFilename;
+      std::cout << "Resolved texture path: " << fullPath << "\n\n";
+      material.texture = AssetManager::GetTexture("assets/rabbit.png");
     }
-    material.shader = new Shader("shaders/basic.vert", "shaders/basic.frag");
-
+    material.setShader(Shader("shaders/basic.vert", "shaders/basic.frag"));
+    std::cout << "\n\n" << material.texture->path << "\n\n";
   }else {
     material.color = glm::vec3(1.0f);
     material.specularColor = glm::vec3(1.0f);

@@ -96,7 +96,7 @@ namespace Serialize{
       obj["material"]["color"] = {go->material.color.x, go->material.color.y, go->material.color.z};
       obj["material"]["shininess"] = go->material.shininess;
       obj["material"]["texture"] = go->material.texture->path;
-      obj["material"]["shader"] = {go->material.shader->vertexPath, go->material.shader->fragmentPath};
+      obj["material"]["shader"] = {go->material.shader.vertexPath, go->material.shader.fragmentPath};
       obj["mesh"]["vertices"] = json::array();
       for(Vertex vertex : go->mesh.vertices){
         json v;

@@ -20,35 +20,33 @@ void Renderer::SetCamera(Camera* cam){
   this->camera = cam;
 }
 void Renderer::Submit(Gameobject* gameobject){
-  if(!camera ||  !gameobject || gameobject->mesh.vertices.empty() || !gameobject->material.texture || !gameobject->material.shader)
+  if(!camera ||  !gameobject || gameobject->mesh.vertices.empty() || !gameobject->material.texture)
   {
     std::cout << "Renderer::Submit -> null pointer" << std::endl;
     std::exit(0);
   }
   glBindVertexArray(gameobject->mesh.vao);
-  gameobject->material.shader->Use();
-  //glUseProgram(gameobject->material.shader->shaderProgram);
+  gameobject->material.shader.Use();
+  //glUseProgram(gameobject->material.shader.shaderProgram);
   //Set Uniforms
   glm::mat4 model = gameobject->getModelMatrix();
   glm::mat4 view = camera->GetViewMatrix();
   glm::mat4 projection = camera->GetProjectionMatrix();
-  glUniformMatrix4fv(glGetUniformLocation(gameobject->material.shader->shaderProgram, "model"),1, GL_FALSE, glm::value_ptr(model));
-  glUniformMatrix4fv(glGetUniformLocation(gameobject->material.shader->shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
-  glUniformMatrix4fv(glGetUniformLocation(gameobject->material.shader->shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-  gameobject->material.texture->Bind();
-  glUniform1i(glGetUniformLocation(gameobject->material.shader->shaderProgram, "u_Texture"), 0);
-  glUniform3fv(glGetUniformLocation(gameobject->material.shader->shaderProgram, "materialColor"), 1, glm::value_ptr(gameobject->material.color));
+  glUniformMatrix4fv(glGetUniformLocation(gameobject->material.shader.shaderProgram, "model"),1, GL_FALSE, glm::value_ptr(model));
+  glUniformMatrix4fv(glGetUniformLocation(gameobject->material.shader.shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
+  glUniformMatrix4fv(glGetUniformLocation(gameobject->material.shader.shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+  gameobject->material.texture->Bind(0);
+  glUniform1i(glGetUniformLocation(gameobject->material.shader.shaderProgram, "u_Texture"), 0);
+  glUniform3fv(glGetUniformLocation(gameobject->material.shader.shaderProgram, "materialColor"), 1, glm::value_ptr(gameobject->material.color));
 
   //Lighting uniforms
   glm::vec3 lightDir = glm::normalize(-light->lightDir);
-  glUniform3f(glGetUniformLocation(gameobject->material.shader->shaderProgram, "lightDirection"), lightDir.x, lightDir.y, lightDir.z);
-  glUniform1f(glGetUniformLocation(gameobject->material.shader->shaderProgram, "shininess"), gameobject->material.shininess);
-  glUniform3f(glGetUniformLocation(gameobject->material.shader->shaderProgram, "viewPos"), camera->position.x, camera->position.y, camera->position.z);
+  glUniform3f(glGetUniformLocation(gameobject->material.shader.shaderProgram, "lightDirection"), lightDir.x, lightDir.y, lightDir.z);
+  glUniform1f(glGetUniformLocation(gameobject->material.shader.shaderProgram, "shininess"), gameobject->material.shininess);
+  glUniform3f(glGetUniformLocation(gameobject->material.shader.shaderProgram, "viewPos"), camera->position.x, camera->position.y, camera->position.z);
   // Specular uniforms
-  glUniform3fv(glGetUniformLocation(gameobject->material.shader->shaderProgram, "specularColor"), 1,glm::value_ptr(gameobject->material.specularColor));    
-  glUniform1f(glGetUniformLocation(gameobject->material.shader->shaderProgram, "specularStrength"), gameobject->material.specularStrength);
-  // Animation
-  glUniform1f(glGetUniformLocation(gameobject->material.shader->shaderProgram, "timeOffset"), mainWindow->GetTime());
+  glUniform3fv(glGetUniformLocation(gameobject->material.shader.shaderProgram, "specularColor"), 1,glm::value_ptr(gameobject->material.specularColor));    
+  glUniform1f(glGetUniformLocation(gameobject->material.shader.shaderProgram, "specularStrength"), gameobject->material.specularStrength);
   gameobject->mesh.Draw();
 }
 void Renderer::NewFrame(){

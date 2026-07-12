@@ -1,4 +1,5 @@
 #include "headers/ui.hpp"
+#include "headers/assetmanager.hpp"
 #include "headers/serialize.hpp"
 #include "headers/globals.hpp"
 #include "vendor/imgui/imgui.h"
@@ -93,7 +94,7 @@ void UI::LoadInspector() {
       std::string textureName = textures[i].substr(7);
       bool isSelected = (obj->material.texture->path == textures[i]);
       if(ImGui::Selectable(textureName.c_str(), isSelected)){
-        obj->material.texture = Texture::CheckLoaded(textures[i]);
+        obj->material.texture = AssetManager::GetTexture(textureName);
       }
     }
     ImGui::EndCombo();

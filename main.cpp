@@ -2,6 +2,7 @@
 #include <GL/glew.h>
 //Custom headers
 #include "headers/renderer.hpp"
+#include "headers/assetmanager.hpp"
 #include "headers/ui.hpp"
 #include "headers/input.hpp"
 #include "headers/globals.hpp"
@@ -71,6 +72,7 @@ int main(){
     mainWindow->SwapBuffers();
   }
   UI::SaveAndExit();
+  AssetManager::Cleanup();
   mainWindow->Terminate();
   glfwTerminate();
   return 0;

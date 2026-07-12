@@ -3,6 +3,7 @@
 #include "shader.hpp"
 #include "texture.hpp"
 #include <glm/glm.hpp>
+#include <memory>
 #include <string>
 
 class Material {
@@ -12,9 +13,8 @@ class Material {
     glm::vec3 color;
     float shininess;
 
-    Shader* shader;
+ Shader shader;
     Texture* texture;
-
 
     Material();
     Material(glm::vec3 specularColor,
@@ -28,7 +28,7 @@ class Material {
 
 
     void setColor(glm::vec3 color);
-    void setShader(Shader* shader);
+    void setShader(Shader&& shader);
     void setTexture(const std::string& texturePath);
     void setShininess(float shininess);
     void setSpecularColor(glm::vec3 specularColor);

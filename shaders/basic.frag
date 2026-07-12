@@ -35,5 +35,5 @@ void main(){
     vec3 specular = spec * specularColor * lightColor * specularStrength;
 
     vec3 finalColor = (ambient + diffuse) * objectColor + specular ;
-    FragColor = vec4(finalColor, texColor.a) ;
+    FragColor = vec4(texColor.rgb, 1.0) ;
 }

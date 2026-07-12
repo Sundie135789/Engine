@@ -22,7 +22,7 @@ Shader::Shader(std::string vertexPath, std::string fragmentPath){
   if(success == GL_FALSE){
     GLint logSize = 0;
     glGetShaderiv(vertex, GL_INFO_LOG_LENGTH, &logSize);
-    char errorLog[512];
+    char errorLog[logSize];
     glGetShaderInfoLog(vertex, logSize, &logSize,&errorLog[0]);
     std::cout << "Vertex shader compilation failed!\n" << &errorLog[0] << std::endl;
   }
@@ -31,7 +31,7 @@ Shader::Shader(std::string vertexPath, std::string fragmentPath){
   if(success == GL_FALSE){
     GLint logSize = 0;
     glGetShaderiv(fragment, GL_INFO_LOG_LENGTH, &logSize);
-    char errorLog[512];
+    char errorLog[logSize];
     glGetShaderInfoLog(fragment, logSize, &logSize,&errorLog[0]);
     std::cout << "Fragment shader compilation failed!\n" << &errorLog[0] << std::endl;
   }
