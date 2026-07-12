@@ -9,7 +9,6 @@
 #include "headers/serialize.hpp"
 #include "headers/model.hpp"
 // C++ headers
-// implement asset manager: gettexture, cleanup
 #include <iostream>
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
@@ -20,9 +19,9 @@ int main(){
   renderer.SetLight(mainDirLight);
   std::vector<Vertex> vertices;
   Material material;
-  Model::LoadModel("assets/rabbit.fbx", vertices, material);
+  Model::LoadModel("assets/models/service_pistol_2k.fbx", vertices, material);
   Mesh mesh(vertices);
-  std::unique_ptr<Gameobject> gameobject = std::make_unique<Gameobject>("Rabbit");
+  std::unique_ptr<Gameobject> gameobject = std::make_unique<Gameobject>("My gameobject");
   gameobject->SetMesh(mesh);
   gameobject->SetTransform(Transform());
   gameobject->SetMaterial(material);

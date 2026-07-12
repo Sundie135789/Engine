@@ -88,7 +88,10 @@ void UI::LoadInspector() {
     ImGui::EndTable();
   }
   ImGui::Separator();
+  //std::string currentTexture = "Current Texture: " + obj->material.texture->path;
+  //ImGui::Text(currentTexture.c_str());
   ImGui::SetNextItemWidth(400.0f);
+  
   if(ImGui::BeginCombo("Available Textures", obj->material.texture->path.substr(7).c_str())){
     for(int i=0;i<textures.size();i++){
       std::string textureName = textures[i].substr(7);

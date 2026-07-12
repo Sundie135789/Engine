@@ -10,7 +10,7 @@ Material::Material()
       specularStrength(6.0f),
       shader("shaders/basic.vert", "shaders/basic.frag")
 {
-  texture = AssetManager::GetTexture("assets/missing_texture.png");
+  texture = AssetManager::GetTexture("assets/textures/missing_texture.png");
 }
 // Fully defined material
 Material::Material(glm::vec3 specularColor,

@@ -60,7 +60,7 @@ void Model::LoadModel(const std::string& path, std::vector<Vertex>& out_vertices
       aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);
   out_vertices.clear();
   ProcessNode(scene->mRootNode, scene, out_vertices);
-  if(scene->mNumMaterials > 0){
+  if(scene->HasMaterials() && scene->mNumMaterials > 0){
     aiMaterial* srcMat = scene->mMaterials[0];
     aiColor3D diffuseColor(1.0f, 1.0f, 1.0f);
     aiColor3D specularColor(1.0f, 1.0f, 1.0f);
@@ -76,21 +76,16 @@ void Model::LoadModel(const std::string& path, std::vector<Vertex>& out_vertices
     material.shininess = shininess;
     material.specularStrength = 3.0f;
     aiString texturePath;
-    if(srcMat->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath) == AI_SUCCESS){
-      //std::cout << "\n\nFOUND TEXTURE IN RABBIT MODEL: " << texturePath.C_Str() << "\n\n";
+    if(srcMat->GetTextureCount(aiTextureType_DIFFUSE) > 0 &&
+        srcMat->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath) == AI_SUCCESS){
       std::string textureFilename = texturePath.C_Str();
-      std::replace(textureFilename.begin(), textureFilename.end(), '\\', '/');
-      std::string directory = path.substr(0, path.find_last_of('/'));
-      std::string fullPath = directory + "/" + textureFilename;
+      std::string fullPath = textureFilename;
+      fullPath = fullPath.substr(fullPath.find_last_of("/\\") + 1);
+      fullPath = "assets/textures/" + fullPath;
       std::cout << "Resolved texture path: " << fullPath << "\n\n";
-      material.texture = AssetManager::GetTexture("assets/rabbit.png");
+      material.texture = AssetManager::GetTexture(fullPath);
     }
     material.setShader(Shader("shaders/basic.vert", "shaders/basic.frag"));
     std::cout << "\n\n" << material.texture->path << "\n\n";
-  }else {
-    material.color = glm::vec3(1.0f);
-    material.specularColor = glm::vec3(1.0f);
-    material.specularStrength = 3.0f;
-    material.shininess = 32.0f;
   }
 }

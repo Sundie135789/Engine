@@ -4,6 +4,7 @@
 #include "vendor/stb_image.h"
 #include <iostream>
 Texture::Texture(std::string path){
+
   LoadTexture(path);
 }
 void Texture::LoadTexture(std::string path){
@@ -25,7 +26,7 @@ void Texture::LoadTexture(std::string path){
     std::cout << "Texture loaded: " << path << std::endl;
   }
   else{
-    path = "assets/missing_texture.png";
+    path = "assets/textures/missing_texture.png";
     image = stbi_load(path.c_str(), &width, &height, &channels, 0);
     glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, image);
     glGenerateMipmap(GL_TEXTURE_2D);
