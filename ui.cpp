@@ -1,11 +1,11 @@
 #include "headers/ui.hpp"
+#include "headers/input.hpp"
 #include "headers/assetmanager.hpp"
 #include "headers/serialize.hpp"
 #include "headers/globals.hpp"
 #include "vendor/imgui/imgui.h"
 #include "vendor/imgui/backends/imgui_impl_glfw.h"
 #include "vendor/imgui/backends/imgui_impl_opengl3.h"
-#include <csetjmp>
 #include <filesystem>
 namespace fs = std::filesystem;
 
@@ -206,6 +206,12 @@ void UI::Menubar(){
       //if(ImGui::MenuItem("Create Point Light")){
         //TODO
       //}
+      ImGui::EndMenu();
+    }
+    if(ImGui::BeginMenu("Input")){
+      if(ImGui::MenuItem("Standard WASD + Mouse")){
+        Input::standardWASDMouse = true;
+      }
       ImGui::EndMenu();
     }
     if(ImGui::BeginMenu("Settings")){

@@ -8,6 +8,7 @@
 #include <glm/ext/vector_float3.hpp>
 #include <iostream>
 #include <glm/glm.hpp>
+#include <filesystem>
 void Model::ProcessNode(aiNode* node, const aiScene* scene, std::vector<Vertex>& out_vertices){
         // Unpack all sub-meshes attached to this specific hierarchy node
         for (unsigned int i = 0; i < node->mNumMeshes; i++) {
@@ -55,6 +56,10 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene, std::vector<Vertex>&
     }
 
 void Model::LoadModel(const std::string& path, std::vector<Vertex>& out_vertices, Material& material){
+  if(!std::filesystem::exists(std::filesystem::path(path))){
+    std::cerr << "[ERROR] Could not find model: " << path << std::endl;
+    std::exit(1);
+  }
   Assimp::Importer importer;
   const aiScene* scene = importer.ReadFile(path,
       aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);

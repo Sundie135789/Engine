@@ -22,8 +22,8 @@ void Renderer::SetCamera(Camera* cam){
 void Renderer::Submit(Gameobject* gameobject){
   if(!camera ||  !gameobject || gameobject->mesh.vertices.empty() || !gameobject->material.texture)
   {
-    std::cout << "Renderer::Submit -> null pointer" << std::endl;
-    std::exit(0);
+    std::cerr << "[ERROR] Renderer::Submit -> null pointer" << std::endl;
+    std::exit(1);
   }
   glBindVertexArray(gameobject->mesh.vao);
   gameobject->material.shader.Use();

@@ -7,8 +7,10 @@
 #include "headers/input.hpp"
 #include "headers/globals.hpp"
 #include "headers/serialize.hpp"
-#include "headers/model.hpp"
 // C++ headers
+// Import model, textuers, settings, all UI.
+// fix no mouse movement bug
+// only image texture models allowed
 #include <iostream>
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
@@ -19,14 +21,14 @@ int main(){
   renderer.SetLight(mainDirLight);
   std::vector<Vertex> vertices;
   Material material;
-  Model::LoadModel("assets/models/service_pistol_2k.fbx", vertices, material);
+  /*Model::LoadModel("assets/models/Untitled.fbx", vertices, material);
   Mesh mesh(vertices);
   std::unique_ptr<Gameobject> gameobject = std::make_unique<Gameobject>("My gameobject");
   gameobject->SetMesh(mesh);
   gameobject->SetTransform(Transform());
   gameobject->SetMaterial(material);
   
-  gameobjects.push_back(std::move(gameobject));
+  gameobjects.push_back(std::move(gameobject));*/
   float deltaTime, lastFrame = 0.0f, currentFrame;
   float fps, titleTimer = 0.0f;
   int fpsFrameCount = 0;
@@ -47,7 +49,7 @@ int main(){
     Renderer::NewFrame();
     if(g_EngineState == EngineState::Playing){
       renderer.SetCamera(gameCamera);
-      Input::HandleGameInput(mainWindow.get(), gameCamera);
+      Input::HandleGameInput(mainWindow.get(), gameCamera, deltaTime, lastX, lastY, firstMouse);
     }else if(g_EngineState == EngineState::Editing){
       renderer.SetCamera(editorCamera);
         Input::HandleEngineInput(
