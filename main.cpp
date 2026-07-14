@@ -8,8 +8,8 @@
 #include "headers/globals.hpp"
 #include "headers/serialize.hpp"
 // C++ headers
+// fix texture switching bug
 // Import model, textuers, settings, all UI.
-// fix no mouse movement bug
 // only image texture models allowed
 #include <iostream>
 int main(){

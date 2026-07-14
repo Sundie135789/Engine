@@ -1,4 +1,5 @@
 #include "headers/ui.hpp"
+#include <iostream>
 #include "headers/input.hpp"
 #include "headers/assetmanager.hpp"
 #include "headers/serialize.hpp"
@@ -215,12 +216,24 @@ void UI::Menubar(){
       ImGui::EndMenu();
     }
     if(ImGui::BeginMenu("Settings")){
-      if(ImGui::Checkbox("V-Sync", &vsync)){
+      /*if(ImGui::Checkbox("V-Sync", &vsync)){
         mainWindow->SetVerticalSync();
       }
       ImGui::Text("Controls");
       ImGui::SliderFloat("Movement speed", &camera_speed, 1.0f, 20.0f, "%.1f m/s");
       ImGui::SliderFloat("Camera sensitivity", &sensitivity, 0.05f, 0.25f, "%.2f");
+      */
+      ImGui::SetNextWindowSize(ImVec2(1400, 900));
+      if(ImGui::Begin("Settings")){
+        ImGui::Text("Graphics Settings");
+        if(ImGui::Checkbox("V-Sync", &vsync)){
+          mainWindow->SetVerticalSync();
+        }
+        ImGui::Text("Controls");
+        ImGui::SliderFloat("Movement speed", &camera_speed, 1.0f, 20.0f, "%.1f m/s");
+        ImGui::SliderFloat("Camera sensitivity", &sensitivity, 0.05f, 0.25f, "%.2f");
+        ImGui::End();
+      }
       ImGui::EndMenu();
     }
     ImGui::EndMainMenuBar();
