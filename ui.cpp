@@ -10,7 +10,7 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
-static char worldName[128] = "", objRename[128];
+static char worldName[128] = "", objRename[128], textureSet[128];
 static bool openSavePopup = false, openLoadPopup = false, openLoadErrorPopup = false, openEmptyRenamePopup = false;
 static std::string errorMsg = "";
 void UI::SaveAndExit(){
@@ -92,17 +92,23 @@ void UI::LoadInspector() {
   //std::string currentTexture = "Current Texture: " + obj->material.texture->path;
   //ImGui::Text(currentTexture.c_str());
   ImGui::SetNextItemWidth(400.0f);
-  
+  /*
   if(ImGui::BeginCombo("Available Textures", obj->material.texture->path.substr(7).c_str())){
     for(int i=0;i<textures.size();i++){
-      std::string textureName = textures[i].substr(7);
-      bool isSelected = (obj->material.texture->path == textures[i]);
+      std::string textureName = textures[i];
+      bool isSelected = (obj->material.texture->path == textureName);
+      std::cout << "GAMEOBJECT TEXTURE: " << obj->material.texture->path << "\nTextureName: " << textureName << '\n'; 
       if(ImGui::Selectable(textureName.c_str(), isSelected)){
         obj->material.texture = AssetManager::GetTexture(textureName);
       }
     }
     ImGui::EndCombo();
-  }
+  }*/
+    ImGui::InputText("##", textureSet, 128, 0, NULL, NULL);
+    if(ImGui::Button("Set Texture")){
+
+      obj->material.texture->path = std::string(textureSet);
+    }
   ImGui::Separator();
   ImGui::SetNextItemWidth(400.0f);
   if(ImGui::ColorEdit3("Color", &obj->material.color.x)){

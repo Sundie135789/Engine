@@ -12,12 +12,6 @@ EngineState g_EngineState = EngineState::Editing;
 int selected = -1;
 int cube_untitled_number = 0;
 int plane_untitled_number = 0;
-std::vector<std::string> textures = {
-  "assets/missing_texture.png",
-  "assets/wood.png",
-  "assets/pennywise.png",
-  "assets/monkey.png"
-};
 bool vsync = true;
 DirectionalLight* mainDirLight = new DirectionalLight(glm::vec3(-0.5f, -1.0f, -0.8f), glm::vec3(1.0f, 1.0f, 1.0f));
 //DirectionalLight* mainDirLight = nullptr;

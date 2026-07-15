@@ -10,14 +10,14 @@ uniform float shininess;
 uniform float specularStrength;
 uniform vec3 specularColor;
 uniform vec3 materialColor;
-uniform float timeOffset;
 out vec4 FragColor;
 
 void main(){
     vec3 lightColor = vec3(1.0, 1.0, 1.0);
-    vec4 texColor = texture(u_Texture, UV);
-    vec3 objectColor = mix(materialColor, texColor.rgb, 0.5);
-
+    vec3 objectColor;
+      vec4 texColor = texture(u_Texture, UV);
+      objectColor = mix(materialColor, texColor.rgb, 0.5);
+    objectColor = materialColor;
     vec3 norm = normalize(Normal);
     vec3 lightDir = normalize(lightDirection);
     vec3 viewDir = normalize(viewPos - FragPos);
@@ -35,5 +35,5 @@ void main(){
     vec3 specular = spec * specularColor * lightColor * specularStrength;
 
     vec3 finalColor = (ambient + diffuse) * objectColor + specular ;
-    FragColor = vec4(texColor.rgb, 1.0) ;
+      FragColor = vec4(finalColor, texColor.rgb);
 }

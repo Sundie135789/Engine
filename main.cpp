@@ -8,7 +8,7 @@
 #include "headers/globals.hpp"
 #include "headers/serialize.hpp"
 // C++ headers
-// fix texture switching bug
+// do os native file picker
 // Import model, textuers, settings, all UI.
 // only image texture models allowed
 #include <iostream>
