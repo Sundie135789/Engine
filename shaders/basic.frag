@@ -17,7 +17,7 @@ void main(){
     vec3 objectColor;
       vec4 texColor = texture(u_Texture, UV);
       objectColor = mix(materialColor, texColor.rgb, 0.5);
-    objectColor = materialColor;
+    //objectColor = materialColor;
     vec3 norm = normalize(Normal);
     vec3 lightDir = normalize(lightDirection);
     vec3 viewDir = normalize(viewPos - FragPos);

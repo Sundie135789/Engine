@@ -17,10 +17,18 @@ namespace fs = std::filesystem;
 static char worldName[128] = "", objRename[128], textureSet[128];
 static bool openSavePopup = false, openLoadPopup = false, openLoadErrorPopup = false, openEmptyRenamePopup = false;
 bool UI::triggerFilePick = false;
+bool UI::triggerModelPick = false;
 static std::string errorMsg = "";
 void UI::SaveAndExit(){
   if(strcmp(worldName, "")) 
     Serialize::SaveWorld("worlds/" + std::string(worldName)+ ".json");
+}
+std::string UI::OpenModelpicker(){
+  auto selection = pfd::open_file("Import Model", "", 
+      {"Autodesk FBX (*.fbx)", "*.fbx"}).result();
+  if(selection.empty())
+    return "";
+  return selection[0];
 }
 std::string UI::OpenFilepicker(){
   auto selection = pfd::open_file("Set Texture", "", {"Image Files", "*.png *.jpg *.jpeg *.bmp *.hdr *.pic"}).result();
@@ -153,6 +161,9 @@ void UI::Menubar(){
       if(ImGui::MenuItem("Load World")){
         strcpy(worldName, "");
         openLoadPopup = true;
+      }
+      if(ImGui::MenuItem("Import Model (FBX)")){
+        triggerModelPick = true;
       }
       ImGui::EndMenu();
     }

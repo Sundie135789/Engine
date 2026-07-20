@@ -13,7 +13,9 @@ class UI{
   static void Hierarchy();
   static void SaveAndExit();
   static std::string OpenFilepicker();
+  static std::string OpenModelpicker();
   static bool triggerFilePick; 
+  static bool triggerModelPick;
 };
 
 

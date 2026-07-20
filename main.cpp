@@ -7,10 +7,9 @@
 #include "headers/input.hpp"
 #include "headers/globals.hpp"
 #include "headers/serialize.hpp"
+#include "headers/model.hpp"
 // C++ headers
-// do os native file picker
-// Import model, textuers, settings, all UI.
-// only image texture models allowed
+// main.cpp line 49 complete model loading code for fbx. 
 #include <iostream>
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
@@ -19,8 +18,8 @@ int main(){
   /* Do not ship with this line */// Serialize::LoadWorld("worlds/first.json");
   Renderer renderer;
   renderer.SetLight(mainDirLight);
-  std::vector<Vertex> vertices;
-  Material material;
+  //std::vector<Vertex> tempvertices;
+  //Material material;
   /*Model::LoadModel("assets/models/Untitled.fbx", vertices, material);
   Mesh mesh(vertices);
   std::unique_ptr<Gameobject> gameobject = std::make_unique<Gameobject>("My gameobject");
@@ -38,6 +37,14 @@ int main(){
       UI::triggerFilePick = false;
       std::string texturePath = UI::OpenFilepicker();
       gameobjects[selected]->material.texture = AssetManager::GetTexture(texturePath);
+    }
+    if(UI::triggerModelPick){
+      UI::triggerModelPick = false;
+      std::string modelPath = UI::OpenModelpicker();
+      std::vector<Vertex> vertices;
+      Material material;
+      Model::LoadModel(modelPath, vertices, material);
+      std::unique_ptr<Gameobject> newGo = std::make_unique<Gameobject>("Imported Model");
     }
     currentFrame = mainWindow->GetTime();
     deltaTime = currentFrame - lastFrame;
