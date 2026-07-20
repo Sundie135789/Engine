@@ -1,4 +1,6 @@
 #include "headers/ui.hpp"
+#include <GLFW/glfw3.h>
+#include <cstdio>
 #include <iostream>
 #include "headers/input.hpp"
 #include "headers/assetmanager.hpp"
@@ -7,15 +9,24 @@
 #include "vendor/imgui/imgui.h"
 #include "vendor/imgui/backends/imgui_impl_glfw.h"
 #include "vendor/imgui/backends/imgui_impl_opengl3.h"
+#include "vendor/pfd/portable-file-dialogs.h"
 #include <filesystem>
+#include <string>
 namespace fs = std::filesystem;
 
 static char worldName[128] = "", objRename[128], textureSet[128];
 static bool openSavePopup = false, openLoadPopup = false, openLoadErrorPopup = false, openEmptyRenamePopup = false;
+bool UI::triggerFilePick = false;
 static std::string errorMsg = "";
 void UI::SaveAndExit(){
   if(strcmp(worldName, "")) 
     Serialize::SaveWorld("worlds/" + std::string(worldName)+ ".json");
+}
+std::string UI::OpenFilepicker(){
+  auto selection = pfd::open_file("Set Texture", "", {"Image Files", "*.png *.jpg *.jpeg *.bmp *.hdr *.pic"}).result();
+  if(selection.empty())
+    return "assets/textures/missing_texture.png";
+  return selection[0];
 }
 void UI::Hierarchy(){
   
@@ -92,8 +103,8 @@ void UI::LoadInspector() {
   //std::string currentTexture = "Current Texture: " + obj->material.texture->path;
   //ImGui::Text(currentTexture.c_str());
   ImGui::SetNextItemWidth(400.0f);
-  /*
-  if(ImGui::BeginCombo("Available Textures", obj->material.texture->path.substr(7).c_str())){
+  
+  /*if(ImGui::BeginCombo("Available Textures", obj->material.texture->path.substr(7).c_str())){
     for(int i=0;i<textures.size();i++){
       std::string textureName = textures[i];
       bool isSelected = (obj->material.texture->path == textureName);
@@ -104,11 +115,9 @@ void UI::LoadInspector() {
     }
     ImGui::EndCombo();
   }*/
-    ImGui::InputText("##", textureSet, 128, 0, NULL, NULL);
-    if(ImGui::Button("Set Texture")){
-
-      obj->material.texture->path = std::string(textureSet);
-    }
+  if(ImGui::Button("Import Texture", ImVec2(300, 50))){
+    UI::triggerFilePick = true;
+  }
   ImGui::Separator();
   ImGui::SetNextItemWidth(400.0f);
   if(ImGui::ColorEdit3("Color", &obj->material.color.x)){

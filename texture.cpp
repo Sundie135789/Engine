@@ -2,6 +2,7 @@
 #include "headers/globals.hpp"
 #define STB_IMAGE_IMPLEMENTATION
 #include "vendor/stb_image.h"
+#include "headers/log.hpp"
 #include <iostream>
 Texture::Texture(std::string path){
 
@@ -18,20 +19,23 @@ void Texture::LoadTexture(std::string path){
   int width, height, channels;
   stbi_set_flip_vertically_on_load(true);
   const uint8_t* image = stbi_load(path.c_str(), &width, &height, &channels,0);
-  GLenum format = (channels == 4) ? GL_RGBA : GL_RGB;
   if(image)
   {
+    GLenum format = (channels == 4) ? GL_RGBA : GL_RGB;
     glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, image);
     glGenerateMipmap(GL_TEXTURE_2D);
     std::cout << "Texture loaded: " << path << std::endl;
   }
   else{
+    Log::Warning("Failed to load: " + path + ". Using fallback!\n");
     path = "assets/textures/missing_texture.png";
     image = stbi_load(path.c_str(), &width, &height, &channels, 0);
-    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, image);
+    GLenum fallbackFormat = (channels == 4) ? GL_RGBA : GL_RGB;
+    glTexImage2D(GL_TEXTURE_2D, 0, fallbackFormat, width, height, 0, fallbackFormat, GL_UNSIGNED_BYTE, image);
     glGenerateMipmap(GL_TEXTURE_2D);
   }
   stbi_image_free((void*)image);
+  glBindTexture(GL_TEXTURE_2D, 0);
 }
 void Texture::Bind(int unit) const{
   glActiveTexture(GL_TEXTURE0 + unit);

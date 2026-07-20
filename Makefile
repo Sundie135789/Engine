@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -g -Ivendor/imgui -Ivendor/imgui/backends -std=c++17
  
-SRC = main.cpp shader.cpp loadshader.cpp mesh.cpp texture.cpp transform.cpp gameobject.cpp renderer.cpp material.cpp ui.cpp camera.cpp dirlight.cpp window.cpp input.cpp globals.cpp serialize.cpp model.cpp assetmanager.cpp
+SRC = main.cpp shader.cpp loadshader.cpp mesh.cpp texture.cpp transform.cpp gameobject.cpp renderer.cpp material.cpp ui.cpp camera.cpp dirlight.cpp window.cpp input.cpp globals.cpp serialize.cpp model.cpp assetmanager.cpp log.cpp
 OBJ = $(SRC:.cpp=.o)
 
 IMGUI_SRC = \
@@ -10,7 +10,7 @@ vendor/imgui/imgui_draw.cpp \
 vendor/imgui/imgui_tables.cpp \
 vendor/imgui/imgui_widgets.cpp \
 vendor/imgui/backends/imgui_impl_glfw.cpp \
-vendor/imgui/backends/imgui_impl_opengl3.cpp
+vendor/imgui/backends/imgui_impl_opengl3.cpp \
 
 IMGUI_OBJ = $(IMGUI_SRC:.cpp=.o)
 

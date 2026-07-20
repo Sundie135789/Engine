@@ -49,7 +49,7 @@ void Input::HandleGameInput(Window* window, Camera* gameCamera, float deltaTime,
   window->setCursorMode(GLFW_CURSOR_DISABLED);
   if(Input::standardWASDMouse)
   {
-    std::cout << "Input standardWASDMouse";
+  //  std::cout << "Input standardWASDMouse";
     Input::WASDMouse(firstMouse, lastX, lastY, gameCamera, window, deltaTime);
   }
 }

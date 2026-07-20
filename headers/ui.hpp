@@ -12,6 +12,8 @@ class UI{
   static void Menubar();
   static void Hierarchy();
   static void SaveAndExit();
+  static std::string OpenFilepicker();
+  static bool triggerFilePick; 
 };
 
 

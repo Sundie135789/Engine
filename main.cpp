@@ -34,6 +34,11 @@ int main(){
   int fpsFrameCount = 0;
   while(!mainWindow->ShouldClose()){
     mainWindow->PollEvents();
+    if(UI::triggerFilePick){
+      UI::triggerFilePick = false;
+      std::string texturePath = UI::OpenFilepicker();
+      gameobjects[selected]->material.texture = AssetManager::GetTexture(texturePath);
+    }
     currentFrame = mainWindow->GetTime();
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
