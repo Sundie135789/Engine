@@ -37,11 +37,12 @@ namespace Serialize{
             );
       go->SetTransform(transform);
       Material material(
-            goJson["material"]["specularColor"].get<glm::vec3>(),
-            goJson["material"]["specularStrength"].get<float>(),
-            goJson["material"]["color"].get<glm::vec3>(),
-            goJson["material"]["shininess"].get<float>(),
-            goJson["material"]["texture"].get<std::string>(),
+            goJson["material"]["albedoTexture"].get<std::string>(),
+            goJson["material"]["metallicTexture"].get<std::string>(),
+            goJson["material"]["roughnessTexture"].get<std::string>(),
+            goJson["material"]["albedoValue"].get<glm::vec3>(),
+            goJson["material"]["roughnessValue"].get<float>(),
+            goJson["material"]["metallicValue"].get<float>(),
             goJson["material"]["shader"][0].get<std::string>(), //Vertex shader
             goJson["material"]["shader"][1].get<std::string>() //Fragment shader
 
@@ -91,11 +92,13 @@ namespace Serialize{
       obj["transform"]["position"] = {go->transform.position.x, go->transform.position.y, go->transform.position.z};
       obj["transform"]["rotation"] = {go->transform.rotation.x, go->transform.rotation.y, go->transform.rotation.z};
       obj["transform"]["scale"] = {go->transform.scale.x, go->transform.scale.y, go->transform.scale.z};
-      obj["material"]["specularColor"] = {go->material.specularColor.x, go->material.specularColor.y, go->material.specularColor.z};
-      obj["material"]["specularStrength"] = go->material.specularStrength;
-      obj["material"]["color"] = {go->material.color.x, go->material.color.y, go->material.color.z};
-      obj["material"]["shininess"] = go->material.shininess;
-      obj["material"]["texture"] = go->material.texture->path;
+      obj["material"]["albedoTexture"] = {go->material.albedoTexture->path},
+      obj["material"]["metallicTexture"] = {go->material.metallicTexture->path},
+      obj["material"]["roughnessTexture"] = {go->material.roughnessTexture->path},
+      obj["material"]["albedoValue"] = {go->material.albedoValue.x, go->material.albedoValue.y, go->material.albedoValue.z},
+      obj["material"]["roughnessValue"] = go->material.roughnessValue,
+      obj["material"]["metallicValue"] = go->material.metallicValue,
+
       obj["material"]["shader"] = {go->material.shader.vertexPath, go->material.shader.fragmentPath};
       obj["mesh"]["vertices"] = json::array();
       for(Vertex vertex : go->mesh.vertices){

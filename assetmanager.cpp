@@ -8,6 +8,8 @@ void AssetManager::Cleanup(){
   }
 }
 Texture* AssetManager::GetTexture(const std::string& path){
+  if(path.empty())
+    return nullptr;
   for(Texture* texture : g_loadedTextures){
     if(texture->path == path){
       return texture;
@@ -16,4 +18,7 @@ Texture* AssetManager::GetTexture(const std::string& path){
   Texture* texture = new Texture(path);
   g_loadedTextures.push_back(texture);
   return texture;
+}
+Texture* AssetManager::GetWhiteTexture(){
+  return AssetManager::GetTexture("assets/textures/white.png");
 }

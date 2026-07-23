@@ -3,6 +3,7 @@
 #include "headers/vertex.hpp"
 #include "headers/log.hpp"
 #include <assimp/Importer.hpp>
+#include <assimp/material.h>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <assimp/types.h>
@@ -67,27 +68,31 @@ void Model::LoadModel(const std::string& path, std::vector<Vertex>& out_vertices
   ProcessNode(scene->mRootNode, scene, out_vertices);
   if(scene->HasMaterials() && scene->mNumMaterials > 0){
     aiMaterial* srcMat = scene->mMaterials[0];
-    aiColor3D diffuseColor(1.0f, 1.0f, 1.0f);
-    aiColor3D specularColor(1.0f, 1.0f, 1.0f);
-    float shininess = 32.0f;
-    srcMat->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor);
-    srcMat->Get(AI_MATKEY_COLOR_SPECULAR, specularColor);
-    srcMat->Get(AI_MATKEY_SHININESS, shininess);
-    if(shininess <= 0.1f){
-      shininess = 32.0f;
-    }
-    material.color = glm::vec3(diffuseColor.r, diffuseColor.g, diffuseColor.b);
-    material.specularColor = glm::vec3(specularColor.r, specularColor.g, specularColor.b);
-    material.shininess = shininess;
-    material.specularStrength = 3.0f;
+    aiColor3D baseColor(1.0f, 1.0f, 1.0f);
+    float roughness = 0.5f;
+    float metallic = 0.0f;
+    srcMat->Get(AI_MATKEY_BASE_COLOR, baseColor);
+    srcMat->Get(AI_MATKEY_ROUGHNESS_FACTOR, roughness);
+    srcMat->Get(AI_MATKEY_METALLIC_FACTOR, metallic);
+    material.setAlbedoValue(glm::vec3(baseColor.r, baseColor.g, baseColor.b));
+    material.setRoughnessValue(roughness);
+    material.setMetallicValue(metallic);
     aiString texturePath;
     if(srcMat->GetTextureCount(aiTextureType_DIFFUSE) > 0 &&
         srcMat->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath) == AI_SUCCESS){
+
       std::string textureFilename = texturePath.C_Str();
-      std::string fullPath = textureFilename;
-      fullPath = fullPath.substr(fullPath.find_last_of("/\\") + 1);
-      fullPath = "assets/textures/" + fullPath;
-      material.texture = AssetManager::GetTexture(fullPath);
+      material.setAlbedoPath(textureFilename);
+    }
+    if(srcMat->GetTextureCount(aiTextureType_METALNESS) > 0 &&
+        srcMat->GetTexture(aiTextureType_METALNESS, 0, &texturePath) == AI_SUCCESS){
+      std::string textureFilename = texturePath.C_Str();
+      material.setMetallicPath(textureFilename);
+    }
+    if(srcMat->GetTextureCount(aiTextureType_DIFFUSE_ROUGHNESS) > 0 &&
+        srcMat->GetTexture(aiTextureType_DIFFUSE_ROUGHNESS, 0, &texturePath) == AI_SUCCESS){
+      std::string textureFilename = texturePath.C_Str();
+      material.setRoughnessPath(textureFilename);
     }
     material.setShader(Shader("shaders/basic.vert", "shaders/basic.frag"));
   }

@@ -1,0 +1,18 @@
+[
+  {
+    "file": "model.cpp",
+    "arguments": [
+      "/usr/bin/g++",
+      "-g",
+      "-Ivendor/imgui",
+      "-Ivendor/imgui/backends",
+      "-std=c++17",
+      "-c",
+      "model.cpp",
+      "-o",
+      "model.o"
+    ],
+    "directory": "/home/paaji/engine",
+    "output": "model.o"
+  }
+]

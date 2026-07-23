@@ -9,6 +9,7 @@
 #include "headers/serialize.hpp"
 #include "headers/model.hpp"
 // C++ headers
+// Add basic PBR. 
 // add GUI input rebinding, and a input manager, for custom input in games.
 // main.cpp line 49 complete model loading code for fbx. 
 #include <iostream>
@@ -37,9 +38,9 @@ int main(){
     if(UI::triggerFilePick){
       UI::triggerFilePick = false;
       std::string texturePath = UI::OpenFilepicker();
-      gameobjects[selected]->material.texture = AssetManager::GetTexture(texturePath);
+      gameobjects[selected]->material.albedoTexture = AssetManager::GetTexture(texturePath);
     }
-    if(UI::triggerModelPick){
+    /*if(UI::triggerModelPick){
       UI::triggerModelPick = false;
       std::string modelPath = UI::OpenModelpicker();
       std::vector<Vertex> vertices;
@@ -50,7 +51,7 @@ int main(){
       newGo->SetMaterial(material);
       newGo->SetTransform(Transform());
       gameobjects.push_back(std::move(newGo));
-    }
+    }*/
     currentFrame = mainWindow->GetTime();
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;

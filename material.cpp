@@ -1,56 +1,46 @@
 #include "headers/material.hpp"
 #include "headers/assetmanager.hpp"
 #include <memory.h>
-// Default material (safe null init OR external assignment later)
-Material::Material()
-    : 
-      color(1.0f),
-      shininess(30.0f),
-      specularColor(1.0f),
-      specularStrength(6.0f),
-      shader("shaders/basic.vert", "shaders/basic.frag")
-{
-  texture = AssetManager::GetTexture("assets/textures/missing_texture.png");
-}
 // Fully defined material
-Material::Material(glm::vec3 specularColor,
-                   float specularStrength,
-                   glm::vec3 color,
-                   float shininess,
-                   std::string texture,
-                   std::string vertexPath,
-                   std::string fragmentPath
+Material::Material(
+    std::string albedoTexture,
+    std::string metallicTexture,
+    std::string roughnessTexture,
+    glm::vec3 albedoValue,
+    float roughnessValue,
+    float metallicValue,
+    std::string vertexPath,
+    std::string fragmentPath
                 ) :
-      specularColor(specularColor),
-      specularStrength(specularStrength),
-      color(color),
-      shininess(shininess),
-      shader(vertexPath, fragmentPath)
+      shader(vertexPath, fragmentPath),
+      albedoTexture(AssetManager::GetTexture(albedoTexture)),
+      metallicTexture(AssetManager::GetTexture(metallicTexture)),
+      roughnessTexture(AssetManager::GetTexture(roughnessTexture)),
+      albedoValue(albedoValue),
+      roughnessValue(roughnessValue),
+      metallicValue(metallicValue)
 {
-  this->texture = AssetManager::GetTexture(texture);
 }
 
-void Material::setColor(glm::vec3 color) {
-    this->color = color;
-}
 
 void Material::setShader(Shader&& shader) {
     this->shader = std::move(shader);
 }
-
-void Material::setTexture(const std::string& texturePath) {
-    this->texture = AssetManager::GetTexture(texturePath);
+void Material::setAlbedoPath(const std::string& albedoPath){
+  this->albedoTexture = AssetManager::GetTexture(albedoPath);
 }
-
-void Material::setShininess(float shininess) {
-    this->shininess = shininess;
+void Material::setAlbedoValue(const glm::vec3& albedo){
+  this->albedoValue = albedo;
 }
-
-void Material::setSpecularColor(glm::vec3 specularColor) {
-    this->specularColor = specularColor;
+void Material::setMetallicValue(float metallic){
+  this->metallicValue = metallic;
 }
-
-void Material::setSpecularStrength(float specularStrength) {
-    this->specularStrength = specularStrength;
+void Material::setRoughnessValue(float roughness){
+  this->roughnessValue = roughness;
 }
-
+void Material::setMetallicPath(const std::string& metallicPath){
+  this->metallicTexture = AssetManager::GetTexture(metallicPath);
+}
+void Material::setRoughnessPath(const std::string& roughnessPath){
+  this->roughnessTexture = AssetManager::GetTexture(roughnessPath);
+}

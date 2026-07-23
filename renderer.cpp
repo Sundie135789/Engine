@@ -34,21 +34,36 @@ void Renderer::Submit(Gameobject* gameobject){
   glUniformMatrix4fv(glGetUniformLocation(gameobject->material.shader.shaderProgram, "model"),1, GL_FALSE, glm::value_ptr(model));
   glUniformMatrix4fv(glGetUniformLocation(gameobject->material.shader.shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
   glUniformMatrix4fv(glGetUniformLocation(gameobject->material.shader.shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-  gameobject->material.texture->Bind(0);
-  glUniform1i(glGetUniformLocation(gameobject->material.shader.shaderProgram, "u_Texture"), 0);
-  glUniform3fv(glGetUniformLocation(gameobject->material.shader.shaderProgram, "materialColor"), 1, glm::value_ptr(gameobject->material.color));
+  // PBR Uniforms
+  bool hasAlbedoTex = gameobject->material.albedoTexture != nullptr && !gameobject->material.albedoTexture->path.empty();
+  bool hasRoughnessTex = gameobject->material.roughnessTexture != nullptr && !gameobject->material.roughnessTexture->path.empty();
+  bool hasMetallicTex = gameobject->material.metallicTexture != nullptr && !gameobject->material.metallicTexture->path.empty();
+
+  if(hasAlbedoTex) gameobject->material.albedoTexture->Bind(0);
+  if(hasRoughnessTex) gameobject->material.roughnessTexture->Bind(1);
+  if(hasMetallicTex)gameobject->material.metallicTexture->Bind(2);
+  // Set hasTexture booleans
+  glUniform1i(glGetUniformLocation(gameobject->material.shader.shaderProgram, "hasAlbedoTex"), hasAlbedoTex);
+  glUniform1i(glGetUniformLocation(gameobject->material.shader.shaderProgram, "hasRoughnessTex"), hasRoughnessTex);
+  glUniform1i(glGetUniformLocation(gameobject->material.shader.shaderProgram, "hasMetallicTex"), hasMetallicTex);
+  // Set primary textures
+  glUniform1i(glGetUniformLocation(gameobject->material.shader.shaderProgram, "albedoTexture"), 0);
+  glUniform1i(glGetUniformLocation(gameobject->material.shader.shaderProgram, "roughnessTexture"), 1);
+  glUniform1i(glGetUniformLocation(gameobject->material.shader.shaderProgram, "metallicTexture"), 2);
+  // Set fallback values
+  glUniform3fv(glGetUniformLocation(gameobject->material.shader.shaderProgram, "albedoValue"), 1, glm::value_ptr(gameobject->material.albedoValue));
+  glUniform1f(glGetUniformLocation(gameobject->material.shader.shaderProgram, "roughnessValue"), gameobject->material.roughnessValue);
+  glUniform1f(glGetUniformLocation(gameobject->material.shader.shaderProgram, "metallicValue"), gameobject->material.metallicValue);
+  //glUniform1i(glGetUniformLocation(gameobject->material.shader.shaderProgram, "u"), 0);
 
   //Lighting uniforms
   glm::vec3 lightDir = glm::normalize(-light->lightDir);
   glUniform3f(glGetUniformLocation(gameobject->material.shader.shaderProgram, "lightDirection"), lightDir.x, lightDir.y, lightDir.z);
-  glUniform1f(glGetUniformLocation(gameobject->material.shader.shaderProgram, "shininess"), gameobject->material.shininess);
   glUniform3f(glGetUniformLocation(gameobject->material.shader.shaderProgram, "viewPos"), camera->position.x, camera->position.y, camera->position.z);
-  // Specular uniforms
-  glUniform3fv(glGetUniformLocation(gameobject->material.shader.shaderProgram, "specularColor"), 1,glm::value_ptr(gameobject->material.specularColor));    
-  glUniform1f(glGetUniformLocation(gameobject->material.shader.shaderProgram, "specularStrength"), gameobject->material.specularStrength);
   gameobject->mesh.Draw();
 }
 void Renderer::NewFrame(){
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
+

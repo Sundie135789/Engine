@@ -5,4 +5,5 @@ class AssetManager{
   public:
     static void Cleanup();
     static Texture* GetTexture(const std::string& path);
+    static Texture* GetWhiteTexture();
 };

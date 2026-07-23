@@ -3,35 +3,34 @@
 #include "shader.hpp"
 #include "texture.hpp"
 #include <glm/glm.hpp>
-#include <memory>
 #include <string>
 
 class Material {
   public:
-    glm::vec3 specularColor;
-    float specularStrength;
-    glm::vec3 color;
-    float shininess;
-
- Shader shader;
-    Texture* texture;
-
-    Material();
-    Material(glm::vec3 specularColor,
-             float specularStrength,
-             glm::vec3 color,
-             float shininess,
-             std::string texture,
-             std::string vertexPath,
-             std::string fragmentPath
+    Shader shader;
+    Texture* albedoTexture;
+    Texture* metallicTexture;
+    Texture* roughnessTexture;
+    float roughnessValue;
+    float metallicValue;
+    glm::vec3 albedoValue;
+    Material(
+             std::string albedoTexture = "",
+             std::string metallicTexture = "",
+             std::string roughnessTexture = "",
+             glm::vec3 albedoValue = { 1.0f, 1.0f, 1.0f},
+             float roughnessValue = 0.5f,
+             float metallicValue = 0.0f,
+             std::string vertexPath = "shaders/basic.vert",
+             std::string fragmentPath = "shaders/basic.frag"
              );
 
-
-    void setColor(glm::vec3 color);
     void setShader(Shader&& shader);
-    void setTexture(const std::string& texturePath);
-    void setShininess(float shininess);
-    void setSpecularColor(glm::vec3 specularColor);
-    void setSpecularStrength(float specularStrength);
+    void setAlbedoPath(const std::string& albedoPath);
+    void setAlbedoValue(const glm::vec3& albedo);
+    void setMetallicValue(float metallic);
+    void setRoughnessValue(float roughness);
+    void setMetallicPath(const std::string& metallicPath);
+    void setRoughnessPath(const std::string& roughnessPath);
 
 };

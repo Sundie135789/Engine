@@ -108,27 +108,19 @@ void UI::LoadInspector() {
     ImGui::EndTable();
   }
   ImGui::Separator();
-  //std::string currentTexture = "Current Texture: " + obj->material.texture->path;
-  //ImGui::Text(currentTexture.c_str());
-  ImGui::SetNextItemWidth(400.0f);
-  
-  /*if(ImGui::BeginCombo("Available Textures", obj->material.texture->path.substr(7).c_str())){
-    for(int i=0;i<textures.size();i++){
-      std::string textureName = textures[i];
-      bool isSelected = (obj->material.texture->path == textureName);
-      if(ImGui::Selectable(textureName.c_str(), isSelected)){
-        obj->material.texture = AssetManager::GetTexture(textureName);
-      }
-    }
-    ImGui::EndCombo();
-  }*/
-  if(ImGui::Button("Import Texture", ImVec2(300, 50))){
-    UI::triggerFilePick = true;
-  }
-  ImGui::Separator();
-  ImGui::SetNextItemWidth(400.0f);
-  if(ImGui::ColorEdit3("Color", &obj->material.color.x)){
-  }
+  ImGui::Text("Material Properties"); ImGui::SetNextItemWidth(400.0f);
+
+  ImGui::ColorEdit3("Albedo Color", &obj->material.albedoValue.x);
+  float roughnessDefault = 0.5f;
+  float metallicDefault = 0.0f;
+
+ ImGui::SetNextItemWidth(300.0f);
+  ImGui::SliderFloat("Roughness", &roughnessDefault, 0.0f, 1.0f, "%.3f");
+ ImGui::SetNextItemWidth(300.0f);
+
+  ImGui::SliderFloat("Metallic", &metallicDefault, 0.0f, 1.0f, "%.3f");
+
+
   ImGui::End();
 }
 void UI::BeginFrame(){

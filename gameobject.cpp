@@ -6,7 +6,7 @@
 #include "headers/log.hpp"
 #include <glm/gtc/type_ptr.hpp>
 Gameobject::Gameobject(std::string name) : mesh(std::vector<Vertex>()),material(), transform(), name(name){
-  Log::Success("Gameobject created: " + name);
+  Log::Success("Gameobject created: " + name + "\n");
 }
 /*void Gameobject::SetShader(Shader* shader){
   this->shader = shader;
