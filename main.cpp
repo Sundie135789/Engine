@@ -9,6 +9,7 @@
 #include "headers/serialize.hpp"
 #include "headers/model.hpp"
 // C++ headers
+// add GUI input rebinding, and a input manager, for custom input in games.
 // main.cpp line 49 complete model loading code for fbx. 
 #include <iostream>
 int main(){
