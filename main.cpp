@@ -45,6 +45,10 @@ int main(){
       Material material;
       Model::LoadModel(modelPath, vertices, material);
       std::unique_ptr<Gameobject> newGo = std::make_unique<Gameobject>("Imported Model");
+      newGo->SetMesh(Mesh(vertices));
+      newGo->SetMaterial(material);
+      newGo->SetTransform(Transform());
+      gameobjects.push_back(std::move(newGo));
     }
     currentFrame = mainWindow->GetTime();
     deltaTime = currentFrame - lastFrame;
@@ -70,10 +74,6 @@ int main(){
     }
     for(auto& go : gameobjects){
       renderer.Submit(go.get());
-    }
-    GLenum err;
-    while((err = glGetError()) != GL_NO_ERROR){
-      std::cout << "OpenGL error flag detected: " << err << std::endl;
     }
     if(g_EngineState == EngineState::Editing){
       if(selected != -1)

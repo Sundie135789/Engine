@@ -105,7 +105,6 @@ namespace Serialize{
         v["uv"] = {vertex.uv.x, vertex.uv.y};
         obj["mesh"]["vertices"].push_back(v);
       }
-      //std::cout << "\n\nAmount of vertices found: " << go->mesh->vertices.size() << "\n\n";
       j["gameobjects"].push_back(obj);
 
     }

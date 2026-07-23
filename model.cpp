@@ -1,12 +1,12 @@
 #include "headers/model.hpp"
 #include "headers/assetmanager.hpp"
 #include "headers/vertex.hpp"
+#include "headers/log.hpp"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <assimp/types.h>
 #include <glm/ext/vector_float3.hpp>
-#include <iostream>
 #include <glm/glm.hpp>
 #include <filesystem>
 void Model::ProcessNode(aiNode* node, const aiScene* scene, std::vector<Vertex>& out_vertices){
@@ -57,7 +57,7 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene, std::vector<Vertex>&
 
 void Model::LoadModel(const std::string& path, std::vector<Vertex>& out_vertices, Material& material){
   if(!std::filesystem::exists(std::filesystem::path(path))){
-    std::cerr << "[ERROR] Could not find model: " << path << std::endl;
+    Log::Fatal("[ERROR] Could not find model: " + path + '\n');
     std::exit(1);
   }
   Assimp::Importer importer;
@@ -87,10 +87,8 @@ void Model::LoadModel(const std::string& path, std::vector<Vertex>& out_vertices
       std::string fullPath = textureFilename;
       fullPath = fullPath.substr(fullPath.find_last_of("/\\") + 1);
       fullPath = "assets/textures/" + fullPath;
-      std::cout << "Resolved texture path: " << fullPath << "\n\n";
       material.texture = AssetManager::GetTexture(fullPath);
     }
     material.setShader(Shader("shaders/basic.vert", "shaders/basic.frag"));
-    std::cout << "\n\n" << material.texture->path << "\n\n";
   }
 }

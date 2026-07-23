@@ -1,7 +1,7 @@
 #include "headers/renderer.hpp"
-#include "headers/globals.hpp"
 #include "headers/gameobject.hpp"
 #include "headers/mesh.hpp"
+#include "headers/log.hpp"
 #include "headers/material.hpp"
 #include "headers/shader.hpp"
 #include "headers/texture.hpp"
@@ -9,9 +9,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <iostream>
 Renderer::Renderer(){
-  std::cout << "Renderer created successfully!" << std::endl;
+  Log::Success("Renderer created successfully!");
 }
 void Renderer::SetLight(DirectionalLight* light){
   this->light = light;
@@ -22,7 +21,7 @@ void Renderer::SetCamera(Camera* cam){
 void Renderer::Submit(Gameobject* gameobject){
   if(!camera ||  !gameobject || gameobject->mesh.vertices.empty())
   {
-    std::cerr << "[ERROR] Renderer::Submit -> null pointer" << std::endl;
+    Log::Fatal("[ERROR] Renderer::Submit -> null pointer\n");
     std::exit(1);
   }
   glBindVertexArray(gameobject->mesh.vao);

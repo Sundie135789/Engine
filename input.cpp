@@ -6,7 +6,6 @@
 #include <GLFW/glfw3.h>
 double Input::mouseX = 0.0f;
 double Input::mouseY = 0.0f;
-bool Input::standardWASDMouse = false;
 void Input::WASDMouse(bool& firstMouse, float& lastX,float& lastY, Camera* camera, Window* window, float deltaTime){
   window->GetCursorPos(mouseX, mouseY);
     if(firstMouse)
@@ -47,11 +46,6 @@ void Input::HandleEngineInput(Window* window,Camera* editorCamera , float deltaT
 }
 void Input::HandleGameInput(Window* window, Camera* gameCamera, float deltaTime, float &lastX, float &lastY, bool &firstMouse){
   window->setCursorMode(GLFW_CURSOR_DISABLED);
-  if(Input::standardWASDMouse)
-  {
-  //  std::cout << "Input standardWASDMouse";
-    Input::WASDMouse(firstMouse, lastX, lastY, gameCamera, window, deltaTime);
-  }
 }
 
 

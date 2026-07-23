@@ -3,10 +3,10 @@
 #include "headers/material.hpp"
 #include "headers/transform.hpp"
 #include "headers/globals.hpp"
+#include "headers/log.hpp"
 #include <glm/gtc/type_ptr.hpp>
-#include <iostream>
 Gameobject::Gameobject(std::string name) : mesh(std::vector<Vertex>()),material(), transform(), name(name){
-  std::cout << "Gameobject created: " << this->name << std::endl;
+  Log::Success("Gameobject created: " + name);
 }
 /*void Gameobject::SetShader(Shader* shader){
   this->shader = shader;

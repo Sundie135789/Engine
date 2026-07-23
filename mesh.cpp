@@ -1,5 +1,5 @@
 #include "headers/mesh.hpp"
-#include <iostream>
+#include "headers/log.hpp"
 Mesh::Mesh(std::vector<Vertex> vertices){
   this->vertices = vertices;
   glGenBuffers(1, &vbo);
@@ -15,7 +15,7 @@ Mesh::Mesh(std::vector<Vertex> vertices){
   glEnableVertexAttribArray(2);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
-  std::cout << "Mesh loaded: Vertex Count " << vertices.size() << std::endl;
+  Log::Success("Mesh loaded: Vertex Count " + std::to_string(vertices.size()) + "\n");
 }
 void Mesh::Draw() const{
   glBindVertexArray(vao);

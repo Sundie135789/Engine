@@ -1,6 +1,6 @@
 #include "headers/shader.hpp"
 #include "headers/loadshader.hpp"
-#include <iostream>
+#include "headers/log.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -24,7 +24,7 @@ Shader::Shader(std::string vertexPath, std::string fragmentPath){
     glGetShaderiv(vertex, GL_INFO_LOG_LENGTH, &logSize);
     char errorLog[logSize];
     glGetShaderInfoLog(vertex, logSize, &logSize,&errorLog[0]);
-    std::cout << "Vertex shader compilation failed!\n" << &errorLog[0] << std::endl;
+    Log::Warning("Vertex shader compilation failed!\n" + std::string(&errorLog[0]) + "\n");
   }
   glCompileShader(fragment);
   glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
@@ -33,7 +33,7 @@ Shader::Shader(std::string vertexPath, std::string fragmentPath){
     glGetShaderiv(fragment, GL_INFO_LOG_LENGTH, &logSize);
     char errorLog[logSize];
     glGetShaderInfoLog(fragment, logSize, &logSize,&errorLog[0]);
-    std::cout << "Fragment shader compilation failed!\n" << &errorLog[0] << std::endl;
+    Log::Warning("Fragment shader compilation failed!\n" + std::string(&errorLog[0]) + "\n");
   }
   shaderProgram = glCreateProgram();
   glAttachShader(shaderProgram, vertex);

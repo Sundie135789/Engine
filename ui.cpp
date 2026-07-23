@@ -116,7 +116,6 @@ void UI::LoadInspector() {
     for(int i=0;i<textures.size();i++){
       std::string textureName = textures[i];
       bool isSelected = (obj->material.texture->path == textureName);
-      std::cout << "GAMEOBJECT TEXTURE: " << obj->material.texture->path << "\nTextureName: " << textureName << '\n'; 
       if(ImGui::Selectable(textureName.c_str(), isSelected)){
         obj->material.texture = AssetManager::GetTexture(textureName);
       }
@@ -235,12 +234,11 @@ void UI::Menubar(){
       //}
       ImGui::EndMenu();
     }
-    if(ImGui::BeginMenu("Input")){
-      if(ImGui::MenuItem("Standard WASD + Mouse")){
+    /*if(ImGui::BeginMenu("Input")){
         Input::standardWASDMouse = true;
       }
       ImGui::EndMenu();
-    }
+    }*/
     if(ImGui::BeginMenu("Settings")){
       /*if(ImGui::Checkbox("V-Sync", &vsync)){
         mainWindow->SetVerticalSync();

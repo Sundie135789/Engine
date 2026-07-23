@@ -11,4 +11,7 @@ class Camera{
     float fov, aspect, nearPlane, farPlane;
     glm::mat4 GetViewMatrix();
     glm::mat4 GetProjectionMatrix();
+    float zoomSpeed;
+    void ZoomIn();
+    void ZoomOut();
 };

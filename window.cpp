@@ -1,6 +1,6 @@
 #include "GL/glew.h"
 #include "headers/globals.hpp"
-#include <iostream>
+#include "headers/log.hpp"
 #define GLFW_INCLUDE_NONE
 #include "GLFW/glfw3.h"
 #include "headers/window.hpp"
@@ -15,6 +15,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     g_EngineState = g_EngineState == EngineState::Editing ? EngineState::Playing : EngineState::Editing;
   }
 }
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset){
+  yoffset == 1 ? editorCamera->ZoomIn() : editorCamera->ZoomOut();
+}
 void Window::setCursorMode(int mode){
   glfwSetInputMode(window, GLFW_CURSOR, mode);
   cursorMode = mode;
@@ -23,8 +26,8 @@ Window::Window(int width, int height, std::string title){
   glfwInit();
   window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
   if(!window){
-    std::cout << "Failed to create GLFW window\n";
-    std::exit(0);
+    Log::Fatal("Failed to create GLFW window\n");
+    std::exit(1);
   }
   glewExperimental = GL_TRUE;
   glfwMakeContextCurrent(window);
@@ -38,7 +41,8 @@ Window::Window(int width, int height, std::string title){
   glViewport(0,0,width, height);
   glfwSetFramebufferSizeCallback(window,framebuffer_size_callback);
   glfwSetKeyCallback(window, key_callback);
-  std::cout << "GLFWwindow created successfully!\n" << std::endl;
+  glfwSetScrollCallback(window, scroll_callback);
+  Log::Success("GLFWwindow created successfully!\n");
 }
 int Window::GetMouseButton(int button){
   return glfwGetMouseButton(window, button);
@@ -60,21 +64,21 @@ void Window::SwapBuffers(){
     glfwSwapBuffers(window);
     return;
   }
-  std::cout << "Window found null in Window::SwapBuffers\n";
+  Log::Fatal("Window found null in Window::SwapBuffers\n");
   std::exit(1);
 }
 bool Window::ShouldClose(){
   if(window){
     return glfwWindowShouldClose(window);
   }
-  std::cout << "Window found null in Window::ShouldClose()\n";
+  Log::Fatal("Window found null in Window::ShouldClose\n");
   std::exit(1);
 }
 int Window::GetKey(int key){
   if(window){
     return glfwGetKey(this->window, key);
   }
-  std::cout << "Window found null in Window::GetKey()\n";
+  Log::Fatal("Window found null in Window::GetKey\n");
   std::exit(1);
 }
 
@@ -82,7 +86,7 @@ void Window::GetCursorPos(double& xPos, double& yPos){
   if(window){
     return glfwGetCursorPos(this->window, &xPos, &yPos);
   }
-  std::cout << "Window found null in Window::GetCursorPos()\n";
+  Log::Fatal("Window found null in Window::GetCursorPos\n");
   std::exit(1);
 }
 
@@ -90,7 +94,7 @@ GLFWwindow* Window::GetWindowHandle(){
   if(window){
     return window;
   }
-  std::cout << "Window found null in WIndow::GetWindowHandle()\n";
+  Log::Fatal("Window found null in WIndow::GetWindowHandle\n");
   std::exit(1);
 }
 float Window::GetTime(){
