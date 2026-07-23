@@ -14,6 +14,7 @@ A custom 3D game engine pipeline written from scratch in C++ using OpenGL.
 *   **State Machine:** Implements an EngineState toggle to switch context between editing variables and running active gameplay.
 *   **User Interface:** Uses Dear ImGui to display real-time variables, a component Inspector window, a scene Hierarchy list, and menu navigation bars.
 *   **Serialization:** Saves and loads runtime scenes created inside the engine.
+*   **Logging:** Success, warning, and fatal types of logs available.
 
 ## Features In Progress
 
