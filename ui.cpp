@@ -111,14 +111,12 @@ void UI::LoadInspector() {
   ImGui::Text("Material Properties"); ImGui::SetNextItemWidth(400.0f);
 
   ImGui::ColorEdit3("Albedo Color", &obj->material.albedoValue.x);
-  float roughnessDefault = 0.5f;
-  float metallicDefault = 0.0f;
 
  ImGui::SetNextItemWidth(300.0f);
-  ImGui::SliderFloat("Roughness", &roughnessDefault, 0.0f, 1.0f, "%.3f");
+  ImGui::SliderFloat("Roughness", &obj->material.roughnessValue, 0.0f, 1.0f, "%.3f");
  ImGui::SetNextItemWidth(300.0f);
 
-  ImGui::SliderFloat("Metallic", &metallicDefault, 0.0f, 1.0f, "%.3f");
+  ImGui::SliderFloat("Metallic", &obj->material.metallicValue , 0.0f, 1.0f, "%.3f");
 
 
   ImGui::End();

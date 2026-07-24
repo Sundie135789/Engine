@@ -9,7 +9,8 @@
 #include "headers/serialize.hpp"
 #include "headers/model.hpp"
 // C++ headers
-// Add basic PBR. 
+// add ability to import albedo, roughness, metallic maps.
+// add gamma correction, light clamping. 
 // add GUI input rebinding, and a input manager, for custom input in games.
 // main.cpp line 49 complete model loading code for fbx. 
 #include <iostream>
