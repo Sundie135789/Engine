@@ -1,9 +1,7 @@
 #include "headers/ui.hpp"
 #include <GLFW/glfw3.h>
 #include <cstdio>
-#include <iostream>
 #include "headers/input.hpp"
-#include "headers/assetmanager.hpp"
 #include "headers/serialize.hpp"
 #include "headers/globals.hpp"
 #include "vendor/imgui/imgui.h"
@@ -15,7 +13,8 @@
 namespace fs = std::filesystem;
 
 static char worldName[128] = "", objRename[128], textureSet[128];
-static bool openSavePopup = false, openLoadPopup = false, openLoadErrorPopup = false, openEmptyRenamePopup = false;
+static bool openSavePopup = false, openLoadPopup = false, openLoadErrorPopup = false, openEmptyRenamePopup = false
+, showInputManager = false, showSettings = false;
 bool UI::triggerFilePick = false;
 bool UI::triggerModelPick = false;
 static std::string errorMsg = "";
@@ -118,7 +117,6 @@ void UI::LoadInspector() {
 
   ImGui::SliderFloat("Metallic", &obj->material.metallicValue , 0.0f, 1.0f, "%.3f");
 
-
   ImGui::End();
 }
 void UI::BeginFrame(){
@@ -133,14 +131,31 @@ void UI::EndFrame(){
 void UI::Init(GLFWwindow* window){
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
-  ImGui::GetIO().FontGlobalScale = 1.5f;
+  ImGuiIO& io = ImGui::GetIO();
+  std::string fontPath;
+  const char* homeDir = std::getenv("HOME");
+  if(homeDir != nullptr){
+    fontPath = std::string(homeDir) + "/.local/share/fonts/JetBrainsMonoNerdFont-Regular.ttf";
+  }
+  ImFontConfig font_cfg;
+  font_cfg.OversampleH = 3;
+  font_cfg.OversampleV = 3;
+  font_cfg.PixelSnapH = true;
 
+  ImFont* engineFont = nullptr;
+  if(!fontPath.empty() && fs::exists(fontPath)){
+    engineFont = io.Fonts->AddFontFromFileTTF(fontPath.c_str(), 25.0f, &font_cfg);
+  }
+  if(engineFont == nullptr){
+    io.Fonts->AddFontDefault();
+  }
   ImGui::StyleColorsDark();
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init("#version 330");
+  io.Fonts->Build();
 }
 void UI::Menubar(){
-  bool shouldCloseMenu = false;
+
   if(ImGui::BeginMainMenuBar()){
     if(ImGui::BeginMenu("File")){
       if(ImGui::MenuItem("Save World")){
@@ -156,62 +171,7 @@ void UI::Menubar(){
       }
       ImGui::EndMenu();
     }
-    if(openSavePopup){
-      ImGui::OpenPopup("Save World Popup");
-      openSavePopup = false;
-    }
-    if(openLoadPopup){
-      ImGui::OpenPopup("Load World Popup");
-      openLoadPopup = false;
-    }
-    if(openLoadErrorPopup){
-      ImGui::OpenPopup("Error Popup");
-      openLoadErrorPopup = false;
-    }
-    if(ImGui::BeginPopupModal("Save World Popup", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
-      ImGui::Text("Enter world name:");
-      ImGui::InputText("###saveworld", worldName, IM_ARRAYSIZE(worldName));
-      if(ImGui::Button("Save")){
-        if(strlen(worldName) > 0){
-          std::string path = std::string("worlds/") + worldName + ".json";
-          Serialize::SaveWorld(path);
-        }
-          ImGui::CloseCurrentPopup();
-      }
-      ImGui::SameLine();
-      if(ImGui::Button( "Cancel")){
-        ImGui::CloseCurrentPopup();
-      }
-      ImGui::EndPopup();
-    }
-      if(ImGui::BeginPopupModal("Load World Popup", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
-      ImGui::Text("Enter world name:");
-      ImGui::InputText("###loadworld", worldName, IM_ARRAYSIZE(worldName));
-      if(ImGui::Button("Load")){
-        if(strlen(worldName) > 0){
-          std::string path = std::string("worlds/") + worldName + ".json";
-          if(!fs::exists(path)){
-            errorMsg = "File not found!";
-            openLoadErrorPopup= true;
-          }else{
-            Serialize::LoadWorld(path);
-          }
-        }
-          ImGui::CloseCurrentPopup();
-      }
-      ImGui::SameLine();
-      if(ImGui::Button( "Cancel")){
-        ImGui::CloseCurrentPopup();
-      }
-      ImGui::EndPopup();
-    }
-    if(ImGui::BeginPopupModal("Error Popup", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
-      ImGui::Text("%s", errorMsg.c_str());
-      if(ImGui::Button("OK")){
-        ImGui::CloseCurrentPopup();
-      }
-      ImGui::EndPopup();
-    }
+    
     if(ImGui::BeginMenu("GameObject")){
       if(ImGui::MenuItem("Create Cube")){
         Gameobject::CreateCube();
@@ -219,37 +179,128 @@ void UI::Menubar(){
       if(ImGui::MenuItem("Create Plane")){
         Gameobject::CreatePlane();
       }
-      //if(ImGui::MenuItem("Create Point Light")){
-        //TODO
-      //}
       ImGui::EndMenu();
     }
-    /*if(ImGui::BeginMenu("Input")){
-        Input::standardWASDMouse = true;
+    
+    if(ImGui::BeginMenu("Input")){
+      if(ImGui::MenuItem("Open Input Manager")){
+        showInputManager = true;
       }
       ImGui::EndMenu();
-    }*/
+    }
+    
     if(ImGui::BeginMenu("Settings")){
-      /*if(ImGui::Checkbox("V-Sync", &vsync)){
-        mainWindow->SetVerticalSync();
-      }
-      ImGui::Text("Controls");
-      ImGui::SliderFloat("Movement speed", &camera_speed, 1.0f, 20.0f, "%.1f m/s");
-      ImGui::SliderFloat("Camera sensitivity", &sensitivity, 0.05f, 0.25f, "%.2f");
-      */
-      ImGui::SetNextWindowSize(ImVec2(1400, 900));
-      if(ImGui::Begin("Settings")){
-        ImGui::Text("Graphics Settings");
-        if(ImGui::Checkbox("V-Sync", &vsync)){
-          mainWindow->SetVerticalSync();
-        }
-        ImGui::Text("Controls");
-        ImGui::SliderFloat("Movement speed", &camera_speed, 1.0f, 20.0f, "%.1f m/s");
-        ImGui::SliderFloat("Camera sensitivity", &sensitivity, 0.05f, 0.25f, "%.2f");
-        ImGui::End();
+      if(ImGui::MenuItem("Open Settings")){
+        showSettings = true;
       }
       ImGui::EndMenu();
     }
     ImGui::EndMainMenuBar();
   }
+
+  if(openSavePopup){
+    ImGui::OpenPopup("Save World Popup");
+    openSavePopup = false;
+  }
+  if(openLoadPopup){
+    ImGui::OpenPopup("Load World Popup");
+    openLoadPopup = false;
+  }
+  if(openLoadErrorPopup){
+    ImGui::OpenPopup("Error Popup");
+    openLoadErrorPopup = false;
+  }
+
+  if(ImGui::BeginPopupModal("Save World Popup", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
+    ImGui::Text("Enter world name:");
+    ImGui::InputText("###saveworld", worldName, IM_ARRAYSIZE(worldName));
+    if(ImGui::Button("Save")){
+      if(strlen(worldName) > 0){
+        std::string path = std::string("worlds/") + worldName + ".json";
+        Serialize::SaveWorld(path);
+      }
+      ImGui::CloseCurrentPopup();
+    }
+    ImGui::SameLine();
+    if(ImGui::Button("Cancel")){
+      ImGui::CloseCurrentPopup();
+    }
+    ImGui::EndPopup();
+  }
+
+  if(ImGui::BeginPopupModal("Load World Popup", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
+    ImGui::Text("Enter world name:");
+    ImGui::InputText("###loadworld", worldName, IM_ARRAYSIZE(worldName));
+    if(ImGui::Button("Load")){
+      if(strlen(worldName) > 0){
+        std::string path = std::string("worlds/") + worldName + ".json";
+        if(!fs::exists(path)){
+          errorMsg = "File not found!";
+          openLoadErrorPopup = true;
+        }else{
+          Serialize::LoadWorld(path);
+        }
+      }
+      ImGui::CloseCurrentPopup();
+    }
+    ImGui::SameLine();
+    if(ImGui::Button("Cancel")){
+      ImGui::CloseCurrentPopup();
+    }
+    ImGui::EndPopup();
+  }
+
+  if(ImGui::BeginPopupModal("Error Popup", NULL, ImGuiWindowFlags_AlwaysAutoResize)){
+    ImGui::Text("%s", errorMsg.c_str());
+    if(ImGui::Button("OK")){
+      ImGui::CloseCurrentPopup();
+    }
+    ImGui::EndPopup();
+  }
+
+  if(showInputManager){
+    ImGui::SetNextWindowSize(ImVec2(1300, 800), ImGuiCond_FirstUseEver);
+    if(ImGui::Begin("Input Manager", &showInputManager)){
+      if(ImGui::BeginTable("KeybindsTable", 2, ImGuiTableFlags_Resizable | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg)){
+        ImGui::TableSetupColumn("Action", ImGuiTableColumnFlags_WidthStretch, 0.6f);
+        ImGui::TableSetupColumn("Key Assigned", ImGuiTableColumnFlags_WidthStretch, 0.4f);
+        ImGui::TableHeadersRow();
+        for(size_t i = 0; i < Input::gameKeybinds->size(); i++){
+          Input::Keybind keybind = Input::gameKeybinds->at(i);
+          ImGui::TableNextRow();
+          ImGui::TableNextColumn();
+          ImGui::Text("%s",keybind.actionName.c_str());
+          ImGui::TableNextColumn();
+          char buf[0]; // temporary, just to fulfill ImGui::Button first parameter. 
+          if(keybind.assignedKey == '\0'){
+            char buf[5] = "None";
+          }else{
+            char buf[2] = {keybind.assignedKey, '\0'};
+          }
+          ImGui::PushID(static_cast<int>(i));
+          if(ImGui::Button(buf, ImVec2(-FLT_MIN, 0.0f))){
+
+          }
+          ImGui::PopID();
+        }
+        ImGui::EndTable();
+      }
+    }
+    ImGui::End();
+  }
+
+  if(showSettings){
+    ImGui::SetNextWindowSize(ImVec2(1400, 900), ImGuiCond_FirstUseEver);
+    if(ImGui::Begin("Settings", &showSettings)){
+      ImGui::Text("Graphics Settings");
+      if(ImGui::Checkbox("V-Sync", &vsync)){
+        mainWindow->SetVerticalSync();
+      }
+      ImGui::Text("Controls");
+      ImGui::SliderFloat("Movement speed", &camera_speed, 1.0f, 20.0f, "%.1f m/s");
+      ImGui::SliderFloat("Camera sensitivity", &sensitivity, 0.05f, 0.25f, "%.2f");
+      ImGui::End();
+    }
+  }
 }
+

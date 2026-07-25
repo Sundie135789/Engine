@@ -6,6 +6,8 @@
 #include <GLFW/glfw3.h>
 double Input::mouseX = 0.0f;
 double Input::mouseY = 0.0f;
+std::vector<Input::Keybind>* Input::gameKeybinds = new std::vector<Input::Keybind>();
+
 void Input::WASDMouse(bool& firstMouse, float& lastX,float& lastY, Camera* camera, Window* window, float deltaTime){
   window->GetCursorPos(mouseX, mouseY);
     if(firstMouse)
@@ -48,4 +50,10 @@ void Input::HandleGameInput(Window* window, Camera* gameCamera, float deltaTime,
   window->setCursorMode(GLFW_CURSOR_DISABLED);
 }
 
+void Input::PopulateKeybinds(){
+  Input::gameKeybinds->push_back(Keybind{"Move Forward", '\0', false});
+  Input::gameKeybinds->push_back(Keybind{"Move Backwards", '\0', false});
+  Input::gameKeybinds->push_back(Keybind{"Move Right", '\0', false});
+  Input::gameKeybinds->push_back(Keybind{"Move Left", '\0', false});
+}
 
