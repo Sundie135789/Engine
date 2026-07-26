@@ -1,0 +1,6 @@
+*.o 
+*.txt
+main
+imgui.ini
+.gdbinit
+

@@ -25,3 +25,5 @@ extern bool vsync;
 extern DirectionalLight* mainDirLight;
 extern std::vector<Texture*> g_loadedTextures;
 extern unsigned int framebuffer;
+extern unsigned int quadVAO;
+extern unsigned int textureColorBuffer;

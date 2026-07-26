@@ -18,3 +18,5 @@ std::vector<Texture*> g_loadedTextures;
 float camera_speed = 10.0f;
 float sensitivity = 0.1f;
 unsigned int framebuffer;
+unsigned int textureColorBuffer;
+unsigned int quadVAO;
