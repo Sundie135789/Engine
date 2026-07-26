@@ -11,6 +11,5 @@ class Renderer{
     DirectionalLight* light;
     void Submit(Gameobject* gameobject);
     static void NewFrame();
-
     Renderer();
 };

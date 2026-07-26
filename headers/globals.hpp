@@ -24,3 +24,4 @@ extern std::vector<std::string> textures;
 extern bool vsync;
 extern DirectionalLight* mainDirLight;
 extern std::vector<Texture*> g_loadedTextures;
+extern unsigned int framebuffer;
