@@ -16,7 +16,7 @@ namespace fs = std::filesystem;
 
 static char worldName[128] = "", objRename[128], textureSet[128];
 static bool openSavePopup = false, openLoadPopup = false, openLoadErrorPopup = false, openEmptyRenamePopup = false
-, showInputManager = false, showSettings = false;
+, showInputManager = false, showSettings = false, openInvalidKeybindPopup = false;
 bool UI::triggerFilePick = false;
 bool UI::triggerModelPick = false;
 static std::string errorMsg = "";
