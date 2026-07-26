@@ -4,7 +4,10 @@
 #include "headers/transform.hpp"
 #include "headers/globals.hpp"
 #include "headers/log.hpp"
+#include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/matrix_decompose.hpp>
 Gameobject::Gameobject(std::string name) : mesh(std::vector<Vertex>()),material(), transform(), name(name){
   Log::Success("Gameobject created: " + name + "\n");
 }
@@ -106,6 +109,13 @@ glm::mat4 Gameobject::getModelMatrix(){
   model = glm::rotate(model, glm::radians(transform.rotation.z), glm::vec3(0,0,1));
   model = glm::scale(model, transform.scale);
   return model;
+}
+void Gameobject::setModelMatrix(const glm::mat4& modelMatrix){
+  glm::vec3 dummySkew;
+  glm::vec4 dummyPerspective;
+  glm::quat tempOrientation;
+  glm::decompose(modelMatrix, transform.scale, tempOrientation, transform.position, dummySkew, dummyPerspective);
+  transform.rotation = glm::degrees(glm::eulerAngles(tempOrientation));
 }
 //void Gameobject::Render(){
   //shader->Use();

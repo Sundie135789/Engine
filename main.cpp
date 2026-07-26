@@ -7,13 +7,12 @@
 #include "headers/input.hpp"
 #include "headers/globals.hpp"
 #include "headers/serialize.hpp"
-#include "headers/model.hpp"
-// C++ headers
+#include "vendor/imguizmo/ImGuizmo.h"
+// fix ImGUizmo
 // input manager GUI
 // add ability to import albedo, roughness, metallic maps.
 // add gamma correction, light clamping. 
 // main.cpp line 49 complete model loading code for fbx. 
-#include <iostream>
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
   Input::PopulateKeybinds();
@@ -65,6 +64,7 @@ int main(){
       fpsFrameCount = 0.0f;
     }
     UI::BeginFrame();
+    ImGuizmo::BeginFrame();
     Renderer::NewFrame();
     if(g_EngineState == EngineState::Playing){
       renderer.SetCamera(gameCamera);
@@ -78,9 +78,13 @@ int main(){
     for(auto& go : gameobjects){
       renderer.Submit(go.get());
     }
+
     if(g_EngineState == EngineState::Editing){
       if(selected != -1)
+      {
         UI::LoadInspector();
+        UI::DrawTransformGizmo(gameobjects[selected].get(), editorCamera->GetViewMatrix(), editorCamera->GetProjectionMatrix());
+      }
       UI::Hierarchy();
       UI::Menubar();
     }

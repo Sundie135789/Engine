@@ -8,6 +8,8 @@
 #include "vendor/imgui/backends/imgui_impl_glfw.h"
 #include "vendor/imgui/backends/imgui_impl_opengl3.h"
 #include "vendor/pfd/portable-file-dialogs.h"
+#include "vendor/imguizmo/ImGuizmo.h"
+#include <glm/gtc/type_ptr.hpp>
 #include <filesystem>
 #include <string>
 namespace fs = std::filesystem;
@@ -18,6 +20,28 @@ static bool openSavePopup = false, openLoadPopup = false, openLoadErrorPopup = f
 bool UI::triggerFilePick = false;
 bool UI::triggerModelPick = false;
 static std::string errorMsg = "";
+void UI::DrawTransformGizmo(Gameobject* gameobject, const glm::mat4& view, const glm::mat4& proj){
+  if(!gameobject) return;
+  ImGuizmo::SetDrawlist(ImGui::GetForegroundDrawList());
+  ImGuizmo::AllowAxisFlip(false);
+  ImGuizmo::GetStyle().TranslationLineThickness = 7.0f;
+  ImGuizmo::GetStyle().TranslationLineArrowSize = 14.0f;
+  ImGuizmo::GetStyle().RotationLineThickness = 6.0f;
+  ImGuizmo::GetStyle().ScaleLineThickness = 6.0f;
+  ImGuiViewport* viewport = ImGui::GetMainViewport();
+  ImGuizmo::SetRect(viewport->Pos.x, viewport->Pos.y, viewport->Size.x, viewport->Size.y);
+  glm::mat4 modelMatrix = gameobject->getModelMatrix();
+  ImGuizmo::Manipulate(
+      glm::value_ptr((view)),
+      glm::value_ptr((proj)),
+      ImGuizmo::TRANSLATE,
+      ImGuizmo::LOCAL,
+      glm::value_ptr(modelMatrix)
+      );
+    if(ImGuizmo::IsUsing()){
+      gameobject->setModelMatrix(modelMatrix);
+    }
+}
 void UI::SaveAndExit(){
   if(strcmp(worldName, "")) 
     Serialize::SaveWorld("worlds/" + std::string(worldName)+ ".json");
@@ -43,6 +67,7 @@ void UI::Hierarchy(){
   for(int i=0;i<gameobjects.size();i++){
     if(ImGui::Selectable(gameobjects[i]->name.c_str())){
       selected = i;
+      //DrawTransformGizmo(gameobjects[i].get(), editorCamera->GetViewMatrix(), editorCamera->GetProjectionMatrix());
     }
   }
   if(selected != -1){

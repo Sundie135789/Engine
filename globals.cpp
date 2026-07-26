@@ -7,7 +7,6 @@ Camera* editorCamera = new Camera();
 Camera* gameCamera = new Camera();
 float lastX, lastY;
 bool firstMouse = true;
-bool gameObjectSelected = true;
 EngineState g_EngineState = EngineState::Editing;
 int selected = -1;
 int cube_untitled_number = 0;

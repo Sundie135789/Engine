@@ -2,7 +2,6 @@
 #include "gameobject.hpp"
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
-#include "imgui.h"
 class UI{
   public:
   static void LoadInspector();
@@ -16,6 +15,7 @@ class UI{
   static std::string OpenModelpicker();
   static bool triggerFilePick; 
   static bool triggerModelPick;
+  static void DrawTransformGizmo(Gameobject* gameobject, const glm::mat4& view, const glm::mat4& proj);
 };
 
 

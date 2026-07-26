@@ -13,6 +13,7 @@ class Gameobject{
     void SetTransform(const Transform& transform);
     void SetName(const std::string& name);
     glm::mat4 getModelMatrix();
+    void setModelMatrix(const glm::mat4& modelMatrix);
     Mesh mesh;
     Material material;
     Transform transform;

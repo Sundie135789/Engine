@@ -11,6 +11,7 @@ vendor/imgui/imgui_tables.cpp \
 vendor/imgui/imgui_widgets.cpp \
 vendor/imgui/backends/imgui_impl_glfw.cpp \
 vendor/imgui/backends/imgui_impl_opengl3.cpp \
+vendor/imguizmo/ImGuizmo.cpp
 
 IMGUI_OBJ = $(IMGUI_SRC:.cpp=.o)
 
