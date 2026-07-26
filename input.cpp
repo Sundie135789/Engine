@@ -1,5 +1,5 @@
 #include "headers/input.hpp"
-#include <iostream>
+#include <glm/geometric.hpp>
 #include "headers/window.hpp"
 #include "headers/camera.hpp"
 #include "headers/globals.hpp"
@@ -7,26 +7,29 @@
 double Input::mouseX = 0.0f;
 double Input::mouseY = 0.0f;
 std::vector<Input::Keybind>* Input::gameKeybinds = new std::vector<Input::Keybind>();
-
-void Input::WASDMouse(bool& firstMouse, float& lastX,float& lastY, Camera* camera, Window* window, float deltaTime){
+void Input::ProcessMouseLook(bool& firstMouse, float& lastX, float& lastY, Camera* camera, Window* window){
   window->GetCursorPos(mouseX, mouseY);
-    if(firstMouse)
-    {  
-      lastX = mouseX;
-      lastY = mouseY;
-      firstMouse = false;
-    }
-    float deltaY = lastY - mouseY;
-    float deltaX = mouseX - lastX;
-    lastX = mouseX;
+  if(firstMouse)
+  {
+    lastX  = mouseX;
     lastY = mouseY;
-    camera->yaw += deltaX * sensitivity;
-    camera->pitch += deltaY * sensitivity;
-    glm::vec3 direction;
-    direction.x = cos(glm::radians(camera->yaw)) * cos(glm::radians(camera->pitch));
-    direction.y = sin(glm::radians(camera->pitch));
-    direction.z = sin(glm::radians(camera->yaw)) * cos(glm::radians(camera->pitch));
-    camera->front = glm::normalize(direction);
+    firstMouse = false;
+  }
+  float deltaY = lastY - mouseY;
+  float deltaX = mouseX - lastX;
+  lastX = mouseX;
+  lastY = mouseY;
+  camera->yaw += deltaX * sensitivity;
+  camera->pitch += deltaY * sensitivity;
+  glm::vec3 direction(
+      cos(glm::radians(camera->yaw)) * cos(glm::radians(camera->pitch)),
+      sin(glm::radians(camera->pitch)),
+      sin(glm::radians(camera->yaw)) * cos(glm::radians(camera->pitch))
+      );
+  camera->front = glm::normalize(direction);
+}
+void Input::WASDMouse(bool& firstMouse, float& lastX,float& lastY, Camera* camera, Window* window, float deltaTime){
+    Input::ProcessMouseLook(firstMouse, lastX, lastY, camera, window);
     float speed = camera_speed * deltaTime;
     glm::vec3 flatFront = glm::normalize(glm::vec3(camera->front.x, 0.0f, camera->front.z));
     glm::vec3 right = glm::normalize(glm::cross(camera->front, glm::vec3(0,1,0)));
@@ -49,12 +52,17 @@ void Input::HandleEngineInput(Window* window,Camera* editorCamera , float deltaT
 }
 void Input::HandleGameInput(Window* window, Camera* gameCamera, float deltaTime, float &lastX, float &lastY, bool &firstMouse){
   window->setCursorMode(GLFW_CURSOR_DISABLED);
+  float speed = camera_speed * deltaTime;
+  Input::ProcessMouseLook(firstMouse, lastX, lastY, gameCamera, window);
+  if(Input::gameKeybinds->at(0).assignedKey && ImGui::IsKeyPressed(Input::gameKeybinds->at(0).assignedKey)){
+    gameCamera->position += gameCamera->front * speed * deltaTime;
+  }
 }
 
 void Input::PopulateKeybinds(){
-  Input::gameKeybinds->push_back(Keybind{"Move Forward", '\0', false});
-  Input::gameKeybinds->push_back(Keybind{"Move Backwards", '\0', false});
-  Input::gameKeybinds->push_back(Keybind{"Move Right", '\0', false});
-  Input::gameKeybinds->push_back(Keybind{"Move Left", '\0', false});
+  Input::gameKeybinds->push_back(Keybind{"Move Forward", ImGuiKey_None, false});
+  Input::gameKeybinds->push_back(Keybind{"Move Backwards", ImGuiKey_None, false});
+  Input::gameKeybinds->push_back(Keybind{"Move Right", ImGuiKey_None, false});
+  Input::gameKeybinds->push_back(Keybind{"Move Left", ImGuiKey_None, false});
 }
 

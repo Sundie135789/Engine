@@ -4,6 +4,7 @@
 #include "../vendor/imgui/imgui.h"
 class Input{
   public:
+    static void ProcessMouseLook(bool& firstMouse, float& lastX, float& lastY, Camera* camera, Window* window);
     static void HandleEngineInput(Window* window, Camera* editorCamera, float deltaTime, float& lastX, float& lastY, bool& lastMouse);
     static void HandleGameInput(Window* window, Camera* camera, float deltaTime, float& lastX, float& lastY, bool & lastMouse);
     static double mouseX;
@@ -11,7 +12,7 @@ class Input{
     static void WASDMouse(bool& firstMouse, float &lastX, float& lastY, Camera* gameCamera, Window* window, float deltaTime);
     struct Keybind{
       std::string actionName;
-      char assignedKey;
+      ImGuiKey assignedKey = ImGuiKey_None;
       bool waitingForInput = false;
     };
     static std::vector<Keybind>* gameKeybinds;

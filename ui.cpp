@@ -291,20 +291,32 @@ void UI::Menubar(){
         ImGui::TableSetupColumn("Key Assigned", ImGuiTableColumnFlags_WidthStretch, 0.4f);
         ImGui::TableHeadersRow();
         for(size_t i = 0; i < Input::gameKeybinds->size(); i++){
-          Input::Keybind keybind = Input::gameKeybinds->at(i);
+          Input::Keybind& keybind = Input::gameKeybinds->at(i);
           ImGui::TableNextRow();
           ImGui::TableNextColumn();
           ImGui::Text("%s",keybind.actionName.c_str());
           ImGui::TableNextColumn();
-          char buf[0]; // temporary, just to fulfill ImGui::Button first parameter. 
-          if(keybind.assignedKey == '\0'){
-            char buf[5] = "None";
+          char buf[32];
+          if(keybind.assignedKey == ImGuiKey_None){
+            strcpy(buf, "None");
           }else{
-            char buf[2] = {keybind.assignedKey, '\0'};
+            const char* keyName = ImGui::GetKeyName(keybind.assignedKey);
+            snprintf(buf, sizeof(buf), "%s", keyName ? keyName : "None");
           }
           ImGui::PushID(static_cast<int>(i));
           if(ImGui::Button(buf, ImVec2(-FLT_MIN, 0.0f))){
-
+            //TODO
+            keybind.waitingForInput = true;
+          }
+          if(keybind.waitingForInput){
+            for(int key = ImGuiKey_NamedKey_BEGIN; key < ImGuiKey_NamedKey_END; key++){
+              if(ImGui::IsKeyPressed((ImGuiKey)key)){
+                keybind.assignedKey = (ImGuiKey)key;
+                keybind.waitingForInput = false;
+                break;
+              }
+            }
+            ImGui::Text("Press any key...");
           }
           ImGui::PopID();
         }

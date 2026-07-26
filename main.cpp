@@ -8,7 +8,6 @@
 #include "headers/globals.hpp"
 #include "headers/serialize.hpp"
 #include "vendor/imguizmo/ImGuizmo.h"
-// switch to FBO
 // input manager GUI
 // add ability to import albedo, roughness, metallic maps.
 // add gamma correction, light clamping. 
