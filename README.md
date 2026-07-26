@@ -15,7 +15,7 @@ A custom 3D game engine pipeline written from scratch in C++ using OpenGL.
 *   **User Interface:** Uses Dear ImGui to display real-time variables, a component Inspector window, a scene Hierarchy list, and menu navigation bars.
 *   **Serialization:** Saves and loads runtime scenes created inside the engine.
 *   **Logging:** Success, warning, and fatal types of logs available.
-
+*   **Post Processing** Current engine design allows all kinds of post processing like bloom, grayscale, etc.
 ## Features In Progress
 
 * Model Loading (fbx file format)
