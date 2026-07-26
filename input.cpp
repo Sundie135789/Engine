@@ -34,7 +34,8 @@ void Input::WASDMouse(bool& firstMouse, float& lastX,float& lastY, Camera* camer
     if(window->GetKey(GLFW_KEY_S))  camera->position -= flatFront * speed;
     if(window->GetKey(GLFW_KEY_D))  camera->position += right * speed;
     if(window->GetKey(GLFW_KEY_A))  camera->position -= right * speed;
-
+    if(window->GetKey(GLFW_KEY_E)) camera->position.y += speed;
+    if(window->GetKey(GLFW_KEY_Q)) camera->position.y -= speed;
 }
 void Input::HandleEngineInput(Window* window,Camera* editorCamera , float deltaTime, float& lastX, float& lastY, bool& firstMouse){
   if(window->GetMouseButton(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS){
