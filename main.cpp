@@ -16,10 +16,12 @@
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
   Input::PopulateKeybinds();
+  Renderer::FBOSetup();
   Serialize::LoadEmptyWorld();
   /* Do not ship with this line */// Serialize::LoadWorld("worlds/first.json");
   Renderer renderer;
   renderer.SetLight(mainDirLight);
+  Shader* fboShader= new Shader("shaders/framebuffer.vert", "shaders/framebuffer.frag");
   //std::vector<Vertex> tempvertices;
   //Material material;
   /*Model::LoadModel("assets/models/Untitled.fbx", vertices, material);
@@ -35,6 +37,10 @@ int main(){
   int fpsFrameCount = 0;
   while(!mainWindow->ShouldClose()){
     mainWindow->PollEvents();
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glEnable(GL_DEPTH_TEST);
+    Renderer::NewFrame();
+
     if(UI::triggerFilePick){
       UI::triggerFilePick = false;
       std::string texturePath = UI::OpenFilepicker();
@@ -63,9 +69,6 @@ int main(){
       titleTimer = 0.0f;
       fpsFrameCount = 0.0f;
     }
-    UI::BeginFrame();
-    ImGuizmo::BeginFrame();
-    Renderer::NewFrame();
     if(g_EngineState == EngineState::Playing){
       renderer.SetCamera(gameCamera);
       Input::HandleGameInput(mainWindow.get(), gameCamera, deltaTime, lastX, lastY, firstMouse);
@@ -79,6 +82,20 @@ int main(){
       renderer.Submit(go.get());
     }
 
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glDisable(GL_DEPTH_TEST);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    fboShader->Use();
+    glUniform1i(glGetUniformLocation(fboShader->shaderProgram, "screenTexture"), 0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, textureColorBuffer);
+    glBindVertexArray(quadVAO);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    UI::BeginFrame();
+    ImGuizmo::BeginFrame();
     if(g_EngineState == EngineState::Editing){
       if(selected != -1)
       {

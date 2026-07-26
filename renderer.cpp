@@ -6,6 +6,7 @@
 #include "headers/shader.hpp"
 #include "headers/texture.hpp"
 #include "headers/camera.hpp"
+#include "headers/globals.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -17,6 +18,42 @@ void Renderer::SetLight(DirectionalLight* light){
 }
 void Renderer::SetCamera(Camera* cam){
   this->camera = cam;
+}
+void Renderer::FBOSetup(){
+  glGenFramebuffers(1, &framebuffer);
+  glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
+  glGenTextures(1, &textureColorBuffer);
+  glBindTexture(GL_TEXTURE_2D, textureColorBuffer);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2560, 1440, 0, GL_RGB, GL_UNSIGNED_INT, NULL);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorBuffer, 0);
+
+  unsigned int rbo;
+  glGenRenderbuffers(1, &rbo);
+  glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+  glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 2560, 1440);
+  glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+  float quadVertices[] = {
+    -1.0f, 1.0f, 0.0f, 1.0f,
+    -1.0f, -1.0f, 0.0f, 0.0f,
+    1.0f, -1.0f, 1.0f, 0.0f,
+
+    -1.0f, 1.0f, 0.0f, 1.0f,
+    1.0f, -1.0f, 1.0f, 0.0f,
+    1.0f, 1.0f, 1.0f, 1.0f
+  };
+  unsigned int quadVBO;
+  glGenVertexArrays(1, &quadVAO);
+  glGenBuffers(1, &quadVBO);
+  glBindVertexArray(quadVAO);
+  glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+  glEnableVertexAttribArray(1);
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2*sizeof(float)));
 }
 void Renderer::Submit(Gameobject* gameobject){
   if(!camera ||  !gameobject || gameobject->mesh.vertices.empty())

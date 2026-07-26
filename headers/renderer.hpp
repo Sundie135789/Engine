@@ -11,5 +11,6 @@ class Renderer{
     DirectionalLight* light;
     void Submit(Gameobject* gameobject);
     static void NewFrame();
+    static void FBOSetup();
     Renderer();
 };
