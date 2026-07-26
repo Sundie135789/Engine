@@ -5,4 +5,5 @@ class Log{
     static void Warning(std::string warning);
     static void Fatal(std::string fatal);
     static void Success(std::string success);
+    static void Info(std::string info);
 };

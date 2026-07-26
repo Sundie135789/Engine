@@ -8,7 +8,7 @@
 #include "headers/globals.hpp"
 #include "headers/serialize.hpp"
 #include "vendor/imguizmo/ImGuizmo.h"
-// input manager GUI
+// add a movement checkbox to each gameobject, then whenever its on, in the inspector, show a slider float for speed, easing, etc.
 // add ability to import albedo, roughness, metallic maps.
 // add gamma correction, light clamping. 
 // main.cpp line 49 complete model loading code for fbx. 

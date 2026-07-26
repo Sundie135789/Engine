@@ -10,3 +10,6 @@ void Log::Fatal(std::string fatal){
   std::cerr << "[ERROR] " << fatal << "\n";
   std::exit(1);
 }
+void Log::Info(std::string info){
+  std::cout << "[INFO] " << info << "\n";
+}
