@@ -8,7 +8,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/matrix_decompose.hpp>
-Gameobject::Gameobject(std::string name) : mesh(std::vector<Vertex>()),material(), transform(), name(name){
+Gameobject::Gameobject(std::string name) : mesh(std::vector<Vertex>(), std::vector<unsigned int>()),material(), transform(), name(name){
   Log::Success("Gameobject created: " + name + "\n");
 }
 /*void Gameobject::SetShader(Shader* shader){
@@ -29,53 +29,69 @@ void Gameobject::SetName(const std::string& name){
 void Gameobject::CreateCube(){
   std::unique_ptr<Gameobject> gameobject = std::make_unique<Gameobject>((cube_untitled_number == 0) ? "Cube Untitled" : "Cube Untitled #" + std::to_string(cube_untitled_number));
   cube_untitled_number++;
-  std::vector<Vertex> vertices = {{ {-0.5f,-0.5f, 0.5f}, {0,0,1}, {0,0} },
-    { { 0.5f,-0.5f, 0.5f}, {0,0,1}, {1,0} },
-    { { 0.5f, 0.5f, 0.5f}, {0,0,1}, {1,1} },
-    { { 0.5f, 0.5f, 0.5f}, {0,0,1}, {1,1} },
-    { {-0.5f, 0.5f, 0.5f}, {0,0,1}, {0,1} },
-    { {-0.5f,-0.5f, 0.5f}, {0,0,1}, {0,0} },
+std::vector<Vertex> vertices = {
+    // FRONT (+Z)
+    {{-0.5f,-0.5f, 0.5f}, {0,0,1}, {0,0}}, // 0
+    {{ 0.5f,-0.5f, 0.5f}, {0,0,1}, {1,0}}, // 1
+    {{ 0.5f, 0.5f, 0.5f}, {0,0,1}, {1,1}}, // 2
+    {{-0.5f, 0.5f, 0.5f}, {0,0,1}, {0,1}}, // 3
 
     // BACK (-Z)
-    { {-0.5f,-0.5f,-0.5f}, {0,0,-1}, {0,0} },
-    { {-0.5f, 0.5f,-0.5f}, {0,0,-1}, {0,1} },
-    { { 0.5f, 0.5f,-0.5f}, {0,0,-1}, {1,1} },
-    { { 0.5f, 0.5f,-0.5f}, {0,0,-1}, {1,1} },
-    { { 0.5f,-0.5f,-0.5f}, {0,0,-1}, {1,0}  },
-    { {-0.5f,-0.5f,-0.5f}, {0,0,-1}, {0,0} },
+    {{-0.5f,-0.5f,-0.5f}, {0,0,-1}, {0,0}}, // 4
+    {{-0.5f, 0.5f,-0.5f}, {0,0,-1}, {0,1}}, // 5
+    {{ 0.5f, 0.5f,-0.5f}, {0,0,-1}, {1,1}}, // 6
+    {{ 0.5f,-0.5f,-0.5f}, {0,0,-1}, {1,0}}, // 7
 
     // LEFT (-X)
-    { {-0.5f, 0.5f, 0.5f}, {-1,0,0}, {1,1} },
-    { {-0.5f, 0.5f,-0.5f}, {-1,0,0}, {0,1} },
-    { {-0.5f,-0.5f,-0.5f}, {-1,0,0}, {0,0} },
-    { {-0.5f,-0.5f,-0.5f}, {-1,0,0}, {0,0} },
-    { {-0.5f,-0.5f, 0.5f}, {-1,0,0}, {1,0} },
-    { {-0.5f, 0.5f, 0.5f}, {-1,0,0}, {1,1} },
+    {{-0.5f, 0.5f, 0.5f}, {-1,0,0}, {1,1}}, // 8
+    {{-0.5f, 0.5f,-0.5f}, {-1,0,0}, {0,1}}, // 9
+    {{-0.5f,-0.5f,-0.5f}, {-1,0,0}, {0,0}}, // 10
+    {{-0.5f,-0.5f, 0.5f}, {-1,0,0}, {1,0}}, // 11
 
     // RIGHT (+X)
-    { { 0.5f, 0.5f, 0.5f}, {1,0,0}, {1,1} },
-    { { 0.5f,-0.5f,-0.5f}, {1,0,0}, {0,0} },
-    { { 0.5f, 0.5f,-0.5f}, {1,0,0}, {0,1} },
-    { { 0.5f,-0.5f,-0.5f}, {1,0,0}, {0,0} },
-    { { 0.5f, 0.5f, 0.5f}, {1,0,0}, {1,1} },
-    { { 0.5f,-0.5f, 0.5f}, {1,0,0}, {1,0} },
+    {{ 0.5f, 0.5f, 0.5f}, {1,0,0}, {1,1}}, // 12
+    {{ 0.5f,-0.5f,-0.5f}, {1,0,0}, {0,0}}, // 13
+    {{ 0.5f, 0.5f,-0.5f}, {1,0,0}, {0,1}}, // 14
+    {{ 0.5f,-0.5f, 0.5f}, {1,0,0}, {1,0}}, // 15
 
     // TOP (+Y)
-    { {-0.5f, 0.5f,-0.5f}, {0,1,0}, {0,1} },
-    { {-0.5f, 0.5f, 0.5f}, {0,1,0}, {0,0} },
-    { { 0.5f, 0.5f, 0.5f}, {0,1,0}, {1,0} },
-    { { 0.5f, 0.5f, 0.5f}, {0,1,0}, {1,0} },
-    { { 0.5f, 0.5f,-0.5f}, {0,1,0}, {1,1} },
-    { {-0.5f, 0.5f,-0.5f}, {0,1,0}, {0,1} },
+    {{-0.5f, 0.5f,-0.5f}, {0,1,0}, {0,1}}, // 16
+    {{-0.5f, 0.5f, 0.5f}, {0,1,0}, {0,0}}, // 17
+    {{ 0.5f, 0.5f, 0.5f}, {0,1,0}, {1,0}}, // 18
+    {{ 0.5f, 0.5f,-0.5f}, {0,1,0}, {1,1}}, // 19
 
     // BOTTOM (-Y)
-    { {-0.5f,-0.5f,-0.5f}, {0,-1,0}, {0,1} },
-    { { 0.5f,-0.5f,-0.5f}, {0,-1,0}, {1,1} },
-    { { 0.5f,-0.5f, 0.5f}, {0,-1,0}, {1,0} },
-    { { 0.5f,-0.5f, 0.5f}, {0,-1,0}, {1,0} },
-    { {-0.5f,-0.5f, 0.5f}, {0,-1,0}, {0,0} },
-    { {-0.5f,-0.5f,-0.5f}, {0,-1,0}, {0,1} }};
-  gameobject->SetMesh(Mesh(vertices));
+    {{-0.5f,-0.5f,-0.5f}, {0,-1,0}, {0,1}}, // 20
+    {{ 0.5f,-0.5f,-0.5f}, {0,-1,0}, {1,1}}, // 21
+    {{ 0.5f,-0.5f, 0.5f}, {0,-1,0}, {1,0}}, // 22
+    {{-0.5f,-0.5f, 0.5f}, {0,-1,0}, {0,0}}, // 23
+};
+  std::vector<unsigned int > indices = {
+    // FRONT
+    0, 1, 2,
+    2, 3, 0,
+
+    // BACK
+    4, 5, 6,
+    6, 7, 4,
+
+    // LEFT
+    8, 9,10,
+   10,11, 8,
+
+    // RIGHT
+   12,13,14,
+   13,12,15,
+
+    // TOP
+   16,17,18,
+   18,19,16,
+
+    // BOTTOM
+   20,21,22,
+   22,23,20
+};
+  gameobject->SetMesh(Mesh(vertices, indices));
   gameobject->SetMaterial(Material());
   gameobject->SetTransform(Transform());
   gameobjects.push_back(std::move(gameobject));
@@ -84,17 +100,16 @@ void Gameobject::CreatePlane(){
   std::unique_ptr<Gameobject> gameobject = std::make_unique<Gameobject>((plane_untitled_number == 0) ? "Plane Untitled" : "Plane Untitled #" + std::to_string(plane_untitled_number));
 plane_untitled_number++;
 std::vector<Vertex> vertices = {
-    // Triangle 1
-    { {-0.5f, -0.0f, -0.5f}, {0,1,0}, {0,0} },
-    { { 0.5f, -0.0f,  0.5f}, {0,1,0}, {1,1} },
-    { { 0.5f, -0.0f, -0.5f}, {0,1,0}, {1,0} },
-
-    // Triangle 2
-    { {-0.5f, -0.0f, -0.5f}, {0,1,0}, {0,0} },
-    { {-0.5f, -0.0f,  0.5f}, {0,1,0}, {0,1} },
-    { { 0.5f, -0.0f,  0.5f}, {0,1,0}, {1,1} }
+    {{-0.5f, 0.0f, -0.5f}, {0,1,0}, {0,0}}, // 0
+    {{ 0.5f, 0.0f, -0.5f}, {0,1,0}, {1,0}}, // 1
+    {{ 0.5f, 0.0f,  0.5f}, {0,1,0}, {1,1}}, // 2
+    {{-0.5f, 0.0f,  0.5f}, {0,1,0}, {0,1}}  // 3
 };
-gameobject->SetMesh(Mesh(vertices));
+std::vector<uint32_t> indices = {
+    0, 2, 1,  // triangle 1
+    0, 3, 2   // triangle 2
+};
+gameobject->SetMesh(Mesh(vertices, indices));
 gameobject->SetMaterial(Material());
 gameobject->SetTransform(Transform());
 gameobjects.push_back(std::move(gameobject));

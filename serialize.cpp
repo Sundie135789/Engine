@@ -50,6 +50,7 @@ namespace Serialize{
       go->SetMaterial(material);
       int nVertices = goJson["mesh"]["vertices"].size();
       std::vector<Vertex> vertices;
+      std::vector<unsigned int> indices;
       for(int k = 0;k < nVertices; k++){
         goJson["mesh"]["vertices"][k];
         vertices.push_back(Vertex(
@@ -57,8 +58,12 @@ namespace Serialize{
                goJson["mesh"]["vertices"][k]["normal"].get<glm::vec3>(),
                goJson["mesh"]["vertices"][k]["uv"].get<glm::vec2>()
               ));
+
       }
-      go->SetMesh(Mesh(vertices));
+      for(size_t i=0;i<indices.size();i++){
+        indices[i] = goJson["mesh"]["indices"][i];
+      }
+      go->SetMesh(Mesh(vertices, indices));
       gameobjects.push_back(std::move(go));
       
     } mainDirLight = new DirectionalLight(

@@ -8,7 +8,7 @@
 #include "headers/globals.hpp"
 #include "headers/serialize.hpp"
 #include "vendor/imguizmo/ImGuizmo.h"
-//settings sidebar with buttons for different types
+// write the code for serialization of the indices. check error in serialize.cpp
 // Add bloom
 // texture and model loading using PBR
 // main.cpp line 49 complete model loading code for fbx. 

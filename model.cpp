@@ -10,53 +10,44 @@
 #include <glm/ext/vector_float3.hpp>
 #include <glm/glm.hpp>
 #include <filesystem>
-void Model::ProcessNode(aiNode* node, const aiScene* scene, std::vector<Vertex>& out_vertices){
+void Model::ProcessNode(aiNode* node, const aiScene* scene, std::vector<Vertex>& out_vertices, std::vector<unsigned int>& out_indices){
         // Unpack all sub-meshes attached to this specific hierarchy node
         for (unsigned int i = 0; i < node->mNumMeshes; i++) {
             aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-            
-            // Loop through every face (triangle) in the sub-mesh
-            for (unsigned int f = 0; f < mesh->mNumFaces; f++) {
-                aiFace face = mesh->mFaces[f];
-                
-                // Unpack the vertices sequentially for your flat glDrawArrays layout
-                for (unsigned int v = 0; v < face.mNumIndices; v++) {
-                    unsigned int index = face.mIndices[v];
-                    Vertex vertex{};
-
-                    // 1. Position
-                    vertex.position.x = mesh->mVertices[index].x;
-                    vertex.position.y = mesh->mVertices[index].y;
-                    vertex.position.z = mesh->mVertices[index].z;
-
-                    // 2. Normal
-                    if (mesh->HasNormals()) {
-                        vertex.normal.x = mesh->mNormals[index].x;
-                        vertex.normal.y = mesh->mNormals[index].y;
-                        vertex.normal.z = mesh->mNormals[index].z;
-                    }
-
-                    // 3. Texture Coordinates (UVs)
-                    if (mesh->mTextureCoords[0]) { // Check first UV channel
-                        vertex.uv.x = mesh->mTextureCoords[0][index].x;
-                        // Flip Y-axis: FBX layout maps top-to-bottom, OpenGL processes bottom-to-top
-                        vertex.uv.y = mesh->mTextureCoords[0][index].y;
-                    } else {
-                        vertex.uv = glm::vec2(0.0f);
-                    }
-
-                    out_vertices.push_back(vertex);
-                }
+            unsigned int baseIndex = static_cast<unsigned int>(out_vertices.size());
+            for(unsigned int v = 0; v< mesh->mNumVertices;v++){
+              Vertex vertex{};
+              vertex.position.x = mesh->mVertices[v].x;
+              vertex.position.y = mesh->mVertices[v].y;
+              vertex.position.z = mesh->mVertices[v].z;
+              if(mesh->HasNormals()){
+                vertex.normal.x = mesh->mNormals[v].x;
+                vertex.normal.y = mesh->mNormals[v].y;
+                vertex.normal.z = mesh->mNormals[v].z;
+              }
+              if(mesh->mTextureCoords[0]){
+                vertex.uv.x = mesh->mTextureCoords[0][v].x;
+                vertex.uv.y = mesh->mTextureCoords[0][v].y;
+              } else{
+                vertex.uv = glm::vec3(0.0f);
+              }
+              out_vertices.push_back(vertex);
+            }
+            for(unsigned int f = 0;f < mesh->mNumFaces;f++){
+              aiFace face = mesh->mFaces[f];
+              for(unsigned int j = 0;j<face.mNumIndices;j++){
+                out_indices.push_back(baseIndex + face.mIndices[j]);
+              }
             }
         }
 
         // Recursively dig down into any nested child nodes
         for (unsigned int i = 0; i < node->mNumChildren; i++) {
-            ProcessNode(node->mChildren[i], scene, out_vertices);
+            ProcessNode(node->mChildren[i], scene, out_vertices, out_indices);
         }
     }
 
-void Model::LoadModel(const std::string& path, std::vector<Vertex>& out_vertices, Material& material){
+void Model::LoadModel(const std::string& path, std::vector<Vertex>& out_vertices,std::vector<unsigned int>& out_indices,  Material& material){
   if(!std::filesystem::exists(std::filesystem::path(path))){
     Log::Fatal("[ERROR] Could not find model: " + path + '\n');
     std::exit(1);
@@ -65,7 +56,8 @@ void Model::LoadModel(const std::string& path, std::vector<Vertex>& out_vertices
   const aiScene* scene = importer.ReadFile(path,
       aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);
   out_vertices.clear();
-  ProcessNode(scene->mRootNode, scene, out_vertices);
+  out_indices.clear();
+  ProcessNode(scene->mRootNode, scene, out_vertices, out_indices);
   if(scene->HasMaterials() && scene->mNumMaterials > 0){
     aiMaterial* srcMat = scene->mMaterials[0];
     aiColor3D baseColor(1.0f, 1.0f, 1.0f);
