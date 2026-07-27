@@ -223,10 +223,8 @@ void UI::Menubar(){
       ImGui::EndMenu();
     }
     
-    if(ImGui::BeginMenu("Settings")){
       if(ImGui::MenuItem("Open Settings")){
         showSettings = true;
-      }
       ImGui::EndMenu();
     }
     ImGui::EndMainMenuBar();
@@ -336,7 +334,7 @@ void UI::Menubar(){
   }
 
   if(showSettings){
-    ImGui::SetNextWindowSize(ImVec2(1400, 900), ImGuiCond_FirstUseEver);
+    /*ImGui::SetNextWindowSize(ImVec2(1400, 900), ImGuiCond_FirstUseEver);
     if(ImGui::Begin("Settings", &showSettings)){
       ImGui::Text("Graphics Settings");
       if(ImGui::Checkbox("V-Sync", &vsync)){
@@ -346,6 +344,29 @@ void UI::Menubar(){
       ImGui::SliderFloat("Movement speed", &camera_speed, 1.0f, 20.0f, "%.1f m/s");
       ImGui::SliderFloat("Camera sensitivity", &sensitivity, 0.05f, 0.25f, "%.2f");
       ImGui::End();
+    }*/
+    ImGui::BeginChild("Sidebar", ImVec2(150, 0), true);
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(5, 10));
+    static int select = 0;
+    if(ImGui::Selectable("Graphics", selected == 0))
+      selected = 0;
+    if(ImGui::Selectable("Controls", selected == 1))
+      selected = 1;
+    ImGui::EndChild();
+    ImGui::SameLine();
+    ImGui::BeginChild("Content", ImVec2(0, 0), true);
+    if(selected == 0)
+    {
+      ImGui::Text("Graphics settings");
+      ImGui::Separator();
+      ImGui::Checkbox("Bloom", &settings.graphics.bloom);
+      ImGui::Checkbox("V-Sync", &settings.graphics.vsync)
+    }
+    if(selected == 1)
+    {
+      ImGui::Text("Controls");
+      ImGui::Separator();
+      ImGui::SliderFloat("Mouse Sensitivity", &settings.controls.mouseSensitivity, 0.05f, 0.25f, "%.2f");
     }
   }
 }
