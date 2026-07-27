@@ -135,12 +135,21 @@ void UI::LoadInspector() {
   ImGui::Text("Material Properties"); ImGui::SetNextItemWidth(400.0f);
 
   ImGui::ColorEdit3("Albedo Color", &obj->material.albedoValue.x);
+  if(ImGui::Button("Import Albedo Map", ImVec2(200.0f, 40.0f))){
+    obj->material.setAlbedoPath(UI::OpenFilepicker());
+  }
 
- ImGui::SetNextItemWidth(300.0f);
+  ImGui::SetNextItemWidth(300.0f);
   ImGui::SliderFloat("Roughness", &obj->material.roughnessValue, 0.0f, 1.0f, "%.3f");
- ImGui::SetNextItemWidth(300.0f);
+if(ImGui::Button("Import Roughness Map", ImVec2(250.0f, 40.0f))){
+    obj->material.setAlbedoPath(UI::OpenFilepicker());
+  }
+  ImGui::SetNextItemWidth(300.0f);
 
   ImGui::SliderFloat("Metallic", &obj->material.metallicValue , 0.0f, 1.0f, "%.3f");
+if(ImGui::Button("Import Metallic Map", ImVec2(250.0f, 40.0f))){
+    obj->material.setMetallicPath(UI::OpenFilepicker());
+  }
 
   ImGui::End();
 }
