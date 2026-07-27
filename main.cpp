@@ -8,9 +8,9 @@
 #include "headers/globals.hpp"
 #include "headers/serialize.hpp"
 #include "vendor/imguizmo/ImGuizmo.h"
-// add a movement checkbox to each gameobject, then whenever its on, in the inspector, show a slider float for speed, easing, etc.
-// add ability to import albedo, roughness, metallic maps.
-// add gamma correction, light clamping. 
+//settings sidebar with buttons for different types
+// Add bloom
+// texture and model loading using PBR
 // main.cpp line 49 complete model loading code for fbx. 
 int main(){
   UI::Init(mainWindow->GetWindowHandle());

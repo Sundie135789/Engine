@@ -25,12 +25,12 @@ extern unsigned int framebuffer;
 extern unsigned int quadVAO;
 extern unsigned int textureColorBuffer;
 struct GraphicsSettings{
-  bool bloom;
-  bool vsync;
+  bool bloom = false;
+  bool vsync = true;
 };
 struct ControlSettings{
-  float camera_speed;
-  float sensitivity;
+  float camera_speed = 5.0f;
+  float sensitivity = 0.1f;
 };
 struct Settings {
   GraphicsSettings graphics;

@@ -20,8 +20,8 @@ void Input::ProcessMouseLook(bool& firstMouse, float& lastX, float& lastY, Camer
   float deltaX = mouseX - lastX;
   lastX = mouseX;
   lastY = mouseY;
-  camera->yaw += deltaX * sensitivity;
-  camera->pitch += deltaY * sensitivity;
+  camera->yaw += deltaX * settings.controls.sensitivity;
+  camera->pitch += deltaY * settings.controls.sensitivity;
   glm::vec3 direction(
       cos(glm::radians(camera->yaw)) * cos(glm::radians(camera->pitch)),
       sin(glm::radians(camera->pitch)),
@@ -31,7 +31,7 @@ void Input::ProcessMouseLook(bool& firstMouse, float& lastX, float& lastY, Camer
 }
 void Input::WASDMouse(bool& firstMouse, float& lastX,float& lastY, Camera* camera, Window* window, float deltaTime){
     Input::ProcessMouseLook(firstMouse, lastX, lastY, camera, window);
-    float speed = camera_speed * deltaTime;
+    float speed = settings.controls.camera_speed * deltaTime;
     glm::vec3 flatFront = glm::normalize(glm::vec3(camera->front.x, 0.0f, camera->front.z));
     glm::vec3 right = glm::normalize(glm::cross(camera->front, glm::vec3(0,1,0)));
     if(window->GetKey(GLFW_KEY_W))   camera->position += flatFront * speed;
@@ -54,7 +54,7 @@ void Input::HandleEngineInput(Window* window,Camera* editorCamera , float deltaT
 void Input::HandleGameInput(Window* window, Camera* gameCamera, float deltaTime, float &lastX, float &lastY, bool &firstMouse){
   window->setCursorMode(GLFW_CURSOR_DISABLED);
   Input::ProcessMouseLook(firstMouse, lastX, lastY, gameCamera, window);
-  float speed = camera_speed * deltaTime;
+  float speed = settings.controls.camera_speed * deltaTime;
   glm::vec3 flatFront = glm::normalize(glm::vec3(gameCamera->front.x, 0.0f, gameCamera->front.z));
   glm::vec3 right = glm::normalize(glm::cross(gameCamera->front, glm::vec3(0,1,0)));
   if(Input::gameKeybinds->at(0).assignedKey && ImGui::IsKeyDown(Input::gameKeybinds->at(0).assignedKey)){

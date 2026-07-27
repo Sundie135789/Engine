@@ -31,7 +31,7 @@ Window::Window(int width, int height, std::string title){
   }
   glewExperimental = GL_TRUE;
   glfwMakeContextCurrent(window);
-  SetVerticalSync();
+  SetVerticalSync(this->GetWindowHandle());
   glewInit();
   glDisable(GL_CULL_FACE);
   glFrontFace(GL_CCW);
@@ -47,8 +47,9 @@ Window::Window(int width, int height, std::string title){
 int Window::GetMouseButton(int button){
   return glfwGetMouseButton(window, button);
 }
-void Window::SetVerticalSync(){
-  glfwSwapInterval(vsync ? 1 : 0);
+void Window::SetVerticalSync(GLFWwindow* window){
+  glfwMakeContextCurrent(window);
+  glfwSwapInterval(settings.graphics.vsync ? 1 : 0);
 }
 void Window::PollEvents(){
   glfwPollEvents();

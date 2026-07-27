@@ -17,7 +17,7 @@ class Window{
     int GetMouseButton(int button);
     int GetCursorMode();
     void setTitle(std::string title);
-    void SetVerticalSync();
+    void SetVerticalSync(GLFWwindow* window);
   private:
     GLFWwindow* window;
     int cursorMode;
