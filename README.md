@@ -15,8 +15,6 @@ A custom 3D game engine pipeline written from scratch in C++ using OpenGL.
 *   **Logging:** Runtime logs available for Success, Warning, Fatal, and Info types.
 *   **Transform Gizmos** Runtime Transformation Gizmos available for all objects.
 *   **Post Processing** Current engine design allows all kinds of post processing like bloom, grayscale, etc.
-## Features In Progress
-
-* Model Loading (fbx file format)
+*   **PBR rendering** Physically based rendering system for higher realism than phong shading.
    
-   <img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/81542bb3-9b28-4639-9620-b15c21ee02a1" />
+
