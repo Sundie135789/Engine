@@ -60,7 +60,9 @@ namespace Serialize{
               ));
 
       }
-      for(size_t i=0;i<indices.size();i++){
+      int nIndices = goJson["mesh"]["indices"].size();
+      indices.resize(nIndices);
+      for(int i=0;i<nIndices;i++){
         indices[i] = goJson["mesh"]["indices"][i];
       }
       go->SetMesh(Mesh(vertices, indices));
@@ -112,6 +114,9 @@ namespace Serialize{
         v["normal"] = {vertex.normal.x, vertex.normal.y, vertex.normal.z};
         v["uv"] = {vertex.uv.x, vertex.uv.y};
         obj["mesh"]["vertices"].push_back(v);
+      }
+      for(unsigned int index : go->mesh.indices){
+        obj["mesh"]["indices"].push_back(index);
       }
       j["gameobjects"].push_back(obj);
 

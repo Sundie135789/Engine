@@ -105,7 +105,7 @@ std::vector<Vertex> vertices = {
     {{ 0.5f, 0.0f,  0.5f}, {0,1,0}, {1,1}}, // 2
     {{-0.5f, 0.0f,  0.5f}, {0,1,0}, {0,1}}  // 3
 };
-std::vector<uint32_t> indices = {
+std::vector<unsigned int > indices = {
     0, 2, 1,  // triangle 1
     0, 3, 2   // triangle 2
 };
