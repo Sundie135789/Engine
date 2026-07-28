@@ -8,7 +8,7 @@
 #include "headers/globals.hpp"
 #include "headers/serialize.hpp"
 #include "vendor/imguizmo/ImGuizmo.h"
-// write the code for serialization of the indices. check error in serialize.cpp
+// issue in seg fault of serialization, material textures can be nullptr -> fixed
 // Add bloom
 // texture and model loading using PBR
 // main.cpp line 49 complete model loading code for fbx. 

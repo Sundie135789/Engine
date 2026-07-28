@@ -372,6 +372,7 @@ void UI::Menubar(){
       ImGui::PushItemWidth(500.0f)  ;
       ImGui::SliderFloat("Mouse Sensitivity", &settings.controls.sensitivity, 0.05f, 0.25f, "%.2f");
       ImGui::PopItemWidth();
+      ImGui::SliderFloat("Editor Camera Speed", &settings.controls.camera_speed, 1.0f, 10.0f, "%.1f");
     }
     ImGui::EndChild();
     ImGui::End();

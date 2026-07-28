@@ -1,5 +1,5 @@
 #include "headers/serialize.hpp"
-
+#include "headers/log.hpp"
 #include "headers/dirlight.hpp"
 #include "headers/globals.hpp"
 #include "vendor/json/json.hpp"
@@ -84,6 +84,11 @@ namespace Serialize{
             j["editor_camera"]["nearPlane"].get<float>(),
             j["editor_camera"]["farPlane"].get<float>()
           );
+      // Restore settings
+      settings.graphics.bloom = j["settings"]["graphics"]["bloom"].get<bool>();
+      settings.graphics.vsync = j["settings"]["graphics"]["vsync"].get<bool>();
+      settings.controls.camera_speed = j["settings"]["controls"]["camera_speed"].get<float>();
+      settings.controls.sensitivity = j["settings"]["controls"]["sensitivity"].get<float>();
 
   }
   void SaveWorld(std::string path){
@@ -99,12 +104,12 @@ namespace Serialize{
       obj["transform"]["position"] = {go->transform.position.x, go->transform.position.y, go->transform.position.z};
       obj["transform"]["rotation"] = {go->transform.rotation.x, go->transform.rotation.y, go->transform.rotation.z};
       obj["transform"]["scale"] = {go->transform.scale.x, go->transform.scale.y, go->transform.scale.z};
-      obj["material"]["albedoTexture"] = {go->material.albedoTexture->path},
-      obj["material"]["metallicTexture"] = {go->material.metallicTexture->path},
-      obj["material"]["roughnessTexture"] = {go->material.roughnessTexture->path},
-      obj["material"]["albedoValue"] = {go->material.albedoValue.x, go->material.albedoValue.y, go->material.albedoValue.z},
-      obj["material"]["roughnessValue"] = go->material.roughnessValue,
-      obj["material"]["metallicValue"] = go->material.metallicValue,
+      obj["material"]["albedoTexture"] = {go->material.albedoTexture->path};
+      obj["material"]["metallicTexture"] = {go->material.metallicTexture->path};
+      obj["material"]["roughnessTexture"] = {go->material.roughnessTexture->path};
+      obj["material"]["albedoValue"] = {go->material.albedoValue.x, go->material.albedoValue.y, go->material.albedoValue.z};
+      obj["material"]["roughnessValue"] = go->material.roughnessValue;
+      obj["material"]["metallicValue"] = go->material.metallicValue;
 
       obj["material"]["shader"] = {go->material.shader.vertexPath, go->material.shader.fragmentPath};
       obj["mesh"]["vertices"] = json::array();
@@ -133,6 +138,11 @@ namespace Serialize{
     j["editor_camera"]["aspect"] = editorCamera->aspect;
     j["editor_camera"]["nearPlane"] = editorCamera->nearPlane;
     j["editor_camera"]["farPlane"] = editorCamera->farPlane;
-    file << j.dump(4) << std::endl;;
+    //Settings
+    j["settings"]["graphics"]["bloom"] = settings.graphics.bloom;
+    j["settings"]["graphics"]["vsync"] = settings.graphics.vsync;
+    j["settings"]["controls"]["mouse_sensitivity"] = settings.controls.sensitivity;
+    j["settings"]["controls"]["camera_speed"] = settings.controls.camera_speed;
+    file << j.dump() << std::endl;;
   }
 };
