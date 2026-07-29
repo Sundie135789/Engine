@@ -14,5 +14,6 @@ void main(){
     color.b = texture(screenTexture, TexCoords - offset).b;
   }
 
+  FragColor.rgb = pow(FragColor.rgb, vec3(1.0 / 2.2));
   FragColor = vec4(color, 1.0);
 }

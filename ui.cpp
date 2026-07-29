@@ -3,6 +3,7 @@
 #include <cstdio>
 #include "headers/input.hpp"
 #include "headers/serialize.hpp"
+#include <iostream>
 #include "headers/globals.hpp"
 #include "vendor/imgui/imgui.h"
 #include "vendor/imgui/backends/imgui_impl_glfw.h"
@@ -15,8 +16,9 @@
 namespace fs = std::filesystem;
 
 static char worldName[128] = "", objRename[128], textureSet[128];
-static bool openSavePopup = false, openLoadPopup = false, openLoadErrorPopup = false, openEmptyRenamePopup = false
-, showInputManager = false, showSettings = false, openInvalidKeybindPopup = false;
+static bool openSavePopup = false, openLoadPopup = false, openLoadErrorPopup = false, openEmptyRenamePopup = false;
+static bool  showInputManager = false, showSettings = false, openInvalidKeybindPopup = false;
+static bool showChromAbStrength = false;
 bool UI::triggerFilePick = false;
 bool UI::triggerModelPick = false;
 static std::string errorMsg = "";
@@ -361,8 +363,12 @@ void UI::Menubar(){
       ImGui::Text("Graphics settings");
       ImGui::Separator();
       if(ImGui::Checkbox("Chromatic Abberation", &settings.graphics.chromaticAbberation)){
-        // TODO
+        showChromAbStrength = !showChromAbStrength;
       }
+      //std::cout << "Before UI: " << settings.graphics.chromaticAbberationStrength << "\n";
+      if(showChromAbStrength)
+        ImGui::SliderFloat("Strength", &settings.graphics.chromaticAbberationStrength, 0.001, 0.1, "%.3f", ImGuiSliderFlags_AlwaysClamp);
+
       if(ImGui::Checkbox("V-Sync", &settings.graphics.vsync)){
         mainWindow->SetVerticalSync(mainWindow->GetWindowHandle());
       }

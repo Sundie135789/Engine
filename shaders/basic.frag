@@ -61,6 +61,5 @@ void main(){
   vec3 col = (diff + spec) * radiance * NdotL;
 
   col += vec3(0.03) * albedo;
-  FragColor.rgb = pow(FragColor.rgb, vec3(1.0 / 2.2));
   FragColor = vec4(col, 1.0);
 }

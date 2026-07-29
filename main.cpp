@@ -8,7 +8,6 @@
 #include "headers/globals.hpp"
 #include "headers/serialize.hpp"
 #include "vendor/imguizmo/ImGuizmo.h"
-// ui.cpp 364 add chromatic abberation strength slider UI
 // Add bloom then add the logs menu
 // texture and model loading using PBR
 // main.cpp line 49 complete model loading code for fbx. 
@@ -85,12 +84,6 @@ int main(){
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    //fboShader->Use();
-    //glUniform1i(glGetUniformLocation(fboShader->shaderProgram, "chromaticAbberation"), true);
-    //glUniform1i(glGetUniformLocation(fboShader->shader))
-    //glUniform1i(glGetUniformLocation(fboShader->shaderProgram, "chromaticAbberation"), settings.graphics.chromaticAbberation);
-    //
-    //glUniform1i(glGetUniformLocation(fboShader->shaderProgram, "screenTexture"), 0);
     Renderer::SetGraphicsUniforms();
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, textureColorBuffer);

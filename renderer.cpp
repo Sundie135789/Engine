@@ -14,7 +14,7 @@ void Renderer::SetGraphicsUniforms(){
   fboShader->Use();
   GLuint fboShaderProgram = fboShader->shaderProgram;
   glUniform1i(glGetUniformLocation(fboShaderProgram, "chromaticAbberation"), settings.graphics.chromaticAbberation);
-  glUniform1i(glGetUniformLocation(fboShaderProgram, "chromaticAbberationStrength"), settings.graphics.chromaticAbberationStrength);
+  glUniform1f(glGetUniformLocation(fboShaderProgram, "chromaticAbberationStrength"), settings.graphics.chromaticAbberationStrength);
   glUniform1i(glGetUniformLocation(fboShaderProgram, "screenTexture"), 0);
 }
 Renderer::Renderer(){
@@ -35,6 +35,8 @@ void Renderer::FBOSetup(){
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2560, 1440, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorBuffer, 0);
 
   unsigned int rbo;

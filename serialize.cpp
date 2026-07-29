@@ -85,7 +85,8 @@ namespace Serialize{
             j["editor_camera"]["farPlane"].get<float>()
           );
       // Restore settings
-      settings.graphics.bloom = j["settings"]["graphics"]["bloom"].get<bool>();
+      settings.graphics.chromaticAbberation = j["settings"]["graphics"]["chromaticAbberation"].get<bool>();
+      settings.graphics.chromaticAbberationStrength = j["settings"]["graphics"]["chromaticAbberationStrength"].get<bool>();
       settings.graphics.vsync = j["settings"]["graphics"]["vsync"].get<bool>();
       settings.controls.camera_speed = j["settings"]["controls"]["camera_speed"].get<float>();
       settings.controls.sensitivity = j["settings"]["controls"]["sensitivity"].get<float>();
@@ -139,7 +140,8 @@ namespace Serialize{
     j["editor_camera"]["nearPlane"] = editorCamera->nearPlane;
     j["editor_camera"]["farPlane"] = editorCamera->farPlane;
     //Settings
-    j["settings"]["graphics"]["bloom"] = settings.graphics.bloom;
+    j["settings"]["graphics"]["chromaticAbberation"] = settings.graphics.chromaticAbberation;
+    j["settings"]["graphics"]["chromaticAbberationStrength"] = settings.graphics.chromaticAbberationStrength;
     j["settings"]["graphics"]["vsync"] = settings.graphics.vsync;
     j["settings"]["controls"]["mouse_sensitivity"] = settings.controls.sensitivity;
     j["settings"]["controls"]["camera_speed"] = settings.controls.camera_speed;

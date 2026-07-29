@@ -18,7 +18,5 @@ std::vector<Texture*> g_loadedTextures;
 unsigned int framebuffer;
 unsigned int textureColorBuffer;
 unsigned int quadVAO;
-GraphicsSettings graphics;
-ControlSettings controls;
 Settings settings;
 Shader* fboShader = new Shader("shaders/framebuffer.vert", "shaders/framebuffer.frag");
