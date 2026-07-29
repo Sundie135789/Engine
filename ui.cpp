@@ -367,7 +367,7 @@ void UI::Menubar(){
       }
       //std::cout << "Before UI: " << settings.graphics.chromaticAbberationStrength << "\n";
       if(showChromAbStrength)
-        ImGui::SliderFloat("Strength", &settings.graphics.chromaticAbberationStrength, 0.001, 0.1, "%.3f", ImGuiSliderFlags_AlwaysClamp);
+        ImGui::SliderFloat("Strength", &settings.graphics.chromaticAbberationStrength, 0.01, 0.1, "%.3f", ImGuiSliderFlags_AlwaysClamp);
 
       if(ImGui::Checkbox("V-Sync", &settings.graphics.vsync)){
         mainWindow->SetVerticalSync(mainWindow->GetWindowHandle());

@@ -6,14 +6,15 @@ uniform float chromaticAbberationStrength;
 uniform sampler2D screenTexture;
 void main(){
   vec3 color = texture(screenTexture, TexCoords).rgb;
-
+  vec2 uv = TexCoords;
   if(chromaticAbberation){
-    vec2 offset = chromaticAbberationStrength * (TexCoords-0.5);
-    color.r = texture(screenTexture, TexCoords + offset).r;
-    color.g = texture(screenTexture, TexCoords).g;
-    color.b = texture(screenTexture, TexCoords - offset).b;
+    vec2 screenFactor = (uv - 0.5);
+    vec2 CAoffset = vec2(screenFactor.x * chromaticAbberationStrength, 0.0);
+    color.r = texture(screenTexture, uv + CAoffset).r;
+    color.g = texture(screenTexture, uv ).g;
+    color.b = texture(screenTexture, uv - CAoffset).b;
   }
 
-  FragColor.rgb = pow(FragColor.rgb, vec3(1.0 / 2.2));
+  color = pow(color, vec3(1.0 / 2.2));
   FragColor = vec4(color, 1.0);
 }
