@@ -25,7 +25,9 @@ extern unsigned int framebuffer;
 extern unsigned int quadVAO;
 extern unsigned int textureColorBuffer;
 struct GraphicsSettings{
-  bool bloom = false;
+  //bool bloom = false
+  bool chromaticAbberation = false;
+  float chromaticAbberationStrength = 0.05f;
   bool vsync = true;
 };
 struct ControlSettings{
@@ -40,3 +42,4 @@ struct Settings {
 extern GraphicsSettings graphics;
 extern ControlSettings controls;
 extern Settings settings;
+extern Shader* fboShader;

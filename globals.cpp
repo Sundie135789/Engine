@@ -21,3 +21,4 @@ unsigned int quadVAO;
 GraphicsSettings graphics;
 ControlSettings controls;
 Settings settings;
+Shader* fboShader = new Shader("shaders/framebuffer.vert", "shaders/framebuffer.frag");

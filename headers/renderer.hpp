@@ -5,6 +5,7 @@
 class Gameobject;
 class Renderer{
   public:
+    static void SetGraphicsUniforms();
     void SetCamera(Camera* cam);
     void SetLight(DirectionalLight* light);
     Camera* camera;

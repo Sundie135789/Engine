@@ -8,8 +8,8 @@
 #include "headers/globals.hpp"
 #include "headers/serialize.hpp"
 #include "vendor/imguizmo/ImGuizmo.h"
-// issue in seg fault of serialization, material textures can be nullptr -> fixed
-// Add bloom
+// ui.cpp 364 add chromatic abberation strength slider UI
+// Add bloom then add the logs menu
 // texture and model loading using PBR
 // main.cpp line 49 complete model loading code for fbx. 
 int main(){
@@ -20,7 +20,6 @@ int main(){
   /* Do not ship with this line */// Serialize::LoadWorld("worlds/first.json");
   Renderer renderer;
   renderer.SetLight(mainDirLight);
-  Shader* fboShader= new Shader("shaders/framebuffer.vert", "shaders/framebuffer.frag");
   //std::vector<Vertex> tempvertices;
   //Material material;
   /*Model::LoadModel("assets/models/Untitled.fbx", vertices, material);
@@ -86,8 +85,13 @@ int main(){
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    fboShader->Use();
-    glUniform1i(glGetUniformLocation(fboShader->shaderProgram, "screenTexture"), 0);
+    //fboShader->Use();
+    //glUniform1i(glGetUniformLocation(fboShader->shaderProgram, "chromaticAbberation"), true);
+    //glUniform1i(glGetUniformLocation(fboShader->shader))
+    //glUniform1i(glGetUniformLocation(fboShader->shaderProgram, "chromaticAbberation"), settings.graphics.chromaticAbberation);
+    //
+    //glUniform1i(glGetUniformLocation(fboShader->shaderProgram, "screenTexture"), 0);
+    Renderer::SetGraphicsUniforms();
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, textureColorBuffer);
     glBindVertexArray(quadVAO);

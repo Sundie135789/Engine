@@ -360,7 +360,9 @@ void UI::Menubar(){
     {
       ImGui::Text("Graphics settings");
       ImGui::Separator();
-      ImGui::Checkbox("Bloom", &settings.graphics.bloom);
+      if(ImGui::Checkbox("Chromatic Abberation", &settings.graphics.chromaticAbberation)){
+        // TODO
+      }
       if(ImGui::Checkbox("V-Sync", &settings.graphics.vsync)){
         mainWindow->SetVerticalSync(mainWindow->GetWindowHandle());
       }
