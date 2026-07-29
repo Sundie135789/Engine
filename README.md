@@ -18,3 +18,4 @@ A custom 3D game engine pipeline written from scratch in C++ using OpenGL.
 *   **PBR rendering** Physically based rendering system for higher realism than phong shading.
    
 
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/b2e5a7c1-a078-4a76-8382-0e6871bf84a4" />
