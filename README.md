@@ -10,14 +10,12 @@ A custom 3D game engine pipeline written from scratch in C++ using OpenGL.
 *   **Transform Engine:** Computes 3D coordinate transformations using translation, rotation, and scale parameters.
 *   **Lighting:** Implements a single Directional Light source for real-time vertex and fragment illumination. (Later, Point lights and attentuation will be added)
 *   **Camera System:** Manages the view matrix calculations for runtime scene navigation.
-*   **GameObjects & Meshes:** Combines 3D vertex position vectors, normal vectors, and UV texture coordinates to construct and track runtime objects.
-*   **State Machine:** Implements an EngineState toggle to switch context between editing variables and running active gameplay.
-*   **User Interface:** Uses Dear ImGui to display real-time variables, a component Inspector window, a scene Hierarchy list, and menu navigation bars.
-*   **Serialization:** Saves and loads runtime scenes created inside the engine.
-*   **Logging:** Success, warning, and fatal types of logs available.
+*   **User Interface:** Uses Dear ImGui to display real-time variables and custom menus.
+*   **Serialization:** Saves and loads runtime worlds created inside the engine.
+*   **Logging:** Runtime logs available for Success, Warning, Fatal, and Info types.
+*   **Transform Gizmos** Runtime Transformation Gizmos available for all objects.
 *   **Post Processing** Current engine design allows all kinds of post processing like bloom, grayscale, etc.
-## Features In Progress
-
-* Model Loading (fbx file format)
+*   **PBR rendering** Physically based rendering system for higher realism than phong shading.
    
-   <img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/81542bb3-9b28-4639-9620-b15c21ee02a1" />
+
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/b2e5a7c1-a078-4a76-8382-0e6871bf84a4" />
