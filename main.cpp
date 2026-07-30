@@ -7,10 +7,9 @@
 #include "headers/input.hpp"
 #include "headers/globals.hpp"
 #include "headers/serialize.hpp"
+#include "headers/model.hpp"
 #include "vendor/imguizmo/ImGuizmo.h"
-// Add bloom then add the logs menu
-// texture and model loading using PBR
-// main.cpp line 49 complete model loading code for fbx. 
+// improve models' albedo maps importing
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
   Input::PopulateKeybinds();
@@ -43,18 +42,19 @@ int main(){
       std::string texturePath = UI::OpenFilepicker();
       gameobjects[selected]->material.albedoTexture = AssetManager::GetTexture(texturePath);
     }
-    /*if(UI::triggerModelPick){
+    if(UI::triggerModelPick){
       UI::triggerModelPick = false;
       std::string modelPath = UI::OpenModelpicker();
       std::vector<Vertex> vertices;
+      std::vector<unsigned int> indices;
       Material material;
-      Model::LoadModel(modelPath, vertices, material);
+      Model::LoadModel(modelPath, vertices, indices, material);
       std::unique_ptr<Gameobject> newGo = std::make_unique<Gameobject>("Imported Model");
-      newGo->SetMesh(Mesh(vertices));
+      newGo->SetMesh(Mesh(vertices, indices));
       newGo->SetMaterial(material);
       newGo->SetTransform(Transform());
       gameobjects.push_back(std::move(newGo));
-    }*/
+    }
     currentFrame = mainWindow->GetTime();
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
