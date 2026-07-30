@@ -6,6 +6,7 @@
 #include "headers/log.hpp"
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <string>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/matrix_decompose.hpp>
 Gameobject::Gameobject(std::string name) : mesh(std::vector<Vertex>(), std::vector<unsigned int>()),material(), transform(), name(name){
@@ -92,6 +93,7 @@ std::vector<Vertex> vertices = {
    22,23,20
 };
   gameobject->SetMesh(Mesh(vertices, indices));
+  Log::Success("Mesh Loaded: Vertex Count " + std::to_string(vertices.size()) + "\n");
   gameobject->SetMaterial(Material());
   gameobject->SetTransform(Transform());
   gameobjects.push_back(std::move(gameobject));

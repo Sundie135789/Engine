@@ -1,5 +1,4 @@
 #include "headers/mesh.hpp"
-#include "headers/log.hpp"
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices){
   this->vertices = vertices;
   this->indices = indices;
@@ -19,7 +18,6 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices){
   glEnableVertexAttribArray(2);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
-  Log::Success("Mesh loaded: Vertex Count " + std::to_string(vertices.size()) + "\n");
 }
 void Mesh::Draw() const{
   glBindVertexArray(vao);
