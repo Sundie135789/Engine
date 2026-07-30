@@ -1,9 +1,22 @@
 #pragma once
 #include <string>
+#include <vector>
+enum class LogType{
+  INFO = 0,
+  SUCCESS = 1,
+  WARNING = 2,
+  FATAL = 3
+};
+struct LogEntry {
+  std::string message;
+  LogType type;
+};
 class Log{
   public:
-    static void Warning(std::string warning);
-    static void Fatal(std::string fatal);
-    static void Success(std::string success);
-    static void Info(std::string info);
+    static void Info(const std::string& msg);
+    static void Fatal(const std::string& msg);
+    static void Warning(const std::string& msg);
+    static void Success(const std::string& msg);
+    static std::vector<LogEntry> logs;
 };
+

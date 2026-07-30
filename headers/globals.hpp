@@ -40,3 +40,4 @@ struct Settings {
 
 extern Settings settings;
 extern Shader* fboShader;
+//extern std::vector<std::string> logs;

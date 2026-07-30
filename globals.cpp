@@ -20,3 +20,4 @@ unsigned int textureColorBuffer;
 unsigned int quadVAO;
 Settings settings;
 Shader* fboShader = new Shader("shaders/framebuffer.vert", "shaders/framebuffer.frag");
+//std::vector<std::string> logs;

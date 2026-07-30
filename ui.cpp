@@ -3,8 +3,8 @@
 #include <cstdio>
 #include "headers/input.hpp"
 #include "headers/serialize.hpp"
-#include <iostream>
 #include "headers/globals.hpp"
+#include "headers/log.hpp"
 #include "vendor/imgui/imgui.h"
 #include "vendor/imgui/backends/imgui_impl_glfw.h"
 #include "vendor/imgui/backends/imgui_impl_opengl3.h"
@@ -19,6 +19,7 @@ static char worldName[128] = "", objRename[128], textureSet[128];
 static bool openSavePopup = false, openLoadPopup = false, openLoadErrorPopup = false, openEmptyRenamePopup = false;
 static bool  showInputManager = false, showSettings = false, openInvalidKeybindPopup = false;
 static bool showChromAbStrength = false;
+static bool showLogs = false;
 bool UI::triggerFilePick = false;
 bool UI::triggerModelPick = false;
 static std::string errorMsg = "";
@@ -229,6 +230,10 @@ void UI::Menubar(){
         showSettings = true;
       ImGui::EndMenu();
     }
+    if(ImGui::BeginMenu("Logs")){
+      showLogs = true;
+    ImGui::EndMenu();
+    }
     ImGui::EndMainMenuBar();
   }
 
@@ -291,7 +296,22 @@ void UI::Menubar(){
     }
     ImGui::EndPopup();
   }
-
+  if(showLogs){
+    ImGui::SetNextWindowSize(ImVec2(600, 300), ImGuiCond_Always);
+    if(ImGui::Begin("Logs")){
+      for(LogEntry log : Log::logs){
+        if(log.type == LogType::SUCCESS)
+          ImGui::TextColored(ImVec4(0.0, 1.0f, 0.0f, 1.0f), "%s", log.message.c_str());
+        if(log.type == LogType::WARNING)
+          ImGui::TextColored(ImVec4(1.0, 0.8, 0.0, 1.0f), "%s", log.message.c_str());
+        if(log.type == LogType::INFO)
+          ImGui::TextColored(ImVec4(0.5, 0.5, 0.5, 1.0f), "%s", log.message.c_str());
+        if(log.type == LogType::FATAL)
+          ImGui::TextColored(ImVec4(1.0, 0.0, 0.0, 1.0f), "%s", log.message.c_str());
+      }
+      ImGui::End();
+    }
+  }
   if(showInputManager){
     ImGui::SetNextWindowSize(ImVec2(1300, 800), ImGuiCond_FirstUseEver);
     if(ImGui::Begin("Input Manager", &showInputManager)){
