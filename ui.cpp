@@ -298,16 +298,17 @@ void UI::Menubar(){
   }
   if(showLogs){
     ImGui::SetNextWindowSize(ImVec2(600, 300), ImGuiCond_Always);
-    if(ImGui::Begin("Logs")){
+    if(ImGui::Begin("Logs", &showLogs)){
       for(LogEntry log : Log::logs){
+        std::string logMessage = log.time + " -> " + log.message;
         if(log.type == LogType::SUCCESS)
-          ImGui::TextColored(ImVec4(0.0, 1.0f, 0.0f, 1.0f), "%s", log.message.c_str());
+          ImGui::TextColored(ImVec4(0.0, 1.0f, 0.0f, 1.0f), "%s", logMessage.c_str());
         if(log.type == LogType::WARNING)
-          ImGui::TextColored(ImVec4(1.0, 0.8, 0.0, 1.0f), "%s", log.message.c_str());
+          ImGui::TextColored(ImVec4(1.0, 0.8, 0.0, 1.0f), "%s", logMessage.c_str());
         if(log.type == LogType::INFO)
-          ImGui::TextColored(ImVec4(0.5, 0.5, 0.5, 1.0f), "%s", log.message.c_str());
+          ImGui::TextColored(ImVec4(0.5, 0.5, 0.5, 1.0f), "%s", logMessage.c_str());
         if(log.type == LogType::FATAL)
-          ImGui::TextColored(ImVec4(1.0, 0.0, 0.0, 1.0f), "%s", log.message.c_str());
+          ImGui::TextColored(ImVec4(1.0, 0.0, 0.0, 1.0f), "%s", logMessage.c_str());
       }
       ImGui::End();
     }
@@ -334,7 +335,6 @@ void UI::Menubar(){
           }
           ImGui::PushID(static_cast<int>(i));
           if(ImGui::Button(buf, ImVec2(-FLT_MIN, 0.0f))){
-            //TODO
             keybind.waitingForInput = true;
           }
           if(keybind.waitingForInput){
@@ -356,17 +356,7 @@ void UI::Menubar(){
   }
 
   if(showSettings){
-    /*ImGui::SetNextWindowSize(ImVec2(1400, 900), ImGuiCond_FirstUseEver);
-    if(ImGui::Begin("Settings", &showSettings)){
-      ImGui::Text("Graphics Settings");
-      if(ImGui::Checkbox("V-Sync", &vsync)){
-        mainWindow->SetVerticalSync();
-      }
-      ImGui::Text("Controls");
-      ImGui::SliderFloat("Movement speed", &camera_speed, 1.0f, 20.0f, "%.1f m/s");
-      ImGui::SliderFloat("Camera sensitivity", &sensitivity, 0.05f, 0.25f, "%.2f");
-      ImGui::End();
-    }*/
+
     ImGui::SetNextWindowSize(ImVec2(1400, 900), ImGuiCond_FirstUseEver);
     if(ImGui::Begin("Settings", &showSettings)){
     ImGui::BeginChild("Sidebar", ImVec2(150, 0), true);
@@ -387,7 +377,7 @@ void UI::Menubar(){
       }
       //std::cout << "Before UI: " << settings.graphics.chromaticAbberationStrength << "\n";
       if(showChromAbStrength)
-        ImGui::SliderFloat("Strength", &settings.graphics.chromaticAbberationStrength, 0.01, 0.1, "%.3f", ImGuiSliderFlags_AlwaysClamp);
+        ImGui::SliderFloat("Strength", &settings.graphics.chromaticAbberationStrength, 0.1, 0.5, "%.3f", ImGuiSliderFlags_AlwaysClamp);
 
       if(ImGui::Checkbox("V-Sync", &settings.graphics.vsync)){
         mainWindow->SetVerticalSync(mainWindow->GetWindowHandle());
