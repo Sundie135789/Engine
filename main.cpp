@@ -9,7 +9,7 @@
 #include "headers/serialize.hpp"
 #include "headers/model.hpp"
 #include "vendor/imguizmo/ImGuizmo.h"
-// improve models' albedo maps importing
+// fix model loading. import textures at model loading, same time
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
   Input::PopulateKeybinds();
@@ -18,16 +18,17 @@ int main(){
   /* Do not ship with this line */// Serialize::LoadWorld("worlds/first.json");
   Renderer renderer;
   renderer.SetLight(mainDirLight);
-  //std::vector<Vertex> tempvertices;
-  //Material material;
-  /*Model::LoadModel("assets/models/Untitled.fbx", vertices, material);
-  Mesh mesh(vertices);
+  std::vector<Vertex> tempVertices;
+  std::vector<unsigned int> tempIndices;
+  Material material;
+  Model::LoadModel("/home/paaji/Downloads/gothic_coffee_table_2k.fbx", tempVertices,tempIndices,  material);
+  Mesh mesh(tempVertices, tempIndices);
   std::unique_ptr<Gameobject> gameobject = std::make_unique<Gameobject>("My gameobject");
   gameobject->SetMesh(mesh);
   gameobject->SetTransform(Transform());
   gameobject->SetMaterial(material);
   
-  gameobjects.push_back(std::move(gameobject));*/
+  gameobjects.push_back(std::move(gameobject));
   float deltaTime, lastFrame = 0.0f, currentFrame;
   float fps, titleTimer = 0.0f;
   int fpsFrameCount = 0;
