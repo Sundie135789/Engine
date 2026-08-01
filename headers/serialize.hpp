@@ -4,4 +4,5 @@ namespace Serialize{
   void LoadEmptyWorld();
   void LoadWorld(std::string path);
   void SaveWorld(std::string path);
+  void ExitEngine(int code);
 };

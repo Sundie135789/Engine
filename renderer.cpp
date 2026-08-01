@@ -7,6 +7,7 @@
 #include "headers/texture.hpp"
 #include "headers/camera.hpp"
 #include "headers/globals.hpp"
+#include "headers/serialize.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -18,7 +19,7 @@ void Renderer::SetGraphicsUniforms(){
   glUniform1i(glGetUniformLocation(fboShaderProgram, "screenTexture"), 0);
 }
 Renderer::Renderer(){
-  Log::Success("Renderer created successfully!");
+  Log::Success("Renderer created successfully!\n");
 }
 void Renderer::SetLight(DirectionalLight* light){
   this->light = light;
@@ -68,7 +69,7 @@ void Renderer::Submit(Gameobject* gameobject){
   if(!camera ||  !gameobject || gameobject->mesh.vertices.empty())
   {
     Log::Fatal("[ERROR] Renderer::Submit -> null pointer\n");
-    std::exit(1);
+    Serialize::ExitEngine(1);
   }
   glBindVertexArray(gameobject->mesh.vao);
   gameobject->material.shader.Use();

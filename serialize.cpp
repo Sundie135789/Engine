@@ -1,6 +1,7 @@
 #include "headers/serialize.hpp"
-#include "headers/log.hpp"
 #include "headers/dirlight.hpp"
+#include "headers/ui.hpp"
+#include "headers/assetmanager.hpp"
 #include "headers/globals.hpp"
 #include "vendor/json/json.hpp"
 #include "headers/jsonconverter.hpp"
@@ -8,6 +9,12 @@
 #include <iostream>
 using json = nlohmann::json;
 namespace Serialize{
+  void ExitEngine(int code){
+    UI::SaveAndExit();
+    AssetManager::Cleanup();
+    mainWindow->Terminate();
+    std::exit(code);
+  }
   void LoadEmptyWorld(){
     mainDirLight = new DirectionalLight({-0.5f, -1.0f, -0.8f}, {1.0f, 1.0f, 1.0f});
     editorCamera = new Camera(glm::radians(60.0f), 2560.0f/1920.0f, 0.1f, 100.0f);
@@ -21,7 +28,7 @@ namespace Serialize{
     std::ifstream file(path.c_str());
     if(!file){
       std::cerr << "Could not open file " << path << std::endl;
-      std::exit(1);
+      Serialize::ExitEngine(1);
     }
     json j;
     file >> j;
@@ -96,7 +103,7 @@ namespace Serialize{
     std::ofstream file(path.c_str());
     if(!file){
       std::cerr << "Could not open file " << path << std::endl;
-      std::exit(1);
+      Serialize::ExitEngine(1);
     }
     json j;
     for(auto& go : gameobjects){

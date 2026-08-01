@@ -107,10 +107,6 @@ void UI::LoadInspector() {
   ImGui::SetNextWindowPos(ImVec2(1900, 0), ImGuiCond_Always);
   ImGui::SetNextWindowSize(ImVec2(1200, 1900), ImGuiCond_Always); 
   ImGui::Begin("Properties", nullptr, ImGuiWindowFlags_NoResize);
-  /*if(!gameobjects[selected]){
-    std::cerr << "load inspector, gameobjects[selected] is null";
-    std::exit(1);
-  }*/
   auto& obj = gameobjects[selected];
   ImGui::Text("Name: %s", obj->name.c_str());
   ImGui::Separator();
@@ -297,7 +293,7 @@ void UI::Menubar(){
     ImGui::EndPopup();
   }
   if(showLogs){
-    ImGui::SetNextWindowSize(ImVec2(600, 300), ImGuiCond_Always);
+    ImGui::SetNextWindowSize(ImVec2(600, 300), ImGuiCond_FirstUseEver);
     if(ImGui::Begin("Logs", &showLogs)){
       for(LogEntry log : Log::logs){
         std::string logMessage = log.time + " -> " + log.message;
