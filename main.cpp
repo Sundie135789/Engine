@@ -1,5 +1,6 @@
 // Graphics header
 #include <GL/glew.h>
+#include <cstdlib>
 //Custom headers
 #include "headers/renderer.hpp"
 #include "headers/assetmanager.hpp"
@@ -9,7 +10,10 @@
 #include "headers/serialize.hpp"
 #include "headers/model.hpp"
 #include "vendor/imguizmo/ImGuizmo.h"
-// fix model loading. import textures at model loading, same time
+// compile, and fix memory leaks
+// fix segmentation fault on saving world
+// allow copy pasting of gameobjects in hierarchy
+// fix model loading texture importing
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
   Input::PopulateKeybinds();
@@ -21,14 +25,14 @@ int main(){
   std::vector<Vertex> tempVertices;
   std::vector<unsigned int> tempIndices;
   Material material;
-  Model::LoadModel("/home/paaji/Downloads/gothic_coffee_table_2k.fbx", tempVertices,tempIndices,  material);
+  /*Model::LoadModel("/home/paaji/Downloads/Novulari.fbx", tempVertices,tempIndices,  material);
   Mesh mesh(tempVertices, tempIndices);
   std::unique_ptr<Gameobject> gameobject = std::make_unique<Gameobject>("My gameobject");
   gameobject->SetMesh(mesh);
   gameobject->SetTransform(Transform());
   gameobject->SetMaterial(material);
   
-  gameobjects.push_back(std::move(gameobject));
+  gameobjects.push_back(std::move(gameobject));*/
   float deltaTime, lastFrame = 0.0f, currentFrame;
   float fps, titleTimer = 0.0f;
   int fpsFrameCount = 0;
@@ -46,15 +50,19 @@ int main(){
     if(UI::triggerModelPick){
       UI::triggerModelPick = false;
       std::string modelPath = UI::OpenModelpicker();
-      std::vector<Vertex> vertices;
-      std::vector<unsigned int> indices;
-      Material material;
-      Model::LoadModel(modelPath, vertices, indices, material);
-      std::unique_ptr<Gameobject> newGo = std::make_unique<Gameobject>("Imported Model");
-      newGo->SetMesh(Mesh(vertices, indices));
-      newGo->SetMaterial(material);
-      newGo->SetTransform(Transform());
-      gameobjects.push_back(std::move(newGo));
+      if(!modelPath.empty()){
+        std::vector<Vertex> vertices;
+        std::vector<unsigned int> indices;
+        Material material;
+        Model::LoadModel(modelPath, vertices, indices, material);
+        std::unique_ptr<Gameobject> newGo = std::make_unique<Gameobject>((model_untitled_number == 0) ? "Imported Model"
+            : "Imported Model " + std::to_string(model_untitled_number));
+        newGo->SetMesh(Mesh(vertices, indices));
+        newGo->SetMaterial(material);
+        newGo->SetTransform(Transform());
+        gameobjects.push_back(std::move(newGo));
+        model_untitled_number++;
+      }
     }
     currentFrame = mainWindow->GetTime();
     deltaTime = currentFrame - lastFrame;
@@ -105,9 +113,6 @@ int main(){
     UI::EndFrame();
     mainWindow->SwapBuffers();
   }
-  UI::SaveAndExit();
-  AssetManager::Cleanup();
-  mainWindow->Terminate();
-  glfwTerminate();
+  Serialize::ExitEngine(EXIT_SUCCESS);
   return 0;
 }
