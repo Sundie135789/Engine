@@ -87,19 +87,19 @@ void Model::LoadModel(const std::string& path, std::vector<Vertex>& out_vertices
         srcMat->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath) == AI_SUCCESS){
       std::filesystem::path tex(texturePath.C_Str());
       std::filesystem::path finalPath = tex.is_absolute() ? tex : modelDir / tex;
-      material.setAlbedoPath(std::filesystem::weakly_canonical(finalPath).string());
+      material.setAlbedoPath(std::filesystem::absolute(finalPath).lexically_normal().string());
     }
     if(srcMat->GetTextureCount(aiTextureType_METALNESS) > 0 &&
         srcMat->GetTexture(aiTextureType_METALNESS, 0, &texturePath) == AI_SUCCESS){
       std::filesystem::path tex(texturePath.C_Str());
       std::filesystem::path finalPath = tex.is_absolute() ? tex : modelDir / tex;
-      material.setMetallicPath(std::filesystem::weakly_canonical(finalPath).string());
+      material.setMetallicPath(std::filesystem::absolute(finalPath).lexically_normal().string());
     }
     if(srcMat->GetTextureCount(aiTextureType_DIFFUSE_ROUGHNESS) > 0 &&
         srcMat->GetTexture(aiTextureType_DIFFUSE_ROUGHNESS, 0, &texturePath) == AI_SUCCESS){
       std::filesystem::path tex(texturePath.C_Str());
       std::filesystem::path finalPath = tex.is_absolute() ? tex : modelDir / tex;
-      material.setRoughnessPath(std::filesystem::weakly_canonical(finalPath).string());
+      material.setRoughnessPath(std::filesystem::absolute(finalPath).lexically_normal().string());
     }
     material.setShader(Shader("shaders/basic.vert", "shaders/basic.frag"));
   }

@@ -48,6 +48,8 @@ void UI::DrawTransformGizmo(Gameobject* gameobject, const glm::mat4& view, const
 void UI::SaveAndExit(){
   if(strcmp(worldName, "")) 
     Serialize::SaveWorld("worlds/" + std::string(worldName)+ ".json");
+  else
+   Serialize::SaveWorld("worlds/default.json");
 }
 std::string UI::OpenModelpicker(){
   auto selection = pfd::open_file("Import Model", "", 
@@ -66,6 +68,7 @@ void UI::Hierarchy(){
   
   ImGui::SetNextWindowPos(ImVec2(0, 30), ImGuiCond_Always);
   ImGui::SetNextWindowSize(ImVec2(400, 1900), ImGuiCond_Always);
+  ImGui::SetWindowCollapsed(false);
   ImGui::Begin("Hierarchy", nullptr, ImGuiWindowFlags_NoResize);
   for(int i=0;i<gameobjects.size();i++){
     if(ImGui::Selectable(gameobjects[i]->name.c_str())){
@@ -229,6 +232,9 @@ void UI::Menubar(){
     if(ImGui::BeginMenu("Logs")){
       showLogs = true;
     ImGui::EndMenu();
+    }
+    if(ImGui::BeginMenu("Exit")){
+      Serialize::ExitEngine(0);
     }
     ImGui::EndMainMenuBar();
   }

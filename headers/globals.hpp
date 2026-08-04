@@ -40,4 +40,5 @@ struct Settings {
 
 extern Settings settings;
 extern Shader* fboShader;
+extern int model_untitled_number;
 //extern std::vector<std::string> logs;

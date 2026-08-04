@@ -10,6 +10,7 @@ enum class LogType{
 struct LogEntry {
   std::string message;
   LogType type;
+  std::string time;
 };
 class Log{
   public:
@@ -17,6 +18,7 @@ class Log{
     static void Fatal(const std::string& msg);
     static void Warning(const std::string& msg);
     static void Success(const std::string& msg);
+    static void Clear();
     static std::vector<LogEntry> logs;
 };
 

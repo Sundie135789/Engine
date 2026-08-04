@@ -4,6 +4,6 @@
 #include "assimp/scene.h"
 class Model{
   public:
-  static void ProcessNode(aiNode* node, const aiScene* scene, std::vector<Vertex>& out_vertices, std::vector<unsigned int>& out_indices);
+  static void ProcessNode(aiNode* node, const aiScene* scene, std::vector<Vertex>& out_vertices, std::vector<unsigned int>& out_indices, glm::mat4 parentTransform);
   static void LoadModel(const std::string& path, std::vector<Vertex>& out_vertices, std::vector<unsigned int>& out_indices,  Material& material);
 };

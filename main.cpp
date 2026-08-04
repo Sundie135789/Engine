@@ -9,9 +9,10 @@
 #include "headers/globals.hpp"
 #include "headers/serialize.hpp"
 #include "headers/model.hpp"
+#include "headers/log.hpp"
 #include "vendor/imguizmo/ImGuizmo.h"
-// compile, and fix memory leaks
-// fix segmentation fault on saving world
+// fix double shader loading. found in logs
+// 
 // allow copy pasting of gameobjects in hierarchy
 // fix model loading texture importing
 int main(){
@@ -19,13 +20,14 @@ int main(){
   Input::PopulateKeybinds();
   Renderer::FBOSetup();
   Serialize::LoadEmptyWorld();
+  Log::Clear();
   /* Do not ship with this line */// Serialize::LoadWorld("worlds/first.json");
   Renderer renderer;
   renderer.SetLight(mainDirLight);
-  std::vector<Vertex> tempVertices;
+  /*std::vector<Vertex> tempVertices;
   std::vector<unsigned int> tempIndices;
   Material material;
-  /*Model::LoadModel("/home/paaji/Downloads/Novulari.fbx", tempVertices,tempIndices,  material);
+  Model::LoadModel("/home/paaji/Downloads/Novulari.fbx", tempVertices,tempIndices,  material);
   Mesh mesh(tempVertices, tempIndices);
   std::unique_ptr<Gameobject> gameobject = std::make_unique<Gameobject>("My gameobject");
   gameobject->SetMesh(mesh);

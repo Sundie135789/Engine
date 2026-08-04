@@ -4,6 +4,7 @@
 #define GLFW_INCLUDE_NONE
 #include "GLFW/glfw3.h"
 #include "headers/window.hpp"
+#include "headers/serialize.hpp"
 void framebuffer_size_callback(GLFWwindow* window, int width, int height ){
   if(width == 0 || height == 0) return;
   glViewport(0, 0, width, height);
@@ -27,7 +28,7 @@ Window::Window(int width, int height, std::string title){
   window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
   if(!window){
     Log::Fatal("Failed to create GLFW window\n");
-    std::exit(1);
+    Serialize::ExitEngine(1);
   }
   glewExperimental = GL_TRUE;
   glfwMakeContextCurrent(window);
@@ -66,21 +67,23 @@ void Window::SwapBuffers(){
     return;
   }
   Log::Fatal("Window found null in Window::SwapBuffers\n");
-  std::exit(1);
+  Serialize::ExitEngine(1);
 }
 bool Window::ShouldClose(){
   if(window){
     return glfwWindowShouldClose(window);
   }
   Log::Fatal("Window found null in Window::ShouldClose\n");
-  std::exit(1);
+  Serialize::ExitEngine(1);
+  return true;
 }
 int Window::GetKey(int key){
   if(window){
     return glfwGetKey(this->window, key);
   }
   Log::Fatal("Window found null in Window::GetKey\n");
-  std::exit(1);
+  Serialize::ExitEngine(1);
+  return -1;
 }
 
 void Window::GetCursorPos(double& xPos, double& yPos){
@@ -88,7 +91,7 @@ void Window::GetCursorPos(double& xPos, double& yPos){
     return glfwGetCursorPos(this->window, &xPos, &yPos);
   }
   Log::Fatal("Window found null in Window::GetCursorPos\n");
-  std::exit(1);
+  Serialize::ExitEngine(1);
 }
 
 GLFWwindow* Window::GetWindowHandle(){
@@ -96,7 +99,8 @@ GLFWwindow* Window::GetWindowHandle(){
     return window;
   }
   Log::Fatal("Window found null in WIndow::GetWindowHandle\n");
-  std::exit(1);
+  Serialize::ExitEngine(1);
+  return nullptr;
 }
 float Window::GetTime(){
   return glfwGetTime();

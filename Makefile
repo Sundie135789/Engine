@@ -1,7 +1,7 @@
 CXX = g++
-CXXFLAGS = -g -Ivendor/imgui -Ivendor/imgui/backends -std=c++17 
+CXXFLAGS = -g -Ivendor/imgui -Ivendor/imgui/backends -std=c++17 #-fsanitize=address
  
-SRC = main.cpp shader.cpp loadshader.cpp mesh.cpp texture.cpp transform.cpp gameobject.cpp renderer.cpp material.cpp ui.cpp camera.cpp dirlight.cpp window.cpp input.cpp globals.cpp serialize.cpp model.cpp assetmanager.cpp log.cpp
+SRC = main.cpp shader.cpp loadshader.cpp mesh.cpp texture.cpp transform.cpp gameobject.cpp renderer.cpp material.cpp ui.cpp camera.cpp dirlight.cpp window.cpp input.cpp globals.cpp serialize.cpp model.cpp assetmanager.cpp log.cpp logtime.cpp
 OBJ = $(SRC:.cpp=.o)
 
 IMGUI_SRC = \
@@ -18,7 +18,7 @@ IMGUI_OBJ = $(IMGUI_SRC:.cpp=.o)
 all: main
 
 main: $(OBJ) $(IMGUI_OBJ)
-	$(CXX) $(OBJ) $(IMGUI_OBJ) -o main -lGLEW -lGL -lglfw -lassimp
+	$(CXX) $(OBJ) $(IMGUI_OBJ) -o main -lGLEW -lGL -lglfw -lassimp #-fsanitize=address
 	
 
 %.o: %.cpp

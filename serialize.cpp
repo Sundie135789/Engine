@@ -1,6 +1,7 @@
 #include "headers/serialize.hpp"
 #include "headers/dirlight.hpp"
 #include "headers/ui.hpp"
+#include "headers/log.hpp"
 #include "headers/assetmanager.hpp"
 #include "headers/globals.hpp"
 #include "vendor/json/json.hpp"
@@ -10,8 +11,16 @@
 using json = nlohmann::json;
 namespace Serialize{
   void ExitEngine(int code){
+
     UI::SaveAndExit();
     AssetManager::Cleanup();
+    // Delete cameras
+    if(editorCamera)
+      delete editorCamera;
+    if(gameCamera)
+      delete gameCamera;
+    
+    Log::Clear();
     mainWindow->Terminate();
     std::exit(code);
   }
@@ -26,6 +35,7 @@ namespace Serialize{
   }
   void LoadWorld(std::string path){
     std::ifstream file(path.c_str());
+    std::cout << path << "\n\n";
     if(!file){
       std::cerr << "Could not open file " << path << std::endl;
       Serialize::ExitEngine(1);
@@ -93,7 +103,7 @@ namespace Serialize{
           );
       // Restore settings
       settings.graphics.chromaticAbberation = j["settings"]["graphics"]["chromaticAbberation"].get<bool>();
-      settings.graphics.chromaticAbberationStrength = j["settings"]["graphics"]["chromaticAbberationStrength"].get<bool>();
+      settings.graphics.chromaticAbberationStrength = j["settings"]["graphics"]["chromaticAbberationStrength"].get<float>();
       settings.graphics.vsync = j["settings"]["graphics"]["vsync"].get<bool>();
       settings.controls.camera_speed = j["settings"]["controls"]["camera_speed"].get<float>();
       settings.controls.sensitivity = j["settings"]["controls"]["sensitivity"].get<float>();
@@ -107,14 +117,15 @@ namespace Serialize{
     }
     json j;
     for(auto& go : gameobjects){
+      if(!go) continue;
       json obj;
       obj["name"] = go->name;
       obj["transform"]["position"] = {go->transform.position.x, go->transform.position.y, go->transform.position.z};
       obj["transform"]["rotation"] = {go->transform.rotation.x, go->transform.rotation.y, go->transform.rotation.z};
       obj["transform"]["scale"] = {go->transform.scale.x, go->transform.scale.y, go->transform.scale.z};
-      obj["material"]["albedoTexture"] = {go->material.albedoTexture->path};
-      obj["material"]["metallicTexture"] = {go->material.metallicTexture->path};
-      obj["material"]["roughnessTexture"] = {go->material.roughnessTexture->path};
+      obj["material"]["albedoTexture"] = go->material.albedoTexture ? go->material.albedoTexture->path : "";
+      obj["material"]["metallicTexture"] = go->material.metallicTexture ? go->material.metallicTexture->path : "";
+      obj["material"]["roughnessTexture"] = go->material.roughnessTexture ? go->material.roughnessTexture->path : "";
       obj["material"]["albedoValue"] = {go->material.albedoValue.x, go->material.albedoValue.y, go->material.albedoValue.z};
       obj["material"]["roughnessValue"] = go->material.roughnessValue;
       obj["material"]["metallicValue"] = go->material.metallicValue;
@@ -152,6 +163,7 @@ namespace Serialize{
     j["settings"]["graphics"]["vsync"] = settings.graphics.vsync;
     j["settings"]["controls"]["mouse_sensitivity"] = settings.controls.sensitivity;
     j["settings"]["controls"]["camera_speed"] = settings.controls.camera_speed;
-    file << j.dump() << std::endl;;
+    file << j.dump(4) << std::endl;;
+    //file << j.dump(0) << std::endl;;
   }
 };
