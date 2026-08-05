@@ -15,6 +15,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
   if(key == GLFW_KEY_F3 && action == GLFW_PRESS){
     g_EngineState = g_EngineState == EngineState::Editing ? EngineState::Playing : EngineState::Editing;
   }
+  if(key == GLFW_KEY_T && action == GLFW_PRESS){
+    currentGizmoOp = ImGuizmo::TRANSLATE;
+  }
+  if(key == GLFW_KEY_S && action == GLFW_PRESS){
+    currentGizmoOp = ImGuizmo::SCALE;
+  }
+  if(key == GLFW_KEY_R && action == GLFW_PRESS){
+    currentGizmoOp = ImGuizmo::ROTATE;
+  }
 }
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset){
   yoffset == 1 ? editorCamera->ZoomIn() : editorCamera->ZoomOut();

@@ -21,4 +21,5 @@ unsigned int quadVAO;
 Settings settings;
 Shader* fboShader = new Shader("shaders/framebuffer.vert", "shaders/framebuffer.frag");
 int model_untitled_number = 0;
+ImGuizmo::OPERATION currentGizmoOp = ImGuizmo::TRANSLATE;
 //std::vector<std::string> logs;

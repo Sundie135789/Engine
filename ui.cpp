@@ -12,6 +12,7 @@
 #include "vendor/imguizmo/ImGuizmo.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <filesystem>
+#include <memory>
 #include <string>
 namespace fs = std::filesystem;
 
@@ -20,6 +21,7 @@ static bool openSavePopup = false, openLoadPopup = false, openLoadErrorPopup = f
 static bool  showInputManager = false, showSettings = false, openInvalidKeybindPopup = false;
 static bool showChromAbStrength = false;
 static bool showLogs = false;
+static std::unique_ptr<Gameobject> copiedObject = nullptr;
 bool UI::triggerFilePick = false;
 bool UI::triggerModelPick = false;
 static std::string errorMsg = "";
@@ -37,7 +39,7 @@ void UI::DrawTransformGizmo(Gameobject* gameobject, const glm::mat4& view, const
   ImGuizmo::Manipulate(
       glm::value_ptr((view)),
       glm::value_ptr((proj)),
-      ImGuizmo::TRANSLATE,
+      currentGizmoOp,
       ImGuizmo::LOCAL,
       glm::value_ptr(modelMatrix)
       );
@@ -85,6 +87,20 @@ void UI::Hierarchy(){
     }
     if(ImGui::IsKeyPressed(ImGuiKey_F2)){
       ImGui::OpenPopup("rename_popup");
+    }
+    if(ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_C)){
+      copiedObject = std::move(gameobjects[selected]);
+    }
+    if(ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_V)){
+      Log::Info("Pasted object");
+      if(copiedObject){
+        Log::Info("copied object true");
+        std::unique_ptr<Gameobject> gameobject;
+        gameobject->SetMesh(copiedObject->mesh);
+        gameobject->SetTransform(copiedObject->transform);
+        gameobject->SetMaterial(copiedObject->material);
+        gameobjects.push_back(std::move(gameobject));
+      }
     }
     if(ImGui::BeginPopup("rename_popup")){
       ImGui::Text("Enter new name");

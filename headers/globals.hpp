@@ -5,6 +5,9 @@
 #include <memory>
 #include "gameobject.hpp"
 #include "dirlight.hpp"
+
+#include "../vendor/imgui/imgui.h"
+#include "../vendor/imguizmo/ImGuizmo.h"
 extern std::unique_ptr<Window> mainWindow;
 extern std::vector<std::unique_ptr<Gameobject>> gameobjects;
 extern int selected;
@@ -41,4 +44,5 @@ struct Settings {
 extern Settings settings;
 extern Shader* fboShader;
 extern int model_untitled_number;
+extern ImGuizmo::OPERATION currentGizmoOp;
 //extern std::vector<std::string> logs;
