@@ -94,7 +94,6 @@ std::vector<Vertex> vertices = {
 };
   gameobject->SetMesh(Mesh(vertices, indices));
   Log::Success("Mesh Loaded: Vertex Count " + std::to_string(vertices.size()) + "\n");
-  gameobject->SetMaterial(Material());
   gameobject->SetTransform(Transform());
   gameobjects.push_back(std::move(gameobject));
 }

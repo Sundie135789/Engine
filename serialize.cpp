@@ -35,7 +35,7 @@ namespace Serialize{
   }
   void LoadWorld(std::string path){
     std::ifstream file(path.c_str());
-    std::cout << path << "\n\n";
+    std::cout << "The path is: *" << path << "*\n\n";
     if(!file){
       std::cerr << "Could not open file " << path << std::endl;
       Serialize::ExitEngine(1);
@@ -106,7 +106,7 @@ namespace Serialize{
       settings.graphics.chromaticAbberationStrength = j["settings"]["graphics"]["chromaticAbberationStrength"].get<float>();
       settings.graphics.vsync = j["settings"]["graphics"]["vsync"].get<bool>();
       settings.controls.camera_speed = j["settings"]["controls"]["camera_speed"].get<float>();
-      settings.controls.sensitivity = j["settings"]["controls"]["sensitivity"].get<float>();
+      settings.controls.sensitivity = j["settings"]["controls"]["mouse_sensitivity"].get<float>();
 
   }
   void SaveWorld(std::string path){
@@ -163,7 +163,7 @@ namespace Serialize{
     j["settings"]["graphics"]["vsync"] = settings.graphics.vsync;
     j["settings"]["controls"]["mouse_sensitivity"] = settings.controls.sensitivity;
     j["settings"]["controls"]["camera_speed"] = settings.controls.camera_speed;
-    file << j.dump(4) << std::endl;;
+    file << j.dump(0) << std::endl;;
     //file << j.dump(0) << std::endl;;
   }
 };

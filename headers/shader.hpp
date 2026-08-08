@@ -3,7 +3,7 @@
 #include <string>
 class Shader{
   public:
-    Shader(std::string vertexPath, std::string fragmentPath);
+    Shader(const std::string &vertexPath, const std::string &fragmentPath);
     GLuint shaderProgram;
     std::string fragmentPath, vertexPath;
     void Use();

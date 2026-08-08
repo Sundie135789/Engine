@@ -37,9 +37,9 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene, std::vector<Vertex>&
               }
               if(mesh->mTextureCoords[0]){
                 vertex.uv.x = mesh->mTextureCoords[0][v].x;
-                vertex.uv.y = mesh->mTextureCoords[0][v].y;
+                vertex.uv.y = 1.0f - mesh->mTextureCoords[0][v].y;
               } else{
-                vertex.uv = glm::vec3(0.0f);
+                vertex.uv = glm::vec2(0.0f);
               }
               out_vertices.push_back(vertex);
             }
@@ -65,7 +65,7 @@ void Model::LoadModel(const std::string& path, std::vector<Vertex>& out_vertices
   Assimp::Importer importer;
   //importer.SetPropertyFloat(AI_CONFIG_GLOBAL_SCALE_FACTOR_KEY, 0.01f);
   const aiScene* scene = importer.ReadFile(path,
-      aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices | aiProcess_FlipUVs | aiProcess_CalcTangentSpace |
+      aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices | aiProcess_CalcTangentSpace | aiProcess_FlipUVs |
       aiProcess_GlobalScale);
   out_vertices.clear();
   out_indices.clear();
