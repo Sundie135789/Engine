@@ -1,4 +1,5 @@
 #include "headers/loadshader.hpp"
+#include <iostream>
 #include "headers/log.hpp"
 #include "headers/serialize.hpp"
 #include <fstream>

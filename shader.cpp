@@ -1,4 +1,5 @@
 #include "headers/shader.hpp"
+#include "headers/globals.hpp"
 #include "headers/loadshader.hpp"
 #include "headers/log.hpp"
 #include <glm/gtc/type_ptr.hpp>
@@ -43,10 +44,7 @@ Shader::Shader(const std::string& vertexPath,const std::string& fragmentPath)
 }
 void Shader::Use(){
   glUseProgram(shaderProgram);
-  glm::mat4 projection = glm::perspective(glm::radians(90.0f), 2560.0f/1920.0f, 0.1f, 100.0f);
+  //glm::mat4 projection = glm::perspective(glm::radians(90.0f), 2560.0f/1920.0f, 0.1f, 100.0f);
   //glm::mat4 model(1.0f);
-  glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, -10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-  glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-  //glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
-  glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
+  //glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, -10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 }

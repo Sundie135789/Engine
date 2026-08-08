@@ -1,5 +1,9 @@
 #pragma once
 #include <glm/glm.hpp>
+enum class ProjectionType{
+  Perspective,
+  Orthographic
+};
 class Camera{
   public:
     Camera();
@@ -14,4 +18,5 @@ class Camera{
     float zoomSpeed;
     void ZoomIn();
     void ZoomOut();
+    ProjectionType projectionType = ProjectionType::Perspective;
 };

@@ -12,17 +12,23 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height ){
   gameCamera->aspect = (float)width / (float)height;
 }
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
-  if(key == GLFW_KEY_F3 && action == GLFW_PRESS){
-    g_EngineState = g_EngineState == EngineState::Editing ? EngineState::Playing : EngineState::Editing;
-  }
-  if(key == GLFW_KEY_T && action == GLFW_PRESS){
-    currentGizmoOp = ImGuizmo::TRANSLATE;
-  }
-  if(key == GLFW_KEY_S && action == GLFW_PRESS){
-    currentGizmoOp = ImGuizmo::SCALE;
-  }
-  if(key == GLFW_KEY_R && action == GLFW_PRESS){
-    currentGizmoOp = ImGuizmo::ROTATE;
+  if(action == GLFW_PRESS){
+    if(key == GLFW_KEY_F3){
+      g_EngineState = g_EngineState == EngineState::Editing ? EngineState::Playing : EngineState::Editing;
+    }
+    if(key == GLFW_KEY_T){
+      currentGizmoOp = ImGuizmo::TRANSLATE;
+    }
+    if(key == GLFW_KEY_S){
+      currentGizmoOp = ImGuizmo::SCALE;
+    }
+    if(key == GLFW_KEY_R){
+      currentGizmoOp = ImGuizmo::ROTATE;
+    }
+    if(key == GLFW_KEY_P){
+      editorCamera->projectionType = 
+        editorCamera->projectionType == ProjectionType::Perspective ? ProjectionType::Orthographic : ProjectionType::Perspective;
+    }
   }
 }
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset){

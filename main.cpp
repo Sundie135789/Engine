@@ -11,10 +11,8 @@
 #include "headers/model.hpp"
 #include "headers/log.hpp"
 #include "vendor/imguizmo/ImGuizmo.h"
-// fix double shader loading. found in logs
-// 
-// allow copy pasting of gameobjects in hierarchy
-// fix model loading texture importing
+// add auto tiling of model albedo.
+// add perspective vs flat view 
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
   Input::PopulateKeybinds();
@@ -63,6 +61,7 @@ int main(){
         newGo->SetMaterial(material);
         newGo->SetTransform(Transform());
         gameobjects.push_back(std::move(newGo));
+        selected = gameobjects.size() - 1;
         model_untitled_number++;
       }
     }

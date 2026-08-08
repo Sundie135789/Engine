@@ -25,7 +25,14 @@ glm::mat4 Camera::GetViewMatrix(){
   return view;
 }
 glm::mat4 Camera::GetProjectionMatrix(){
-  glm::mat4 projection = glm::perspective(fov, aspect, nearPlane, farPlane);
+  glm::mat4 projection;
+  if(projectionType == ProjectionType::Perspective){
+    projection = glm::perspective(fov, aspect, nearPlane, farPlane);
+  }else{
+    float orthoSize = fov;
+    float right = orthoSize * aspect;
+    projection = glm::ortho(-right, right, -orthoSize, orthoSize, nearPlane, farPlane);
+  }
   return projection;
 }
 void Camera::ZoomIn(){
