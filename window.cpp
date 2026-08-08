@@ -14,7 +14,19 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height ){
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
   if(action == GLFW_PRESS){
     if(key == GLFW_KEY_F3){
-      g_EngineState = g_EngineState == EngineState::Editing ? EngineState::Playing : EngineState::Editing;
+      if(g_EngineState == EngineState::Editing){
+        g_editorTransforms.clear();
+        g_editorTransforms.shrink_to_fit();
+        for(auto& go : gameobjects){
+          g_editorTransforms.push_back(go->transform);
+        }
+        g_EngineState = EngineState::Playing;
+      }else{
+        for(int i=0; i<gameobjects.size();i++){
+          gameobjects.at(i)->transform = g_editorTransforms.at(i);
+        }
+        g_EngineState = EngineState::Editing;
+      }
     }
     if(key == GLFW_KEY_T){
       currentGizmoOp = ImGuizmo::TRANSLATE;

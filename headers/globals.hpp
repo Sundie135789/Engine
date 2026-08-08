@@ -5,7 +5,7 @@
 #include <memory>
 #include "gameobject.hpp"
 #include "dirlight.hpp"
-
+#include "transform.hpp"
 #include "../vendor/imgui/imgui.h"
 #include "../vendor/imguizmo/ImGuizmo.h"
 extern std::unique_ptr<Window> mainWindow;
@@ -45,4 +45,5 @@ extern Settings settings;
 extern Shader* fboShader;
 extern int model_untitled_number;
 extern ImGuizmo::OPERATION currentGizmoOp;
+extern std::vector<Transform> g_editorTransforms;
 //extern std::vector<std::string> logs;
