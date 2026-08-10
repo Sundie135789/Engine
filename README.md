@@ -13,9 +13,9 @@ A custom 3D game engine pipeline written from scratch in C++ using OpenGL.
 *   **User Interface:** Uses Dear ImGui to display real-time variables and custom menus.
 *   **Serialization:** Saves and loads runtime worlds created inside the engine.
 *   **Logging:** Runtime logs available for Success, Warning, Fatal, and Info types.
-*   **Transform Gizmos** Runtime Transformation Gizmos available for all objects.
-*   **Post Processing** Current engine design allows all kinds of post processing like bloom, grayscale, etc.
-*   **PBR rendering** Physically based rendering system for higher realism than phong shading.
+*   **Transform Gizmos:** Runtime Transformation Gizmos available for all objects.
+*   **Post Processing:** Current engine design allows all kinds of post processing like bloom, grayscale, etc.
+*   **PBR Lighting:** Physically based rendering system for higher realism than phong shading.
    
 
 <img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/b2e5a7c1-a078-4a76-8382-0e6871bf84a4" />
