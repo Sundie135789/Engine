@@ -6,6 +6,7 @@
 #include "gameobject.hpp"
 #include "dirlight.hpp"
 #include "transform.hpp"
+#include "settings.hpp"
 #include "../vendor/imgui/imgui.h"
 #include "../vendor/imguizmo/ImGuizmo.h"
 extern std::unique_ptr<Window> mainWindow;
@@ -27,19 +28,6 @@ extern std::vector<Texture*> g_loadedTextures;
 extern unsigned int framebuffer;
 extern unsigned int quadVAO;
 extern unsigned int textureColorBuffer;
-struct GraphicsSettings{
-  bool chromaticAbberation = false;
-  float chromaticAbberationStrength = 0.05f;
-  bool vsync = true;
-};
-struct ControlSettings{
-  float camera_speed = 5.0f;
-  float sensitivity = 0.1f;
-};
-struct Settings {
-  GraphicsSettings graphics;
-  ControlSettings controls;
-};
 
 extern Settings settings;
 extern Shader* fboShader;
