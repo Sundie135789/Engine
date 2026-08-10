@@ -20,11 +20,13 @@ uniform vec3 albedoValue;
 uniform float roughnessValue;
 uniform float metallicValue;
 
+uniform float tiling;
 const float PI = 3.14159265;
 void main(){
-  vec3 albedo = hasAlbedoTex ? texture(albedoTexture, UV).rgb : albedoValue;
-  float roughness = hasRoughnessTex ? texture(roughnessTexture, UV).r : roughnessValue;
-  float metallic = hasMetallicTex ? texture(metallicTexture, UV).r : metallicValue;
+  vec2 tiledUV = UV * tiling;
+  vec3 albedo = hasAlbedoTex ? texture(albedoTexture, tiledUV).rgb : albedoValue;
+  float roughness = hasRoughnessTex ? texture(roughnessTexture, tiledUV).r : roughnessValue;
+  float metallic = hasMetallicTex ? texture(metallicTexture, tiledUV).r : metallicValue;
 
   vec3 N = normalize(Normal); // fragment normal
   vec3 V = normalize(viewPos - FragPos); // view vector

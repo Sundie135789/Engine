@@ -151,8 +151,7 @@ void UI::LoadInspector() {
   }
   ImGui::Separator();
   ImGui::Text("Material Properties"); ImGui::SetNextItemWidth(400.0f);
-
-  ImGui::ColorEdit3("Albedo Color", &obj->material.albedoValue.x);
+    ImGui::ColorEdit3("Albedo Color", &obj->material.albedoValue.x);
   if(ImGui::Button("Import Albedo Map", ImVec2(200.0f, 40.0f))){
     obj->material.setAlbedoPath(UI::OpenFilepicker());
   }
@@ -168,7 +167,13 @@ if(ImGui::Button("Import Roughness Map", ImVec2(250.0f, 40.0f))){
 if(ImGui::Button("Import Metallic Map", ImVec2(250.0f, 40.0f))){
     obj->material.setMetallicPath(UI::OpenFilepicker());
   }
-
+  ImGui::Separator();
+  ImGui::Text("Rigid Body Settings");
+  ImGui::Checkbox("Gravity Enabled?", &obj->rigidbody.applyGravity);
+  ImGui::Separator();
+  ImGui::Text("Texture Settings");
+  ImGui::SetNextItemWidth(350.0f);
+  ImGui::SliderFloat("Tiling", &obj->material.tiling , 1.0f, 100.0f, "%.2f", ImGuiSliderFlags_AlwaysClamp);
   ImGui::End();
 }
 void UI::BeginFrame(){
@@ -195,6 +200,8 @@ void UI::Init(GLFWwindow* window){
   font_cfg.PixelSnapH = true;
 
   ImFont* engineFont = nullptr;
+  if(!fs::exists(fontPath))
+    Log::Warning("Could not find JetBrainsMonoNerdFont-Regular.ttf! Using fallback...");
   if(!fontPath.empty() && fs::exists(fontPath)){
     engineFont = io.Fonts->AddFontFromFileTTF(fontPath.c_str(), 25.0f, &font_cfg);
   }
@@ -383,6 +390,9 @@ void UI::Menubar(){
       select = 0;
     if(ImGui::Selectable("Controls", select == 1))
       select = 1;
+    if(ImGui::Selectable("World", select == 2)){
+      select = 2;
+    }
     ImGui::EndChild();
     ImGui::SameLine();
     ImGui::BeginChild("Content", ImVec2(0, 0), true);
@@ -393,7 +403,6 @@ void UI::Menubar(){
       if(ImGui::Checkbox("Chromatic Abberation", &settings.graphics.chromaticAbberation)){
         showChromAbStrength = !showChromAbStrength;
       }
-      //std::cout << "Before UI: " << settings.graphics.chromaticAbberationStrength << "\n";
       if(showChromAbStrength)
         ImGui::SliderFloat("Strength", &settings.graphics.chromaticAbberationStrength, 0.1, 0.5, "%.3f", ImGuiSliderFlags_AlwaysClamp);
 
@@ -405,10 +414,17 @@ void UI::Menubar(){
     {
       ImGui::Text("Controls");
       ImGui::Separator();
-      ImGui::PushItemWidth(500.0f)  ;
+      ImGui::SetNextItemWidth(400.0f);
       ImGui::SliderFloat("Mouse Sensitivity", &settings.controls.sensitivity, 0.05f, 0.25f, "%.2f");
-      ImGui::PopItemWidth();
+      ImGui::SetNextItemWidth(400.0f);
       ImGui::SliderFloat("Editor Camera Speed", &settings.controls.camera_speed, 1.0f, 10.0f, "%.1f");
+    }
+    if(select == 2)
+    {
+      ImGui::Text("World Settings");
+      ImGui::Separator();
+      ImGui::SetNextItemWidth(350.0f);
+      ImGui::SliderFloat("Gravity", &settings.world.gravity, 0.0f, 40.0f, "%.1f");
     }
     ImGui::EndChild();
     ImGui::End();

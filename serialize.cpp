@@ -1,5 +1,6 @@
 #include "headers/serialize.hpp"
 #include "headers/dirlight.hpp"
+#include "headers/rigidbody.hpp"
 #include "headers/ui.hpp"
 #include "headers/log.hpp"
 #include "headers/assetmanager.hpp"
@@ -53,6 +54,10 @@ namespace Serialize{
             goJson["transform"]["scale"].get<glm::vec3>()
             );
       go->SetTransform(transform);
+      go->SetRigidbody(RigidBody{
+          goJson["rigidbody"]["apply_gravity"].get<bool>(),
+          goJson["rigibody"]["velocity"].get<glm::vec3>()
+          });
       Material material(
             goJson["material"]["albedoTexture"].get<std::string>(),
             goJson["material"]["metallicTexture"].get<std::string>(),
@@ -64,6 +69,7 @@ namespace Serialize{
             goJson["material"]["shader"][1].get<std::string>() //Fragment shader
 
           );
+      material.tiling = goJson["material"]["tiling"].get<float>();
       go->SetMaterial(material);
       int nVertices = goJson["mesh"]["vertices"].size();
       std::vector<Vertex> vertices;
@@ -107,7 +113,7 @@ namespace Serialize{
       settings.graphics.vsync = j["settings"]["graphics"]["vsync"].get<bool>();
       settings.controls.camera_speed = j["settings"]["controls"]["camera_speed"].get<float>();
       settings.controls.sensitivity = j["settings"]["controls"]["mouse_sensitivity"].get<float>();
-
+      settings.world.gravity = j["settings"]["world"]["gravity"].get<float>();
   }
   void SaveWorld(std::string path){
     std::ofstream file(path.c_str());
@@ -120,6 +126,8 @@ namespace Serialize{
       if(!go) continue;
       json obj;
       obj["name"] = go->name;
+      obj["rigidbody"]["apply_gravity"] = go->rigidbody.applyGravity;
+      obj["rigidbody"]["velocity"] = {go->rigidbody.velocity.x, go->rigidbody.velocity.y, go->rigidbody.velocity.z};
       obj["transform"]["position"] = {go->transform.position.x, go->transform.position.y, go->transform.position.z};
       obj["transform"]["rotation"] = {go->transform.rotation.x, go->transform.rotation.y, go->transform.rotation.z};
       obj["transform"]["scale"] = {go->transform.scale.x, go->transform.scale.y, go->transform.scale.z};
@@ -131,7 +139,9 @@ namespace Serialize{
       obj["material"]["metallicValue"] = go->material.metallicValue;
 
       obj["material"]["shader"] = {go->material.shader.vertexPath, go->material.shader.fragmentPath};
+      obj["material"]["tiling"] = go->material.tiling;
       obj["mesh"]["vertices"] = json::array();
+
       for(Vertex vertex : go->mesh.vertices){
         json v;
         v["position"] = {vertex.position.x, vertex.position.y, vertex.position.z};
@@ -163,7 +173,8 @@ namespace Serialize{
     j["settings"]["graphics"]["vsync"] = settings.graphics.vsync;
     j["settings"]["controls"]["mouse_sensitivity"] = settings.controls.sensitivity;
     j["settings"]["controls"]["camera_speed"] = settings.controls.camera_speed;
-    file << j.dump(0) << std::endl;;
+    j["settings"]["world"]["gravity"] = settings.world.gravity;
+    file << j.dump(-1) << std::endl;; // extreme compaction for least lines
     //file << j.dump(0) << std::endl;;
   }
 };

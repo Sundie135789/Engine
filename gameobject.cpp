@@ -9,12 +9,15 @@
 #include <string>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/matrix_decompose.hpp>
-Gameobject::Gameobject(std::string name) : mesh(std::vector<Vertex>(), std::vector<unsigned int>()),material(), transform(), name(name){
+Gameobject::Gameobject(std::string name) : mesh(std::vector<Vertex>(), std::vector<unsigned int>()),material(), transform(), name(name), rigidbody(){
   Log::Success("Gameobject created: " + name + "\n");
 }
 /*void Gameobject::SetShader(Shader* shader){
   this->shader = shader;
 }*/
+void Gameobject::SetRigidbody(const RigidBody& rigidbody){
+  this->rigidbody = rigidbody;
+}
 void Gameobject::SetMesh(const Mesh& mesh){
   this->mesh = mesh;
 }
@@ -95,7 +98,9 @@ std::vector<Vertex> vertices = {
   gameobject->SetMesh(Mesh(vertices, indices));
   Log::Success("Mesh Loaded: Vertex Count " + std::to_string(vertices.size()) + "\n");
   gameobject->SetTransform(Transform());
+  gameobject->SetMaterial(Material());
   gameobjects.push_back(std::move(gameobject));
+  selected = gameobjects.size() - 1;
 }
 void Gameobject::CreatePlane(){
   std::unique_ptr<Gameobject> gameobject = std::make_unique<Gameobject>((plane_untitled_number == 0) ? "Plane Untitled" : "Plane Untitled #" + std::to_string(plane_untitled_number));
@@ -114,6 +119,8 @@ gameobject->SetMesh(Mesh(vertices, indices));
 gameobject->SetMaterial(Material());
 gameobject->SetTransform(Transform());
 gameobjects.push_back(std::move(gameobject));
+
+  selected = gameobjects.size() - 1;
 }
 void Gameobject::CreateDirectionalLight(){
 }

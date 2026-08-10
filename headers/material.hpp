@@ -14,6 +14,7 @@ class Material {
     float roughnessValue;
     float metallicValue;
     glm::vec3 albedoValue;
+    float tiling;
     Material(
              std::string albedoTexture = "",
              std::string metallicTexture = "",

@@ -111,8 +111,8 @@ void Renderer::Submit(Gameobject* gameobject){
   glUniform3f(glGetUniformLocation(goShaderProgram, "lightDirection"), lightDir.x, lightDir.y, lightDir.z);
   glUniform3f(glGetUniformLocation(goShaderProgram, "viewPos"), camera->position.x, camera->position.y, camera->position.z);
   gameobject->mesh.Draw();
-  //glUniform1i(glGetUniformLocation(goShaderProgram, "bloom"), settings.graphics.bloom);
-  //fetch framebuffer shader program once
+  // Tiling uniform
+  glUniform1f(glGetUniformLocation(goShaderProgram, "tiling"), gameobject->material.tiling);
 }
 void Renderer::NewFrame(){
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

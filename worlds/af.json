@@ -1,0 +1,151 @@
+{
+"dirlight": {
+"color": [
+1.0,
+1.0,
+1.0
+],
+"lightDir": [
+-0.5,
+-1.0,
+-0.800000011920929
+]
+},
+"editor_camera": {
+"aspect": 1.8156027793884277,
+"farPlane": 100.0,
+"fov": 1.0471975803375244,
+"nearPlane": 0.10000000149011612
+},
+"game_camera": {
+"aspect": 1.8156027793884277,
+"farPlane": 100.0,
+"fov": 1.0471975803375244,
+"nearPlane": 0.10000000149011612
+},
+"gameobjects": [
+{
+"material": {
+"albedoTexture": "/home/paaji/Downloads/textures/forest_ground_05_diff_2k.png",
+"albedoValue": [
+1.0,
+1.0,
+1.0
+],
+"metallicTexture": "",
+"metallicValue": 0.0,
+"roughnessTexture": "",
+"roughnessValue": 0.5,
+"shader": [
+"shaders/basic.vert",
+"shaders/basic.frag"
+]
+},
+"mesh": {
+"indices": [
+0,
+2,
+1,
+0,
+3,
+2
+],
+"vertices": [
+{
+"normal": [
+0.0,
+1.0,
+0.0
+],
+"position": [
+-0.5,
+0.0,
+-0.5
+],
+"uv": [
+0.0,
+0.0
+]
+},
+{
+"normal": [
+0.0,
+1.0,
+0.0
+],
+"position": [
+0.5,
+0.0,
+-0.5
+],
+"uv": [
+1.0,
+0.0
+]
+},
+{
+"normal": [
+0.0,
+1.0,
+0.0
+],
+"position": [
+0.5,
+0.0,
+0.5
+],
+"uv": [
+1.0,
+1.0
+]
+},
+{
+"normal": [
+0.0,
+1.0,
+0.0
+],
+"position": [
+-0.5,
+0.0,
+0.5
+],
+"uv": [
+0.0,
+1.0
+]
+}
+]
+},
+"name": "Plane Untitled",
+"transform": {
+"position": [
+0.0,
+0.0,
+0.0
+],
+"rotation": [
+0.0,
+-0.0,
+0.0
+],
+"scale": [
+10.558697700500488,
+1.220344066619873,
+17.606264114379883
+]
+}
+}
+],
+"settings": {
+"controls": {
+"camera_speed": 5.0,
+"mouse_sensitivity": 0.10000000149011612
+},
+"graphics": {
+"chromaticAbberation": false,
+"chromaticAbberationStrength": 0.05000000074505806,
+"vsync": true
+}
+}
+}

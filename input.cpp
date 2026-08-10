@@ -60,14 +60,17 @@ void Input::HandleGameInput(Window* window, Camera* gameCamera, float deltaTime,
   if(Input::gameKeybinds->at(0).assignedKey && ImGui::IsKeyDown(Input::gameKeybinds->at(0).assignedKey)){
     gameCamera->position += flatFront * speed;
   }
-if(Input::gameKeybinds->at(1).assignedKey && ImGui::IsKeyDown(Input::gameKeybinds->at(1).assignedKey)){
+  if(Input::gameKeybinds->at(1).assignedKey && ImGui::IsKeyDown(Input::gameKeybinds->at(1).assignedKey)){
     gameCamera->position -= flatFront * speed;
   }
-if(Input::gameKeybinds->at(2).assignedKey && ImGui::IsKeyDown(Input::gameKeybinds->at(2).assignedKey)){
+  if(Input::gameKeybinds->at(2).assignedKey && ImGui::IsKeyDown(Input::gameKeybinds->at(2).assignedKey)){
     gameCamera->position += right * speed;
   }
-if(Input::gameKeybinds->at(3).assignedKey && ImGui::IsKeyDown(Input::gameKeybinds->at(3).assignedKey)){
+  if(Input::gameKeybinds->at(3).assignedKey && ImGui::IsKeyDown(Input::gameKeybinds->at(3).assignedKey)){
     gameCamera->position -= right * speed;
+  }
+  if(Input::gameKeybinds->at(4).assignedKey && ImGui::IsKeyDown(Input::gameKeybinds->at(4).assignedKey)){
+    gameCamera->position.y += 3.0f; // TODO
   }
 }
 
@@ -76,5 +79,6 @@ void Input::PopulateKeybinds(){
   Input::gameKeybinds->push_back(Keybind{"Move Backwards", ImGuiKey_None, false});
   Input::gameKeybinds->push_back(Keybind{"Move Right", ImGuiKey_None, false});
   Input::gameKeybinds->push_back(Keybind{"Move Left", ImGuiKey_None, false});
+  Input::gameKeybinds->push_back(Keybind{"Jump", ImGuiKey_None, false});
 }
 

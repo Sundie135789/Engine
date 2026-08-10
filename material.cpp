@@ -18,7 +18,8 @@ Material::Material(
       roughnessTexture(AssetManager::GetTexture(roughnessTexture)),
       albedoValue(albedoValue),
       roughnessValue(roughnessValue),
-      metallicValue(metallicValue)
+      metallicValue(metallicValue),
+      tiling(1.0f)
 {
 }
 

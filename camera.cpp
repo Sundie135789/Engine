@@ -8,7 +8,7 @@ Camera::Camera(){
   fov = glm::radians(60.0f);
   aspect = 2560.0f / 1920.0f;
   nearPlane = 0.1f;
-  farPlane = 1000.0f;
+  farPlane = 5000.0f;
   zoomSpeed = 2.0f;
 }
 Camera::Camera(float fov, float aspect, float nearPlane, float farPlane) :

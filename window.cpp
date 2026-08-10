@@ -18,28 +18,33 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         g_editorTransforms.clear();
         g_editorTransforms.shrink_to_fit();
         for(auto& go : gameobjects){
+
           g_editorTransforms.push_back(go->transform);
         }
         g_EngineState = EngineState::Playing;
       }else{
         for(int i=0; i<gameobjects.size();i++){
+          gameobjects.at(i)->rigidbody.velocity = glm::vec3(0.0f);
           gameobjects.at(i)->transform = g_editorTransforms.at(i);
         }
         g_EngineState = EngineState::Editing;
       }
     }
-    if(key == GLFW_KEY_T){
-      currentGizmoOp = ImGuizmo::TRANSLATE;
-    }
-    if(key == GLFW_KEY_S){
-      currentGizmoOp = ImGuizmo::SCALE;
-    }
-    if(key == GLFW_KEY_R){
-      currentGizmoOp = ImGuizmo::ROTATE;
-    }
-    if(key == GLFW_KEY_P){
-      editorCamera->projectionType = 
+    ImGuiIO& io = ImGui::GetIO();
+    if(!io.WantCaptureKeyboard && !io.WantCaptureMouse && !ImGui::IsAnyItemActive()){
+      if(key == GLFW_KEY_T){
+        currentGizmoOp = ImGuizmo::TRANSLATE;
+      }
+      if(key == GLFW_KEY_S){
+        currentGizmoOp = ImGuizmo::SCALE;
+      }
+      if(key == GLFW_KEY_R){
+        currentGizmoOp = ImGuizmo::ROTATE;
+      }
+      if(key == GLFW_KEY_P){
+        editorCamera->projectionType = 
         editorCamera->projectionType == ProjectionType::Perspective ? ProjectionType::Orthographic : ProjectionType::Perspective;
+      }
     }
   }
 }

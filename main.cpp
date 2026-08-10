@@ -11,33 +11,22 @@
 #include "headers/model.hpp"
 #include "headers/log.hpp"
 #include "vendor/imguizmo/ImGuizmo.h"
-// add auto tiling of model albedo.
-// add perspective vs flat view 
+// add jumping
+// Add Collission
 int main(){
   UI::Init(mainWindow->GetWindowHandle());
   Input::PopulateKeybinds();
   Renderer::FBOSetup();
   Serialize::LoadEmptyWorld();
   Log::Clear();
-  /* Do not ship with this line */// Serialize::LoadWorld("worlds/first.json");
   Renderer renderer;
   renderer.SetLight(mainDirLight);
-  /*std::vector<Vertex> tempVertices;
-  std::vector<unsigned int> tempIndices;
-  Material material;
-  Model::LoadModel("/home/paaji/Downloads/Novulari.fbx", tempVertices,tempIndices,  material);
-  Mesh mesh(tempVertices, tempIndices);
-  std::unique_ptr<Gameobject> gameobject = std::make_unique<Gameobject>("My gameobject");
-  gameobject->SetMesh(mesh);
-  gameobject->SetTransform(Transform());
-  gameobject->SetMaterial(material);
-  
-  gameobjects.push_back(std::move(gameobject));*/
   float deltaTime, lastFrame = 0.0f, currentFrame;
   float fps, titleTimer = 0.0f;
   int fpsFrameCount = 0;
   while(!mainWindow->ShouldClose()){
     mainWindow->PollEvents();
+    if(mainWindow->ShouldClose()) break;
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
     glEnable(GL_DEPTH_TEST);
     Renderer::NewFrame();
@@ -86,6 +75,10 @@ int main(){
         );
     }
     for(auto& go : gameobjects){
+      if(g_EngineState == EngineState::Playing && go->rigidbody.applyGravity){
+        go->rigidbody.velocity.y -= settings.world.gravity * deltaTime;
+        go->transform.position += go->rigidbody.velocity * deltaTime;
+      }
       renderer.Submit(go.get());
     }
 
