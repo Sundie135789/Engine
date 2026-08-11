@@ -11,6 +11,8 @@
 #include "headers/model.hpp"
 #include "headers/log.hpp"
 #include "vendor/imguizmo/ImGuizmo.h"
+// add a Is Player to each gameobject's inspector. only one gameobject can have it enabled. the camera locks on to THAT gameobject and treats it like 
+// a player. then add collision. possibly in the form of a "Collider" class. speculate.
 // add jumping
 // Add Collission
 int main(){
