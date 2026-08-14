@@ -9,7 +9,7 @@
 #include <string>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/matrix_decompose.hpp>
-Gameobject::Gameobject(std::string name) : mesh(std::vector<Vertex>(), std::vector<unsigned int>()),material(), transform(), name(name), rigidbody(){
+Gameobject::Gameobject(std::string name) : mesh(std::vector<Vertex>(), std::vector<unsigned int>()),material(), transform(), name(name), rigidbody(), isPlayer(false){
   Log::Success("Gameobject created: " + name + "\n");
 }
 /*void Gameobject::SetShader(Shader* shader){
@@ -29,6 +29,9 @@ void Gameobject::SetMaterial(const Material& material){
 }
 void Gameobject::SetName(const std::string& name){
   this->name = name;
+}
+void Gameobject::SetIsPlayer(const bool& isPlayer){
+  this->isPlayer = isPlayer;
 }
 void Gameobject::CreateCube(){
   std::unique_ptr<Gameobject> gameobject = std::make_unique<Gameobject>((cube_untitled_number == 0) ? "Cube Untitled" : "Cube Untitled #" + std::to_string(cube_untitled_number));

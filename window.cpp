@@ -21,7 +21,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
           g_editorTransforms.push_back(go->transform);
         }
+        gameCamera->front = glm::vec3(0.0f, 0.0f, -1.0f);
         g_EngineState = EngineState::Playing;
+        if(g_Player != nullptr)
+          gameCamera->position = glm::vec3(g_Player->transform.position);
       }else{
         for(int i=0; i<gameobjects.size();i++){
           gameobjects.at(i)->rigidbody.velocity = glm::vec3(0.0f);

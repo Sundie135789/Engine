@@ -14,6 +14,7 @@ class Gameobject{
     void SetTransform(const Transform& transform);
     void SetRigidbody(const RigidBody& rigidBody);
     void SetName(const std::string& name);
+    void SetIsPlayer(const bool& isPlayer);
     glm::mat4 getModelMatrix();
     void setModelMatrix(const glm::mat4& modelMatrix);
     Mesh mesh;
@@ -21,6 +22,8 @@ class Gameobject{
     Transform transform;
     std::string name;
     RigidBody rigidbody;
+
+    bool isPlayer;
     // creation
     static void CreateCube();
     static void CreatePlane();

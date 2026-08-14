@@ -4,7 +4,7 @@
 #include "../vendor/imgui/imgui.h"
 class Input{
   public:
-    static void ProcessMouseLook(bool& firstMouse, float& lastX, float& lastY, Camera* camera, Window* window);
+    static glm::vec3 ProcessMouseLook(bool& firstMouse, float& lastX, float& lastY, Camera* camera, Window* window);
     static void HandleEngineInput(Window* window, Camera* editorCamera, float deltaTime, float& lastX, float& lastY, bool& lastMouse);
     static void HandleGameInput(Window* window, Camera* camera, float deltaTime, float& lastX, float& lastY, bool & lastMouse);
     static double mouseX;

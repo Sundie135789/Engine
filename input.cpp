@@ -8,7 +8,7 @@
 double Input::mouseX = 0.0f;
 double Input::mouseY = 0.0f;
 std::vector<Input::Keybind>* Input::gameKeybinds = new std::vector<Input::Keybind>();
-void Input::ProcessMouseLook(bool& firstMouse, float& lastX, float& lastY, Camera* camera, Window* window){
+glm::vec3 Input::ProcessMouseLook(bool& firstMouse, float& lastX, float& lastY, Camera* camera, Window* window){
   window->GetCursorPos(mouseX, mouseY);
   if(firstMouse)
   {
@@ -27,10 +27,12 @@ void Input::ProcessMouseLook(bool& firstMouse, float& lastX, float& lastY, Camer
       sin(glm::radians(camera->pitch)),
       sin(glm::radians(camera->yaw)) * cos(glm::radians(camera->pitch))
       );
-  camera->front = glm::normalize(direction);
+  return direction;
+  //camera->front = glm::normalize(direction);
+  //if(g_Player != nullptr)
+    //g_Player->transform.rotation = glm::normalize(direction);
 }
 void Input::WASDMouse(bool& firstMouse, float& lastX,float& lastY, Camera* camera, Window* window, float deltaTime){
-    Input::ProcessMouseLook(firstMouse, lastX, lastY, camera, window);
     float speed = settings.controls.camera_speed * deltaTime;
     glm::vec3 flatFront = glm::normalize(glm::vec3(camera->front.x, 0.0f, camera->front.z));
     glm::vec3 right = glm::normalize(glm::cross(camera->front, glm::vec3(0,1,0)));
@@ -46,6 +48,7 @@ void Input::HandleEngineInput(Window* window,Camera* editorCamera , float deltaT
 
     window->setCursorMode(GLFW_CURSOR_DISABLED);
     Input::WASDMouse(firstMouse, lastX, lastY, editorCamera, window, deltaTime);
+editorCamera->front = glm::normalize(Input::ProcessMouseLook(firstMouse, lastX, lastY, editorCamera, window));
   }else {
     window->setCursorMode(GLFW_CURSOR_NORMAL);
     firstMouse = true;
@@ -57,6 +60,9 @@ void Input::HandleGameInput(Window* window, Camera* gameCamera, float deltaTime,
   float speed = settings.controls.camera_speed * deltaTime;
   glm::vec3 flatFront = glm::normalize(glm::vec3(gameCamera->front.x, 0.0f, gameCamera->front.z));
   glm::vec3 right = glm::normalize(glm::cross(gameCamera->front, glm::vec3(0,1,0)));
+
+
+  gameCamera->front = glm::normalize(Input::ProcessMouseLook(firstMouse, lastX, lastY, gameCamera, window));
   if(Input::gameKeybinds->at(0).assignedKey && ImGui::IsKeyDown(Input::gameKeybinds->at(0).assignedKey)){
     gameCamera->position += flatFront * speed;
   }

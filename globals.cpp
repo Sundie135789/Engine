@@ -1,5 +1,6 @@
 #include "headers/globals.hpp"
 #include "headers/dirlight.hpp"
+#include <glm/ext/vector_float3.hpp>
 
 std::unique_ptr<Window> mainWindow = std::make_unique<Window>(2560, 1920, "Game Engine - x64");
 std::vector<std::unique_ptr<Gameobject>> gameobjects;
@@ -23,4 +24,5 @@ Shader* fboShader = new Shader("shaders/framebuffer.vert", "shaders/framebuffer.
 int model_untitled_number = 0;
 ImGuizmo::OPERATION currentGizmoOp = ImGuizmo::TRANSLATE;
 std::vector<Transform> g_editorTransforms;
+Gameobject* g_Player = nullptr;
 //std::vector<std::string> logs;

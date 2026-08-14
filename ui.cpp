@@ -149,6 +149,12 @@ void UI::LoadInspector() {
     ImGui::PopStyleVar();
     ImGui::EndTable();
   }
+  //TODO
+  ImGui::Separator();
+  ImGui::Text("Player settings");
+  if(ImGui::Checkbox("Player?", &obj->isPlayer)){
+    g_Player = obj.get();
+  };
   ImGui::Separator();
   ImGui::Text("Material Properties"); ImGui::SetNextItemWidth(400.0f);
     ImGui::ColorEdit3("Albedo Color", &obj->material.albedoValue.x);
