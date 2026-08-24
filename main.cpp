@@ -77,8 +77,6 @@ int main(){
         );
     }
     // setting game camera to player position
-    if(g_Player != nullptr)
-    gameCamera->position = g_Player->transform.position;
     for(auto& go : gameobjects){
       if(g_EngineState == EngineState::Playing && go->rigidbody.applyGravity){
         go->rigidbody.velocity.y -= settings.world.gravity * deltaTime;

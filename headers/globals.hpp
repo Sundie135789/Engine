@@ -34,5 +34,4 @@ extern Shader* fboShader;
 extern int model_untitled_number;
 extern ImGuizmo::OPERATION currentGizmoOp;
 extern std::vector<Transform> g_editorTransforms;
-extern Gameobject* g_Player;
 //extern std::vector<std::string> logs;

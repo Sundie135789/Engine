@@ -24,5 +24,4 @@ Shader* fboShader = new Shader("shaders/framebuffer.vert", "shaders/framebuffer.
 int model_untitled_number = 0;
 ImGuizmo::OPERATION currentGizmoOp = ImGuizmo::TRANSLATE;
 std::vector<Transform> g_editorTransforms;
-Gameobject* g_Player = nullptr;
 //std::vector<std::string> logs;
